@@ -1,0 +1,86 @@
+<app-screen-title screenTitle="Keygroup Global" />
+<app-screen-program-name programName="{{programHeader?.name?.trim()}}" />
+<mat-grid-list cols="3" rowHeight="100">
+  <mat-grid-tile>
+    <mat-form-field>
+      <label>Pitch Modulation Type</label>
+      <mat-select [value]="'' + programHeader?.pitchModulationInputType" (valueChange)="pitchModulationInputTypeChanged($event)">
+        @for(item of modulationTypes; track item.value ) {
+          <mat-option value="{{item.value}}">{{item.label}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Filter 1 Freq. Mod. 1</mat-label>
+      <mat-select [value]="'' + programHeader?.filter1FreqModulationInput1Type" (valueChange)="filter1FreqModulationInput1TypeChanged($event)">
+        @for(item of modulationTypes; track item.value ) {
+          <mat-option value="{{item.value}}">{{item.label}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Filter 2 Freq. Mod. 1</mat-label>
+      <mat-select [value]="'' + programHeader?.filter2FreqModulationInput1Type" (valueChange)="filter2FreqModulationInput1TypeChanged($event)">
+        @for(item of modulationTypes; track item.value ) {
+          <mat-option value="{{item.value}}">{{item.label}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <label>Loudness Modulation Type</label>
+      <mat-select [value]="'' + programHeader?.loudnessModulationInputType" (valueChange)="loudnessModulationInputTypeChanged($event)">
+        @for(item of modulationTypes; track item.value ) {
+          <mat-option value="{{item.value}}">{{item.label}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Filter 1 Freq. Mod. 2</mat-label>
+      <mat-select [value]="'' + programHeader?.filter1FreqModulationInput2Type" (valueChange)="filter1FreqModulationInput2TypeChanged($event)">
+        @for(item of modulationTypes; track item.value ) {
+          <mat-option value="{{item.value}}">{{item.label}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Filter 2 Freq. Mod. 2</mat-label>
+      <mat-select [value]="'' + programHeader?.filter2FreqModulationInput2Type" (valueChange)="filter2FreqModulationInput2TypeChanged($event)">
+        @for(item of modulationTypes; track item.value ) {
+          <mat-option value="{{item.value}}">{{item.label}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <label>Filter 1 Freq. Mod. 3</label>
+      <mat-select [value]="'' + programHeader?.filter1FreqModulationInput3Type" (valueChange)="filter1FreqModulationInput3TypeChanged($event)">
+        @for(item of modulationTypes; track item.value ) {
+          <mat-option value="{{item.value}}">{{item.label}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Filter 2 Freq. Mod. 3</mat-label>
+      <mat-select [value]="'' + programHeader?.filter2FreqModulationInput3Type" (valueChange)="filter2FreqModulationInput3TypeChanged($event)">
+        @for(item of modulationTypes; track item.value ) {
+          <mat-option value="{{item.value}}">{{item.label}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+</mat-grid-list>

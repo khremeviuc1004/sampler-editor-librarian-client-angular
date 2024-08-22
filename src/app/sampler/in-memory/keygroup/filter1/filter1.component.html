@@ -1,0 +1,81 @@
+<app-screen-title screenTitle="Filter 1" />
+<app-screen-program-name programName="{{programHeader?.name}}" />
+<app-screen-keygroup-name keygroupName="{{+keygroupNumberInMemory + 1}}" />
+
+<mat-grid-list cols="3" rowHeight="100">
+  <mat-grid-tile></mat-grid-tile>
+  <mat-grid-tile><span class="keygroup-global">Keygroup Global</span></mat-grid-tile>
+  <mat-grid-tile></mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Frequency</mat-label>
+      <input matInput type="number" min="0" max="99" [value]="keygroupHeader?.filter1?.frequency" (change)="keygroupHeaderChanged(7, $event)">
+      <mat-hint>Min 0 Max 99</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Filter 1 Freq. Mod. 1</mat-label>
+      <mat-select [value]="'' + programHeader?.filter1FreqModulationInput1Type" (valueChange)="programEnumTypeChanged(84, $event)">
+        @for(item of modulationTypes; track item.value ) {
+          <mat-option value="{{item.value}}">{{item.label}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Frequency Modulation 1</mat-label>
+      <input matInput type="number" min="-50" max="50" [value]="keygroupHeader?.filter1?.freqModulationInput1Amount" (change)="keygroupHeaderChanged(151, $event)">
+      <mat-hint>Min -50 Max 50</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Key Follow</mat-label>
+      <input matInput type="number" min="-24" max="24" [value]="keygroupHeader?.filter1?.keyFollow" (change)="keygroupHeaderChanged(8, $event)">
+      <mat-hint>Min -24 Max 24</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Filter 1 Freq. Mod. 2</mat-label>
+      <mat-select [value]="'' + programHeader?.filter1FreqModulationInput2Type" (valueChange)="programEnumTypeChanged(85, $event)">
+        @for(item of modulationTypes; track item.value ) {
+          <mat-option value="{{item.value}}">{{item.label}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Frequency Modulation 2</mat-label>
+      <input matInput type="number" min="-50" max="50" [value]="keygroupHeader?.filter1?.freqModulationInput2Amount" (change)="keygroupHeaderChanged(152, $event)">
+      <mat-hint>Min -50 Max 50</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Resonance</mat-label>
+      <input matInput type="number" min="0" max="15" [value]="keygroupHeader?.filter1?.resonance" (change)="keygroupHeaderChanged(149, $event)">
+      <mat-hint>Min 0 Max 15</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Filter 1 Freq. Mod. 3</mat-label>
+      <mat-select [value]="'' + programHeader?.filter1FreqModulationInput3Type" (valueChange)="programEnumTypeChanged(86, $event)">
+        @for(item of modulationTypes; track item.value ) {
+          <mat-option value="{{item.value}}">{{item.label}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Frequency Modulation 3</mat-label>
+      <input matInput type="number" min="-50" max="50" [value]="keygroupHeader?.filter1?.freqModulationInput3Amount" (change)="keygroupHeaderChanged(153, $event)">
+      <mat-hint>Min -50 Max 50</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+</mat-grid-list>

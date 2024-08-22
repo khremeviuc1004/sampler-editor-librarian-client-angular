@@ -1,0 +1,53 @@
+<app-screen-title screenTitle="Keygroup" />
+<app-screen-program-name programName="{{programHeader?.name}}" />
+<app-screen-keygroup-name keygroupName="{{+keygroupNumberInMemory + 1}}" />
+
+<mat-grid-list cols="2" rowHeight="100">
+  <mat-grid-tile>
+    <mat-form-field>
+      <label>Span low</label>
+      <mat-select [value]="'' + keygroupHeader?.span?.lowNote" (valueChange)="spanLowChanged($event)">
+        @for(item of notesRange; track item ) {
+          <mat-option value="{{item}}">{{item | notePipe:showNoteNames.checked}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-checkbox checked="true" #showNoteNames>Show note names</mat-checkbox>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <label>Span high</label>
+      <mat-select [value]="'' + keygroupHeader?.span?.highNote" (valueChange)="spanHighChanged($event)">
+        @for(item of notesRange; track item ) {
+          <mat-option value="{{item}}">{{item | notePipe:showNoteNames.checked}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile></mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Mute Group</mat-label>
+      <mat-select [value]="'' + keygroupHeader?.muteGroup" (valueChange)="muteGroupChanged($event)">
+        @for(item of muteGroups; track item.value ) {
+          <mat-option value="{{item.value}}">{{item.label}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile></mat-grid-tile>
+</mat-grid-list>
+
+<nav mat-tab-nav-bar  mat-stretch-tabs="false" mat-align-tabs="start" [tabPanel]="tabPanel">
+  <a mat-tab-link routerLink="./filter1" routerLinkActive="active-link">Filter 1</a>
+  <a mat-tab-link routerLink="./filter2" routerLinkActive="active-link">Filter 2</a>
+  <a mat-tab-link routerLink="./tone" routerLinkActive="active-link">Tone</a>
+  <a mat-tab-link routerLink="./envelope1" routerLinkActive="active-link">Envelope 1</a>
+  <a mat-tab-link routerLink="./envelope2" routerLinkActive="active-link">Envelope 2</a>
+  <a mat-tab-link routerLink="./envelope3" routerLinkActive="active-link">Envelope 3</a>
+  <a mat-tab-link routerLink="./zones" routerLinkActive="active-link">Zones</a>
+  <a mat-tab-link routerLink="./pitch" routerLinkActive="active-link">Pitch</a>
+</nav>
+<mat-tab-nav-panel #tabPanel><router-outlet></router-outlet></mat-tab-nav-panel>

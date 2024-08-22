@@ -1,0 +1,76 @@
+<app-screen-title screenTitle="Midi" />
+<app-screen-program-name programName="{{programHeader?.name?.trim()}}" />
+<mat-grid-list cols="3" rowHeight="100">
+  <mat-grid-tile>
+    <mat-form-field>
+      <label>Program Number</label>
+      @let progNum = programHeader?.midi?.programNumber;
+      <input matInput type="number" min="1" max="128" [value]="progNum ? progNum + 1 : 1" (change)="programNumberChanged($event)">
+      <mat-hint>Min 1 Max 128</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>Play Range</mat-grid-tile>
+  <mat-grid-tile>
+    <mat-checkbox checked="true" #showNoteNames>Show note names</mat-checkbox>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <label>Priority</label>
+      <mat-select [value]="'' + programHeader?.midi?.priority" (valueChange)="priorityChanged($event)">
+        @for(item of priorityTypes; track item.value ) {
+          <mat-option value="{{item.value}}">{{item.label}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Play Low</mat-label>
+      <mat-select [value]="'' + programHeader?.midi?.playRangeLow" (valueChange)="playLowChanged($event)">
+        @for(item of notesRange; track item ) {
+          <mat-option value="{{item}}">{{item | notePipe:showNoteNames.checked}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Play High</mat-label>
+      <mat-select [value]="'' + programHeader?.midi?.playRangeHigh" (valueChange)="playHighChanged($event)">
+        @for(item of notesRange; track item ) {
+          <mat-option value="{{item}}">{{item | notePipe:showNoteNames.checked}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Channel</mat-label>
+      @let midiChannel = programHeader?.midi?.channel;
+      <input matInput type="number" min="1" max="16" [value]="midiChannel ? midiChannel + 1 : 1" (change)="channelChanged($event)">
+      <mat-hint>Min 1 Max 16</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile></mat-grid-tile>
+  <mat-grid-tile></mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <label>Reassignment</label>
+      <mat-select [value]="'' + programHeader?.midi?.reassignment" (valueChange)="reassignmentChanged($event)">
+        @for(item of reassignmentTypes; track item.value ) {
+          <mat-option value="{{item.value}}">{{item.label}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile></mat-grid-tile>
+  <mat-grid-tile></mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Polyphony</mat-label>
+      @let polyphony = programHeader?.midi?.polyphony;
+      <input matInput type="number" min="1" max="32" [value]="polyphony ? polyphony + 1: 32" (change)="polyphonyChanged($event)">
+      <mat-hint>Min 1 Max 32</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+</mat-grid-list>

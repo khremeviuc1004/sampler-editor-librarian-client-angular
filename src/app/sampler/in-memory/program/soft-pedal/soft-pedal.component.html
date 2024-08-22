@@ -1,0 +1,25 @@
+<app-screen-title screenTitle="Soft Pedal" />
+<app-screen-program-name programName="{{programHeader?.name?.trim()}}" />
+<mat-grid-list cols="1" rowHeight="100">
+  <mat-grid-tile>
+    <mat-form-field>
+      <label>Loudness Reduction</label>
+      <input matInput type="number" min="0" max="99" [value]="programHeader?.softPedal?.loudnessReduction" (change)="loudnessReductionChanged($event)">
+      <mat-hint>Min 0 Max 99</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <label>Attack Stretch</label>
+      <input matInput type="number" min="0" max="99" [value]="programHeader?.softPedal?.attackStretch" (change)="attackStretchChanged($event)">
+      <mat-hint>Min 0 Max 99</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <label>Filter Close</label>
+      <input matInput type="number" min="0" max="99" [value]="programHeader?.softPedal?.filterClose" (change)="filterCloseChanged($event)">
+      <mat-hint>Min 0 Max 99</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+</mat-grid-list>

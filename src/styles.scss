@@ -1,1 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.mat-grid-tile-content {
+  justify-content: flex-start !important;
+  align-items: flex-start !important;
+}
+
+
+mat-grid-list {
+  margin-left: 1em;
+  margin-top: 1em;
+}

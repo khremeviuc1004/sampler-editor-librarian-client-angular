@@ -1,0 +1,10 @@
+<app-screen-title screenTitle="Modes" />
+<app-screen-program-name programName="{{programHeader?.name?.trim()}}" />
+<mat-grid-list cols="1" rowHeight="100">
+  <mat-grid-tile>
+    <mat-checkbox [checked]="programHeader?.modes?.keyGroupCrossFade" (change)="keyGroupCrossFadeChanged($event.checked)">Key Group Cross Fade</mat-checkbox>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-checkbox [checked]="programHeader?.modes?.monoLegato" (change)="monoLegatoChanged($event.checked)">Mono Legato</mat-checkbox>
+  </mat-grid-tile>
+</mat-grid-list>

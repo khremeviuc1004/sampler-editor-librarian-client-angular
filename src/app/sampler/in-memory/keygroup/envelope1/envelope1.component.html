@@ -1,0 +1,72 @@
+<app-screen-title screenTitle="Envelope 1" />
+<app-screen-program-name programName="{{programHeader?.name}}" />
+<app-screen-keygroup-name keygroupName="{{+keygroupNumberInMemory + 1}}" />
+
+<mat-grid-list cols="3" rowHeight="100">
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Attack</mat-label>
+      <input #attack matInput type="number" min="0" max="99" [value]="keygroupHeader?.envelope1?.attack" (change)="keygroupHeaderChanged(12, $event);envelope1CanvasComponent.drawEnvelope(+attack.value, +decay.value, +sustain.value, +release.value)">
+      <mat-hint>Min 0 Max 99</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Vel. Mod. of Attack</mat-label>
+      <input matInput type="number" min="-50" max="50" [value]="keygroupHeader?.envelope1?.velocityModulationOfAttack" (change)="keygroupHeaderChanged(16, $event)">
+      <mat-hint>Min -50 Max 50</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <app-adsr-envelope-canvas #envelope1CanvasComponent width="400" height="100" />
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Decay</mat-label>
+      <input #decay matInput type="number" min="-50" max="50" [value]="keygroupHeader?.envelope1?.decay" (change)="keygroupHeaderChanged(13, $event);envelope1CanvasComponent.drawEnvelope(+attack.value, +decay.value, +sustain.value, +release.value)">
+      <mat-hint>Min -50 Max 50</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Vel. Mod. of Release</mat-label>
+      <input matInput type="number" min="-50" max="50" [value]="keygroupHeader?.envelope1?.velocityModulationOfRelease" (change)="keygroupHeaderChanged(17, $event)">
+      <mat-hint>Min -50 Max 50</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile></mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Sustain</mat-label>
+      <input #sustain matInput type="number" min="0" max="99" [value]="keygroupHeader?.envelope1?.sustain" (change)="keygroupHeaderChanged(14, $event);envelope1CanvasComponent.drawEnvelope(+attack.value, +decay.value, +sustain.value, +release.value)">
+      <mat-hint>Min 0 Max 99</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Vel. Off Mod. of Release</mat-label>
+      <input matInput type="number" min="-50" max="50" [value]="keygroupHeader?.envelope1?.velocityOffModulationOfRelease" (change)="keygroupHeaderChanged(18, $event)">
+      <mat-hint>Min -50 Max 50</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile></mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Release</mat-label>
+      <input #release matInput type="number" min="0" max="99" [value]="keygroupHeader?.envelope1?.release" (change)="keygroupHeaderChanged(15, $event);envelope1CanvasComponent.drawEnvelope(+attack.value, +decay.value, +sustain.value, +release.value)">
+      <mat-hint>Min 0 Max 99</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Key Mod. of Dec. & Rel.</mat-label>
+      <input matInput type="number" min="-50" max="50" [value]="keygroupHeader?.envelope1?.keyModulationOfDecayAndRelease" (change)="keygroupHeaderChanged(19, $event)">
+      <mat-hint>Min -50 Max 50</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile></mat-grid-tile>
+  <mat-grid-tile></mat-grid-tile>
+  <mat-grid-tile>
+    <mat-checkbox [checked]="keygroupHeader?.envelope1?.attackHold" (change)="keygroupBooleanTypeChanged(131, $event.checked)">Attack Hold</mat-checkbox>
+  </mat-grid-tile>
+</mat-grid-list>

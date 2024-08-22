@@ -1,0 +1,108 @@
+<app-screen-title screenTitle="Envelope 2" />
+<app-screen-program-name programName="{{programHeader?.name}}" />
+<app-screen-keygroup-name keygroupName="{{+keygroupNumberInMemory + 1}}" />
+
+<mat-grid-list cols="4" rowHeight="120">
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Rate 1</mat-label>
+      <input #rate1 matInput type="number" min="0" max="99" [value]="keygroupHeader?.envelope2?.rate1" (change)="keygroupHeaderChanged(12, $event);envelope2CanvasComponent.drawEnvelope(+rate1.value, +level1.value, +rate2.value, +level2.value, +rate3.value, +level3.value, +rate4.value, +level4.value)">
+      <mat-hint>Min 0 Max 99</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Level 1</mat-label>
+      <input #level1 matInput type="number" min="0" max="99" [value]="keygroupHeader?.envelope2?.level1" (change)="keygroupHeaderChanged(16, $event);envelope2CanvasComponent.drawEnvelope(+rate1.value, +level1.value, +rate2.value, +level2.value, +rate3.value, +level3.value, +rate4.value, +level4.value)">
+      <mat-hint>Min 0 Max 99</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Vel. Mod. of Rate 1</mat-label>
+      <input matInput type="number" min="-50" max="50" [value]="keygroupHeader?.envelope2?.velocityModulationOfRate1" (change)="keygroupHeaderChanged(16, $event)">
+      <mat-hint>Min -50 Max 50</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <div style="width: 410px;height: 110px;background-color: lightgray;">
+      <app-four-stage-envelope-canvas #envelope2CanvasComponent width="400" height="100" style="margin: 5px;"/>
+    </div>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Rate 2</mat-label>
+      <input #rate2 matInput type="number" min="0" max="99" [value]="keygroupHeader?.envelope2?.rate2" (change)="keygroupHeaderChanged(13, $event);envelope2CanvasComponent.drawEnvelope(+rate1.value, +level1.value, +rate2.value, +level2.value, +rate3.value, +level3.value, +rate4.value, +level4.value)">
+      <mat-hint>Min 0 Max 99</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Level 2</mat-label>
+      <input #level2 matInput type="number" min="0" max="99" [value]="keygroupHeader?.envelope2?.level2" (change)="keygroupHeaderChanged(17, $event);envelope2CanvasComponent.drawEnvelope(+rate1.value, +level1.value, +rate2.value, +level2.value, +rate3.value, +level3.value, +rate4.value, +level4.value)">
+      <mat-hint>Min 0 Max 99</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Vel. Mod. of Rate 4</mat-label>
+      <input matInput type="number" min="-50" max="50" [value]="keygroupHeader?.envelope2?.velocityModulationOfRate4" (change)="keygroupHeaderChanged(16, $event)">
+      <mat-hint>Min -50 Max 50</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile></mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Rate 3</mat-label>
+      <input #rate3 matInput type="number" min="0" max="99" [value]="keygroupHeader?.envelope2?.rate3" (change)="keygroupHeaderChanged(14, $event);envelope2CanvasComponent.drawEnvelope(+rate1.value, +level1.value, +rate2.value, +level2.value, +rate3.value, +level3.value, +rate4.value, +level4.value)">
+      <mat-hint>Min 0 Max 99</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Level 3</mat-label>
+      <input #level3 matInput type="number" min="0" max="99" [value]="keygroupHeader?.envelope2?.level3" (change)="keygroupHeaderChanged(18, $event);envelope2CanvasComponent.drawEnvelope(+rate1.value, +level1.value, +rate2.value, +level2.value, +rate3.value, +level3.value, +rate4.value, +level4.value)">
+      <mat-hint>Min 0 Max 99</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Vel. Off Mod. of Rate 4</mat-label>
+      <input matInput type="number" min="-50" max="50" [value]="keygroupHeader?.envelope2?.velocityOffModulationOfRate4" (change)="keygroupHeaderChanged(16, $event)">
+      <mat-hint>Min -50 Max 50</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile></mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Rate 4</mat-label>
+      <input #rate4 matInput type="number" min="0" max="99" [value]="keygroupHeader?.envelope2?.rate4" (change)="keygroupHeaderChanged(15, $event);envelope2CanvasComponent.drawEnvelope(+rate1.value, +level1.value, +rate2.value, +level2.value, +rate3.value, +level3.value, +rate4.value, +level4.value)">
+      <mat-hint>Min 0 Max 99</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Level 4</mat-label>
+      <input #level4 matInput type="number" min="0" max="99" [value]="keygroupHeader?.envelope2?.level4" (change)="keygroupHeaderChanged(19, $event);envelope2CanvasComponent.drawEnvelope(+rate1.value, +level1.value, +rate2.value, +level2.value, +rate3.value, +level3.value, +rate4.value, +level4.value)">
+      <mat-hint>Min 0 Max 99</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Key. Mod. of Rate 2 and Rate 4</mat-label>
+      <input matInput type="number" min="-50" max="50" [value]="keygroupHeader?.envelope2?.keyModulationOfRate2AndRate4" (change)="keygroupHeaderChanged(16, $event)">
+      <mat-hint>Min -50 Max 50</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile></mat-grid-tile>
+  <mat-grid-tile></mat-grid-tile>
+  <mat-grid-tile></mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Vel. Mod. of Envelope</mat-label>
+      <input matInput type="number" min="-50" max="50" [value]="keygroupHeader?.envelope2?.velocityModulationOfEnvelope" (change)="keygroupHeaderChanged(16, $event)">
+      <mat-hint>Min -50 Max 50</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile></mat-grid-tile>
+</mat-grid-list>

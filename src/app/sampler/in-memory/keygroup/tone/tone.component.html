@@ -1,0 +1,33 @@
+<app-screen-title screenTitle="Tone" />
+<app-screen-program-name programName="{{programHeader?.name}}" />
+<app-screen-keygroup-name keygroupName="{{+keygroupNumberInMemory + 1}}" />
+
+<mat-grid-list cols="1" rowHeight="100">
+  <mat-grid-tile>
+    <mat-checkbox [checked]="keygroupHeader?.filter2ToneEnabled" (change)="keygroupBooleanTypeChanged(168, $event.checked)">Filter 2/Tone Enable</mat-checkbox>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <label>Centre Frequency</label>
+      <input matInput type="number" min="0" max="99" [value]="keygroupHeader?.tone?.centerFreqency" (change)="keygroupHeaderChanged(172, $event)">
+      <mat-hint>Min 0 Max 99</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <label>Slope</label>
+      <input matInput type="number" min="-50" max="50" [value]="keygroupHeader?.tone?.slope" (change)="keygroupHeaderChanged(173, $event)">
+      <mat-hint>Min -50 Max 50</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Filter 2 Attenuator</mat-label>
+      <mat-select [value]="'' + keygroupHeader?.filter2?.attenuator" (valueChange)="keygroupEnumTypeChanged(169, $event)">
+        @for(item of attenuation; track item.value ) {
+          <mat-option value="{{item.value}}">{{item.label}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+</mat-grid-list>

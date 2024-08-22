@@ -1,0 +1,59 @@
+<app-screen-title screenTitle="Pitch" />
+<app-screen-program-name programName="{{programHeader?.name}}" />
+<app-screen-keygroup-name keygroupName="{{+keygroupNumberInMemory + 1}}" />
+
+<mat-grid-list cols="2" rowHeight="100">
+  <mat-grid-tile>Keygroup Global</mat-grid-tile>
+  <mat-grid-tile>Keygroup Specific</mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Pitch Modulation Source</mat-label>
+      <mat-select [value]="'' + modulationSourceTypes.LFO1" disabled="true">
+        @for(item of modulationTypes; track item.value ) {
+          <mat-option value="{{item.value}}">{{item.label}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Pitch Modulation Amount</mat-label>
+      <input matInput type="number" min="0" max="99" [value]="keygroupHeader?.pitchModulationByLFO1" (change)="keygroupHeaderChanged(150, $event)">
+      <mat-hint>Min 0 Max 99</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Pitch Modulation Source</mat-label>
+      <mat-select [value]="'' + programHeader?.pitchModulationInputType" (valueChange)="programEnumTypeChanged(87, $event)">
+        @for(item of modulationTypes; track item.value ) {
+          <mat-option value="{{item.value}}">{{item.label}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Pitch Modulation Amount</mat-label>
+      <input matInput type="number" min="-50" max="50" [value]="keygroupHeader?.pitchModulationInputAmount" (change)="keygroupHeaderChanged(154, $event)">
+      <mat-hint>Min -50 Max 50</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Loudness Modulation Source</mat-label>
+      <mat-select [value]="'' + programHeader?.loudnessModulationInputType" (valueChange)="programEnumTypeChanged(88, $event)">
+        @for(item of modulationTypes; track item.value ) {
+          <mat-option value="{{item.value}}">{{item.label}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Loudness Modulation Amount</mat-label>
+      <input matInput type="number" min="-50" max="50" [value]="keygroupHeader?.loudnessModulationInputAmount" (change)="keygroupHeaderChanged(155, $event)">
+      <mat-hint>Min -50 Max 50</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+</mat-grid-list>

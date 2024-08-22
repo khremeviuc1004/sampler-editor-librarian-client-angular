@@ -1,0 +1,126 @@
+<app-screen-title screenTitle="LFO 1" />
+<nz-breadcrumb nzSeparator=">" style="margin-left: 1em;">
+  <nz-breadcrumb-item>
+    <a routerLink="/sampler">
+      <span nz-icon nzType="home"></span>
+    </a>
+  </nz-breadcrumb-item>
+  <nz-breadcrumb-item>
+    <a routerLink="/in-memory-program/{{+programNumberInMemory}}">Program - {{programHeader?.name}}</a>
+  </nz-breadcrumb-item>
+  <nz-breadcrumb-item>LFO 1</nz-breadcrumb-item>
+</nz-breadcrumb>
+<mat-grid-list cols="4" rowHeight="100">
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Waveform</mat-label>
+      <mat-select [value]="'' + programHeader?.lfo1?.waveform" (valueChange)="lfoWaveformChanged($event)">
+        @for(item of waveFormTypes; track item.value ) {
+          <mat-option value="{{item.value}}">{{item.label}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile></mat-grid-tile>
+  <mat-grid-tile></mat-grid-tile>
+  <mat-grid-tile></mat-grid-tile>
+  <mat-grid-tile>
+    <mat-checkbox [checked]="programHeader?.lfo1?.desync" (change)="lfoDesyncChanged($event.checked)">LFO Desync</mat-checkbox>
+  </mat-grid-tile>
+  <mat-grid-tile></mat-grid-tile>
+  <mat-grid-tile></mat-grid-tile>
+  <mat-grid-tile></mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <label>Speed</label>
+      <input matInput type="number" min="0" max="99" [value]="programHeader?.lfo1?.speed" (change)="lfoSpeedChanged($event)">
+      <mat-hint>Min 0 Max 99</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Speed Modulation Type</mat-label>
+      <mat-select [value]="'' + programHeader?.lfo1?.speedModulationInputType" (valueChange)="lfoSpeedModulationTypeChanged($event)">
+        @for(item of modulationTypes; track item.value ) {
+          <mat-option value="{{item.value}}">{{item.label}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Speed Modulation Amount</mat-label>
+      <input matInput type="number" min="-50" max="50" [value]="programHeader?.lfo1?.speedModulationInputAmount" (change)="lfoSpeedModulationAmountChanged($event)">
+      <mat-hint>Min -50 Max 50</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Extra Depth Modwheel Mod. Amt.</mat-label>
+      <input matInput type="number" min="0" max="99" [value]="programHeader?.lfo1?.extraDepthModulationByModwheelAmount" (change)="lfoExtraDepthModwheelChanged($event)">
+      <mat-hint>Min 0 Max 99</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <label>Depth</label>
+      <input matInput type="number" min="0" max="99" [value]="programHeader?.lfo1?.depth" (change)="lfoDepthChanged($event)">
+      <mat-hint>Min 0 Max 99</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Depth Modulation Type</mat-label>
+      <mat-select [value]="'' + programHeader?.lfo1?.depthModulationInputType" (valueChange)="lfoDepthModulationTypeChanged($event)">
+        @for(item of modulationTypes; track item.value ) {
+          <mat-option value="{{item.value}}">{{item.label}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Depth Modulation Amount</mat-label>
+      <input matInput type="number" min="-50" max="50" [value]="programHeader?.lfo1?.depthModulationInputAmount" (change)="lfoDepthModulationAmountChanged($event)">
+      <mat-hint>Min -50 Max 50</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Extra Depth Aftertouch Mod. Amt.</mat-label>
+      <input matInput type="number" min="0" max="99" [value]="programHeader?.lfo1?.extraDepthModulationByAftertouchAmount" (change)="lfoExtraDepthPressureChanged($event)">
+      <mat-hint>Min 0 Max 99</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <label>Delay</label>
+      <input matInput type="number" min="0" max="99" [value]="programHeader?.lfo1?.delay" (change)="lfoDelayChanged($event)">
+      <mat-hint>Min 0 Max 99</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Delay Modulation Type</mat-label>
+      <mat-select [value]="'' + programHeader?.lfo1?.delayModulationInputType" (valueChange)="lfoDelayModulationTypeChanged($event)">
+        @for(item of modulationTypes; track item.value ) {
+          <mat-option value="{{item.value}}">{{item.label}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Delay Modulation Amount</mat-label>
+      <input matInput type="number" min="-50" max="50" [value]="programHeader?.lfo1?.delayModulationInputAmount" (change)="lfoDelayModulationAmountChanged($event)">
+      <mat-hint>Min -50 Max 50</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Extra Depth Velocity Mod. Amt.</mat-label>
+      <input matInput type="number" min="0" max="99" [value]="programHeader?.lfo1?.extraDepthModulationByVelocityAmount" (change)="lfoExtraDepthVelocityChanged($event)">
+      <mat-hint>Min 0 Max 99</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+</mat-grid-list>

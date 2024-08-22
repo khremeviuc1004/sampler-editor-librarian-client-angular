@@ -1,0 +1,88 @@
+<app-screen-title screenTitle="Temper Tuning" />
+<app-screen-program-name programName="{{programHeader?.name?.trim()}}" />
+<mat-grid-list cols="1" rowHeight="100">
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>C</mat-label>
+      <input matInput type="number" min="-50" max="50" [value]="programHeader?.semiToneTuning?.temperC" (change)="temperAmountChanged(44, $event)">
+      <mat-hint>Min -50 Max 50</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>C#</mat-label>
+      <input matInput type="number" min="-50" max="50" [value]="programHeader?.semiToneTuning?.temperCSharp" (change)="temperAmountChanged(45, $event)">
+      <mat-hint>Min -50 Max 50</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>D</mat-label>
+      <input matInput type="number" min="-50" max="50" [value]="programHeader?.semiToneTuning?.temperD" (change)="temperAmountChanged(46, $event)">
+      <mat-hint>Min -50 Max 50</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>D#</mat-label>
+      <input matInput type="number" min="-50" max="50" [value]="programHeader?.semiToneTuning?.temperDSharp" (change)="temperAmountChanged(47, $event)">
+      <mat-hint>Min -50 Max 50</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>E</mat-label>
+      <input matInput type="number" min="-50" max="50" [value]="programHeader?.semiToneTuning?.temperE" (change)="temperAmountChanged(48, $event)">
+      <mat-hint>Min -50 Max 50</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>F</mat-label>
+      <input matInput type="number" min="-50" max="50" [value]="programHeader?.semiToneTuning?.temperF" (change)="temperAmountChanged(49, $event)">
+      <mat-hint>Min -50 Max 50</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>F#</mat-label>
+      <input matInput type="number" min="-50" max="50" [value]="programHeader?.semiToneTuning?.temperFSharp" (change)="temperAmountChanged(50, $event)">
+      <mat-hint>Min -50 Max 50</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>G</mat-label>
+      <input matInput type="number" min="-50" max="50" [value]="programHeader?.semiToneTuning?.temperG" (change)="temperAmountChanged(51, $event)">
+      <mat-hint>Min -50 Max 50</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>G#</mat-label>
+      <input matInput type="number" min="-50" max="50" [value]="programHeader?.semiToneTuning?.temperGSharp" (change)="temperAmountChanged(52, $event)">
+      <mat-hint>Min -50 Max 50</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>A</mat-label>
+      <input matInput type="number" min="-50" max="50" [value]="programHeader?.semiToneTuning?.temperA" (change)="temperAmountChanged(53, $event)">
+      <mat-hint>Min -50 Max 50</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>A#</mat-label>
+      <input matInput type="number" min="-50" max="50" [value]="programHeader?.semiToneTuning?.temperASharp" (change)="temperAmountChanged(54, $event)">
+      <mat-hint>Min -50 Max 50</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>B</mat-label>
+      <input matInput type="number" min="-50" max="50" [value]="programHeader?.semiToneTuning?.temperB" (change)="temperAmountChanged(55, $event)">
+      <mat-hint>Min -50 Max 50</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+</mat-grid-list>
