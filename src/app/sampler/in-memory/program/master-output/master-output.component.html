@@ -1,0 +1,88 @@
+<app-screen-title screenTitle="Master Output" />
+<app-screen-program-name programName="{{programHeader?.name?.trim()}}" />
+<mat-grid-list cols="3" rowHeight="100">
+  <mat-grid-tile>
+    <mat-form-field>
+      <label>Loudness</label>
+      <input matInput type="number" min="0" max="99" [value]="programHeader?.masterOutput?.loudness" (change)="loudnessChanged($event)">
+      <mat-hint>Min 0 Max 99</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>Loudness Modulation</mat-grid-tile>
+  <mat-grid-tile></mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <label>Individual Output</label>
+      <mat-select [value]="'' + programHeader?.masterOutput?.individualOutput" (valueChange)="individualOutputChanged($event)">
+        @for(item of individualOutputTypes; track item.value ) {
+          <mat-option value="{{item.value}}">{{item.label}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Loudness Modulation Type 1</mat-label>
+      <mat-select [value]="'' + modulationSourceTypes.NoteOnvelocity" (valueChange)="loudnessModulationInput2TypeChanged($event)" disabled="true">
+        @for(item of modulationTypes; track item.value ) {
+          <mat-option value="{{item.value}}">{{item.label}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Loudness Modulation Amount 1</mat-label>
+      <input matInput type="number" min="-50" max="50" [value]="programHeader?.masterOutput?.loudnessModulationInput1Amount" (change)="loudnessModulationInput1AmountChanged($event)">
+      <mat-hint>Min -50 Max 50</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <label>Individual Level (RVB/FX send amount)</label>
+      <input matInput type="number" min="0" max="99" [value]="programHeader?.masterOutput?.individualLevel" (change)="individualLevelChanged($event)">
+      <mat-hint>Min 0 Max 99</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Loudness Modulation Type 2</mat-label>
+      <mat-select [value]="'' + programHeader?.masterOutput?.loudnessModulationInput2Type" (valueChange)="loudnessModulationInput2TypeChanged($event)">
+        @for(item of modulationTypes; track item.value ) {
+          <mat-option value="{{item.value}}">{{item.label}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Loudness Modulation Amount 2</mat-label>
+      <input matInput type="number" min="-50" max="50" [value]="programHeader?.masterOutput?.loudnessModulationInput2Amount" (change)="loudnessModulationInput2AmountChanged($event)">
+      <mat-hint>Min -50 Max 50</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <label>Stereo Level</label>
+      <input matInput type="number" min="0" max="99" [value]="programHeader?.masterOutput?.stereoLevel" (change)="stereoLevelChanged($event)">
+      <mat-hint>Min 0 Max 99</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Loudness Modulation Type 3</mat-label>
+      <mat-select [value]="'' + programHeader?.masterOutput?.loudnessModulationInput3Type" (valueChange)="loudnessModulationInput3TypeChanged($event)">
+        @for(item of modulationTypes; track item.value ) {
+          <mat-option value="{{item.value}}">{{item.label}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Loudness Modulation Amount 3</mat-label>
+      <input matInput type="number" min="-50" max="50" [value]="programHeader?.masterOutput?.loudnessModulationInput3Amount" (change)="loudnessModulationInput3AmountChanged($event)">
+      <mat-hint>Min -50 Max 50</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+</mat-grid-list>

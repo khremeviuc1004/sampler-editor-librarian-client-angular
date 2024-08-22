@@ -1,0 +1,38 @@
+<app-screen-title screenTitle="LFO 2" />
+<app-screen-program-name programName="{{programHeader?.name?.trim()}}" />
+<mat-grid-list cols="1" rowHeight="100">
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Waveform</mat-label>
+      <mat-select [value]="'' + programHeader?.lfo2?.waveform" (valueChange)="lfoWaveformChanged($event)">
+        @for(item of waveFormTypes; track item.value ) {
+          <mat-option value="{{item.value}}">{{item.label}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-checkbox [checked]="programHeader?.lfo2?.retrigger" (change)="lfoRetriggerChanged($event.checked)">Retrigger</mat-checkbox>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <label>Speed</label>
+      <input matInput type="number" min="0" max="99" [value]="programHeader?.lfo2?.speed" (change)="lfoSpeedChanged($event)">
+      <mat-hint>Min 0 Max 99</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <label>Depth</label>
+      <input matInput type="number" min="0" max="99" [value]="programHeader?.lfo2?.depth" (change)="lfoDepthChanged($event)">
+      <mat-hint>Min 0 Max 99</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <label>Delay</label>
+      <input matInput type="number" min="0" max="99" [value]="programHeader?.lfo2?.delay" (change)="lfoDelayChanged($event)">
+      <mat-hint>Min 0 Max 99</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+</mat-grid-list>

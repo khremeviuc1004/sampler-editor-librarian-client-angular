@@ -1,0 +1,54 @@
+<app-screen-title screenTitle="Edit Program" />
+<nz-breadcrumb>
+  <nz-breadcrumb-item nzSeparator=">" style="margin-left: 1em;">
+    <a routerLink="/sampler">
+      <span nz-icon nzType="home"></span>
+    </a>
+  </nz-breadcrumb-item>
+  <nz-breadcrumb-item>Program - {{programHeader?.name}}</nz-breadcrumb-item>
+</nz-breadcrumb>
+<mat-grid-list cols="1" rowHeight="100">
+  <mat-grid-tile>
+    <mat-form-field hintLabel="Min 3 Max 12 characters">
+      <mat-label>Program name</mat-label>
+      <input matInput #input maxlength="12" minlength="3" (input)="onInput($event)" value="{{programHeader ? programHeader.name.trim(): ''}}" (change)="onProgramNameChange($event)" />
+      <mat-hint align="end">{{name().length}}/12</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+    <mat-label>Keygroup</mat-label>
+    <mat-select #keygroupSelect>
+      @for (item of [].constructor(programHeader ? programHeader.numberOfKeyGroups : 0); track $index) {
+        <mat-option value="{{$index}}">{{$index + 1}}</mat-option>
+      }
+    </mat-select>
+    <mat-hint align="end">Navigate to a keygroup by selecting one</mat-hint>
+  </mat-form-field>
+  <button mat-mini-fab (click)="navigateToKeygroup()">
+    <mat-icon>edit</mat-icon>
+  </button>
+  <button mat-mini-fab (click)="addKeygroup()">
+    <mat-icon>add</mat-icon>
+  </button>
+  <button mat-mini-fab (click)="deleteKeygroup()">
+    <mat-icon>delete</mat-icon>
+  </button>
+</mat-grid-tile>
+</mat-grid-list>
+
+<nav mat-tab-nav-bar  mat-stretch-tabs="false" mat-align-tabs="start" [tabPanel]="tabPanel">
+  <a mat-tab-link routerLink="./lfo1" routerLinkActive="active-link">LFO1</a>
+  <a mat-tab-link routerLink="./lfo2" routerLinkActive="active-link">LFO2</a>
+  <a mat-tab-link routerLink="./pitch-bend" routerLinkActive="active-link">Pitch Bend</a>
+  <a mat-tab-link routerLink="./temper-tuning" routerLinkActive="active-link">Temper Tuning</a>
+  <a mat-tab-link routerLink="./master-tuning" routerLinkActive="active-link">Master Tuning</a>
+  <a mat-tab-link routerLink="./soft-pedal" routerLinkActive="active-link">Soft Pedal</a>
+  <a mat-tab-link routerLink="./modes" routerLinkActive="active-link">Modes</a>
+  <a mat-tab-link routerLink="./master-output" routerLinkActive="active-link">Master Output</a>
+  <a mat-tab-link routerLink="./master-pan" routerLinkActive="active-link">Master Pan</a>
+  <a mat-tab-link routerLink="./midi" routerLinkActive="active-link">Midi</a>
+  <a mat-tab-link routerLink="./portamento" routerLinkActive="active-link">Portamento</a>
+  <a mat-tab-link routerLink="./keygroup-global" routerLinkActive="active-link">Keygroup Global</a>
+</nav>
+<mat-tab-nav-panel #tabPanel><router-outlet></router-outlet></mat-tab-nav-panel>

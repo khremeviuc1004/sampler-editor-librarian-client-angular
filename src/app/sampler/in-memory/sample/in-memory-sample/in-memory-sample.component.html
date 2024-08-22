@@ -1,0 +1,179 @@
+<app-screen-title screenTitle="Sample" />
+<mat-grid-list cols="4" rowHeight="100">
+  <mat-grid-tile>
+    <mat-form-field hintLabel="Min 3 Max 12 characters">
+      <mat-label>Sample name</mat-label>
+      <input matInput #input maxlength="12" minlength="3" (input)="onInput($event)" value="{{sampleHeader ? sampleHeader.name.trim(): ''}}" (change)="sampleHeaderNameChanged(3, $event)" />
+      <mat-hint align="end">{{name().length}}/12</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Bandwidth</mat-label>
+      <mat-select [value]="'' + sampleHeader?.bandwith" disabled="true">
+        @for(item of bandwidths; track item.value ) {
+          <mat-option value="{{item.value}}">{{item.label}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Sample Rate</mat-label>
+      <input matInput type="number" min="1" max="44100" [value]="sampleHeader?.sampleRate" disabled="true">
+      <mat-hint>Min 1 Max 44100</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-checkbox [checked]="sampleHeader?.valid" disabled="true">Sample rate validity</mat-checkbox>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Original Pitch</mat-label>
+      <input matInput type="number" min="21" max="127" [value]="sampleHeader?.originalPitch" (change)="sampleHeaderChanged(2, $event)">
+      <mat-hint>Min 21 Max 127</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Start Offset</mat-label>
+      <input matInput type="number" min="0" [max]="sampleHeader ? sampleHeader.sampleLength ? sampleHeader.sampleLength : 12 : 12" max="127" [value]="sampleHeader?.startOffset" (change)="sampleHeaderChanged(30, $event)">
+      <mat-hint>Min 21 Max 127</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Number of loops</mat-label>
+      <input matInput type="number" min="0" max="4" [value]="sampleHeader?.numberOfLoops" disabled="true">
+      <mat-hint>Min 0 Max 4</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Playback Type</mat-label>
+      <mat-select [value]="'' + sampleHeader?.playbackType" (valueChange)="sampleEnumTypeChanged(19, $event)">
+        @for(item of samplePlayBackTypes; track item.value ) {
+          <mat-option value="{{item.value}}">{{item.label}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Tuning</mat-label>
+      <input matInput type="number" min="-50.0" max="50.0" step="0.01" [value]="sampleHeader?.tune" (change)="sampleHeaderChanged(20, $event)">
+      <mat-hint>Min -50.0 Max 50.0</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>End Offset</mat-label>
+      <input matInput type="number" min="1" [max]="sampleHeader ? sampleHeader.sampleLength ? sampleHeader.sampleLength : 12 : 12" max="127" [value]="sampleHeader?.playLength" (change)="sampleHeaderChanged(34, $event)">
+      <mat-hint>Min 21 Max 127</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Length</mat-label>
+      <input matInput type="number" min="1" max="268435455" disabled="true" [value]="sampleHeader?.sampleLength">
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Tuning Offset of Hold Loop</mat-label>
+      <input matInput type="number" min="-50" max="50" [value]="sampleHeader?.tuningOffset" (change)="sampleHeaderChanged(140, $event)">
+      <mat-hint>Min -50 Max 50</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+</mat-grid-list>
+<app-screen-title screenTitle="Sample Loops" />
+<mat-grid-list  cols="4" rowHeight="125">
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Loop 1 - Start</mat-label>
+      <input matInput type="number" min="0" [max]="sampleHeader ? sampleHeader.sampleLength ? sampleHeader.sampleLength : 1 : 1" [value]="sampleHeader?.loop1?.loopStart" (change)="sampleHeaderChanged(38, $event)">
+      <mat-hint>Min 0 Max {{sampleHeader ? sampleHeader.sampleLength ? sampleHeader.sampleLength : 1 : 1}} - sample is played to this point and then looping starts from this position minus loop length</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Loop 1 - Length</mat-label>
+      <input matInput type="number" step="0.01" min="0.0" [max]="sampleHeader ? sampleHeader.loop1.loopStart : 1.0" [value]="sampleHeader?.loop1?.loopLength" (change)="sampleHeaderChanged(42, $event)">
+      <mat-hint>Min 0.0 Max {{sampleHeader ? sampleHeader.loop1.loopStart : 1.0}} - looping start from the loop start point minus this length</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Loop 1 - Dwell Time</mat-label>
+      <input matInput type="number" min="0" max="9999" [value]="sampleHeader?.loop1?.dwellTime" (change)="sampleHeaderChanged(48, $event)">
+      <mat-hint>0 = Off, 9999 = Hold, 1 - 998 = valid dwell</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile></mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Loop 2 - Start</mat-label>
+      <input matInput type="number" min="0" [max]="sampleHeader ? sampleHeader.sampleLength ? sampleHeader.sampleLength : 1 : 1" [value]="sampleHeader?.loop2?.loopStart" (change)="sampleHeaderChanged(38 + 12, $event)">
+      <mat-hint>Min 0 Max {{sampleHeader ? sampleHeader.sampleLength ? sampleHeader.sampleLength : 1 : 1}} - sample is played to this point and then looping starts from this position minus loop length</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Loop 2 - Length</mat-label>
+      <input matInput type="number" step="0.01" min="0" [max]="sampleHeader ? sampleHeader.loop2.loopStart : 1.0" [value]="sampleHeader?.loop2?.loopLength" (change)="sampleHeaderChanged(42 + 12, $event)">
+      <mat-hint>Min 0 Max {{sampleHeader ? sampleHeader.loop1.loopStart : 1.0}} - looping start from the loop start point minus this length</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Loop 2 - Dwell Time</mat-label>
+      <input matInput type="number" min="0" max="9999" [value]="sampleHeader?.loop2?.dwellTime" (change)="sampleHeaderChanged(48 + 12, $event)">
+      <mat-hint>0 = Off, 9999 = Hold, 1 - 998 = valid dwell</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile></mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Loop 3 - Start</mat-label>
+      <input matInput type="number" min="0" [max]="sampleHeader ? sampleHeader.sampleLength ? sampleHeader.sampleLength : 1 : 1" [value]="sampleHeader?.loop3?.loopStart" (change)="sampleHeaderChanged(38 + (12 * 2), $event)">
+      <mat-hint>Min 0 Max {{sampleHeader ? sampleHeader.sampleLength ? sampleHeader.sampleLength : 1 : 1}} - sample is played to this point and then looping starts from this position minus loop length</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Loop 3 - Length</mat-label>
+      <input matInput type="number" step="0.01" min="0" [max]="sampleHeader ? sampleHeader.loop3.loopStart : 1.0" [value]="sampleHeader?.loop3?.loopLength" (change)="sampleHeaderChanged(42 + (12 * 2), $event)">
+      <mat-hint>Min 0 Max {{sampleHeader ? sampleHeader.loop3.loopStart : 1.0}} - looping start from the loop start point minus this length</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Loop 3 - Dwell Time</mat-label>
+      <input matInput type="number" min="0" max="9999" [value]="sampleHeader?.loop3?.dwellTime" (change)="sampleHeaderChanged(48 + (12 * 2), $event)">
+      <mat-hint>0 = Off, 9999 = Hold, 1 - 998 = valid dwell</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile></mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Loop 4 - Start</mat-label>
+      <input matInput type="number" min="0" [max]="sampleHeader ? sampleHeader.sampleLength ? sampleHeader.sampleLength : 1 : 1" [value]="sampleHeader?.loop4?.loopStart" (change)="sampleHeaderChanged(38 + (12 * 3), $event)">
+      <mat-hint>Min 0 Max {{sampleHeader ? sampleHeader.sampleLength ? sampleHeader.sampleLength : 1 : 1}} - sample is played to this point and then looping starts from this position minus loop length</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Loop 4 - Length</mat-label>
+      <input matInput type="number" step="0.01" min="0" [max]="sampleHeader ? sampleHeader.loop4.loopStart : 1.0" [value]="sampleHeader?.loop4?.loopLength" (change)="sampleHeaderChanged(42 + (12 * 3), $event)">
+      <mat-hint>Min 0 Max {{sampleHeader ? sampleHeader.loop4.loopStart : 1.0}} - looping start from the loop start point minus this length</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Loop 4 - Dwell Time</mat-label>
+      <input matInput type="number" min="0" max="9999" [value]="sampleHeader?.loop4?.dwellTime" (change)="sampleHeaderChanged(48 + (12 * 3), $event)">
+      <mat-hint>0 = Off, 9999 = Hold, 1 - 998 = valid dwell</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile></mat-grid-tile>
+</mat-grid-list>

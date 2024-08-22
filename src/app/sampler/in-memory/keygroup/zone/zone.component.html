@@ -1,0 +1,376 @@
+<app-screen-title screenTitle="Zones" />
+<app-screen-program-name programName="{{programHeader?.name}}" />
+<app-screen-keygroup-name keygroupName="{{+keygroupNumberInMemory + 1}}" />
+
+<mat-grid-list cols="11" rowHeight="100">
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Sample</mat-label>
+      <mat-select [value]="'' + keygroupHeader?.zone1?.sampleName" (valueChange)="zoneChangeSampleName(34, $event)">
+        @for(sampleName of samples; track sampleName ) {
+          <mat-option value="{{sampleName}}">{{sampleName}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Velocity Low</mat-label>
+      <input matInput type="number" min="0" max="127" [value]="keygroupHeader?.zone1?.velocityLow" (change)="keygroupHeaderChanged(46, $event)">
+      <mat-hint>Min 0 Max 127</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Velocity High</mat-label>
+      <input matInput type="number" min="0" max="127" [value]="keygroupHeader?.zone1?.velocityHigh" (change)="keygroupHeaderChanged(47, $event)">
+      <mat-hint>Min 0 Max 127</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Pitch</mat-label>
+      <mat-select [value]="'' + keygroupHeader?.zone1?.pitch" (valueChange)="keygroupEnumTypeChanged(132, $event)">
+        @for(item of pitchTypes; track item.value ) {
+          <mat-option value="{{item.value}}">{{item.label}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Tune (semitone.cents)</mat-label>
+      <input matInput type="number" min="-50.0" max="50.0" step="0.01" [value]="keygroupHeader?.zone1?.tune" (change)="keygroupHeaderChanged(48, $event)">
+      <mat-hint>Min -50.0 Max 50.0</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Loudness</mat-label>
+      <input matInput type="number" min="-50" max="50" [value]="keygroupHeader?.zone1?.loudness" (change)="keygroupHeaderChanged(50, $event)">
+      <mat-hint>Min -50 Max 50</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Filter</mat-label>
+      <input matInput type="number" min="-50" max="50" [value]="keygroupHeader?.zone1?.filterCutOff" (change)="keygroupHeaderChanged(51, $event)">
+      <mat-hint>Min -50 Max 50</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Pan</mat-label>
+      <input matInput type="number" min="-50" max="50" [value]="keygroupHeader?.zone1?.pan" (change)="keygroupHeaderChanged(52, $event)">
+      <mat-hint>Min -50 Max 50</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Out</mat-label>
+      <mat-select [value]="'' + keygroupHeader?.zone1?.output" (valueChange)="keygroupEnumTypeChanged(136, $event)">
+        @for(item of zoneOutputTypes; track item.value ) {
+          <mat-option value="{{item.value}}">{{item.label}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Playback</mat-label>
+      <mat-select [value]="'' + keygroupHeader?.zone1?.playback" (valueChange)="keygroupEnumTypeChanged(53, $event)">
+        @for(item of zonePlayBackTypes; track item.value ) {
+          <mat-option value="{{item.value}}">{{item.label}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Velocity > start</mat-label>
+      <input matInput type="number" min="-9999" max="9999" [value]="keygroupHeader?.zone1?.velToStartPosAdj" (change)="keygroupHeaderChanged(140, $event)">
+      <mat-hint>Min -9999 Max 9999</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+
+
+
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Sample</mat-label>
+      <mat-select [value]="'' + keygroupHeader?.zone2?.sampleName" (valueChange)="zoneChangeSampleName(58, $event)">
+        @for(sampleName of samples; track sampleName ) {
+          <mat-option value="{{sampleName}}">{{sampleName}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Velocity Low</mat-label>
+      <input matInput type="number" min="0" max="127" [value]="keygroupHeader?.zone2?.velocityLow" (change)="keygroupHeaderChanged(70, $event)">
+      <mat-hint>Min 0 Max 127</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Velocity High</mat-label>
+      <input matInput type="number" min="0" max="127" [value]="keygroupHeader?.zone2?.velocityHigh" (change)="keygroupHeaderChanged(71, $event)">
+      <mat-hint>Min 0 Max 127</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Pitch</mat-label>
+      <mat-select [value]="'' + keygroupHeader?.zone2?.pitch" (valueChange)="keygroupEnumTypeChanged(133, $event)">
+        @for(item of pitchTypes; track item.value ) {
+          <mat-option value="{{item.value}}">{{item.label}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Tune (semitone.cents)</mat-label>
+      <input matInput type="number" min="-50.0" max="50.0" step="0.01" [value]="keygroupHeader?.zone2?.tune" (change)="keygroupHeaderChanged(72, $event)">
+      <mat-hint>Min -50.0 Max 50.0</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Loudness</mat-label>
+      <input matInput type="number" min="-50" max="50" [value]="keygroupHeader?.zone2?.loudness" (change)="keygroupHeaderChanged(74, $event)">
+      <mat-hint>Min -50 Max 50</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Filter</mat-label>
+      <input matInput type="number" min="-50" max="50" [value]="keygroupHeader?.zone2?.filterCutOff" (change)="keygroupHeaderChanged(75, $event)">
+      <mat-hint>Min -50 Max 50</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Pan</mat-label>
+      <input matInput type="number" min="-50" max="50" [value]="keygroupHeader?.zone2?.pan" (change)="keygroupHeaderChanged(76, $event)">
+      <mat-hint>Min -50 Max 50</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Out</mat-label>
+      <mat-select [value]="'' + keygroupHeader?.zone2?.output" (valueChange)="keygroupEnumTypeChanged(137, $event)">
+        @for(item of zoneOutputTypes; track item.value ) {
+          <mat-option value="{{item.value}}">{{item.label}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Playback</mat-label>
+      <mat-select [value]="'' + keygroupHeader?.zone2?.playback" (valueChange)="keygroupEnumTypeChanged(77, $event)">
+        @for(item of zonePlayBackTypes; track item.value ) {
+          <mat-option value="{{item.value}}">{{item.label}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Velocity > start</mat-label>
+      <input matInput type="number" min="-9999" max="9999" [value]="keygroupHeader?.zone2?.velToStartPosAdj" (change)="keygroupHeaderChanged(142, $event)">
+      <mat-hint>Min -9999 Max 9999</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+
+
+
+
+
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Sample</mat-label>
+      <mat-select [value]="'' + keygroupHeader?.zone3?.sampleName" (valueChange)="zoneChangeSampleName(82, $event)">
+        @for(sampleName of samples; track sampleName ) {
+          <mat-option value="{{sampleName}}">{{sampleName}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Velocity Low</mat-label>
+      <input matInput type="number" min="0" max="127" [value]="keygroupHeader?.zone3?.velocityLow" (change)="keygroupHeaderChanged(94, $event)">
+      <mat-hint>Min 0 Max 127</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Velocity High</mat-label>
+      <input matInput type="number" min="0" max="127" [value]="keygroupHeader?.zone3?.velocityHigh" (change)="keygroupHeaderChanged(95, $event)">
+      <mat-hint>Min 0 Max 127</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Pitch</mat-label>
+      <mat-select [value]="'' + keygroupHeader?.zone3?.pitch" (valueChange)="keygroupEnumTypeChanged(134, $event)">
+        @for(item of pitchTypes; track item.value ) {
+          <mat-option value="{{item.value}}">{{item.label}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Tune (semitone.cents)</mat-label>
+      <input matInput type="number" min="-50.0" max="50.0" step="0.01" [value]="keygroupHeader?.zone3?.tune" (change)="keygroupHeaderChanged(96, $event)">
+      <mat-hint>Min -50.0 Max 50.0</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Loudness</mat-label>
+      <input matInput type="number" min="-50" max="50" [value]="keygroupHeader?.zone3?.loudness" (change)="keygroupHeaderChanged(98, $event)">
+      <mat-hint>Min -50 Max 50</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Filter</mat-label>
+      <input matInput type="number" min="-50" max="50" [value]="keygroupHeader?.zone3?.filterCutOff" (change)="keygroupHeaderChanged(99, $event)">
+      <mat-hint>Min -50 Max 50</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Pan</mat-label>
+      <input matInput type="number" min="-50" max="50" [value]="keygroupHeader?.zone3?.pan" (change)="keygroupHeaderChanged(100, $event)">
+      <mat-hint>Min -50 Max 50</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Out</mat-label>
+      <mat-select [value]="'' + keygroupHeader?.zone3?.output" (valueChange)="keygroupEnumTypeChanged(138, $event)">
+        @for(item of zoneOutputTypes; track item.value ) {
+          <mat-option value="{{item.value}}">{{item.label}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Playback</mat-label>
+      <mat-select [value]="'' + keygroupHeader?.zone3?.playback" (valueChange)="keygroupEnumTypeChanged(101, $event)">
+        @for(item of zonePlayBackTypes; track item.value ) {
+          <mat-option value="{{item.value}}">{{item.label}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Velocity > start</mat-label>
+      <input matInput type="number" min="-9999" max="9999" [value]="keygroupHeader?.zone3?.velToStartPosAdj" (change)="keygroupHeaderChanged(144, $event)">
+      <mat-hint>Min -9999 Max 9999</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+
+
+
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Sample</mat-label>
+      <mat-select [value]="'' + keygroupHeader?.zone4?.sampleName" (valueChange)="zoneChangeSampleName(106, $event)">
+        @for(sampleName of samples; track sampleName ) {
+          <mat-option value="{{sampleName}}">{{sampleName}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Velocity Low</mat-label>
+      <input matInput type="number" min="0" max="127" [value]="keygroupHeader?.zone4?.velocityLow" (change)="keygroupHeaderChanged(118, $event)">
+      <mat-hint>Min 0 Max 127</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Velocity High</mat-label>
+      <input matInput type="number" min="0" max="127" [value]="keygroupHeader?.zone4?.velocityHigh" (change)="keygroupHeaderChanged(119, $event)">
+      <mat-hint>Min 0 Max 127</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Pitch</mat-label>
+      <mat-select [value]="'' + keygroupHeader?.zone4?.pitch" (valueChange)="keygroupEnumTypeChanged(135, $event)">
+        @for(item of pitchTypes; track item.value ) {
+          <mat-option value="{{item.value}}">{{item.label}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Tune (semitone.cents)</mat-label>
+      <input matInput type="number" min="-50.0" max="50.0" step="0.01" [value]="keygroupHeader?.zone4?.tune" (change)="keygroupHeaderChanged(120, $event)">
+      <mat-hint>Min -50.0 Max 50.0</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Loudness</mat-label>
+      <input matInput type="number" min="-50" max="50" [value]="keygroupHeader?.zone4?.loudness" (change)="keygroupHeaderChanged(122, $event)">
+      <mat-hint>Min -50 Max 50</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Filter</mat-label>
+      <input matInput type="number" min="-50" max="50" [value]="keygroupHeader?.zone4?.filterCutOff" (change)="keygroupHeaderChanged(123, $event)">
+      <mat-hint>Min -50 Max 50</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Pan</mat-label>
+      <input matInput type="number" min="-50" max="50" [value]="keygroupHeader?.zone4?.pan" (change)="keygroupHeaderChanged(124, $event)">
+      <mat-hint>Min -50 Max 50</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Out</mat-label>
+      <mat-select [value]="'' + keygroupHeader?.zone4?.output" (valueChange)="keygroupEnumTypeChanged(139, $event)">
+        @for(item of zoneOutputTypes; track item.value ) {
+          <mat-option value="{{item.value}}">{{item.label}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Playback</mat-label>
+      <mat-select [value]="'' + keygroupHeader?.zone4?.playback" (valueChange)="keygroupEnumTypeChanged(125, $event)">
+        @for(item of zonePlayBackTypes; track item.value ) {
+          <mat-option value="{{item.value}}">{{item.label}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Velocity > start</mat-label>
+      <input matInput type="number" min="-9999" max="9999" [value]="keygroupHeader?.zone4?.velToStartPosAdj" (change)="keygroupHeaderChanged(146, $event)">
+      <mat-hint>Min -9999 Max 9999</mat-hint>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-checkbox [checked]="keygroupHeader?.velocityCrossFade" (change)="keygroupBooleanTypeChanged(30, $event.checked)">Zone Velocity Cross Fade</mat-checkbox>
+  </mat-grid-tile>
+</mat-grid-list>

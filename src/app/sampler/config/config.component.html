@@ -1,0 +1,81 @@
+<app-screen-title screenTitle="Midi Configuration" />
+<button mat-button [matMenuTriggerFor]="menu">Menu</button>
+<mat-menu #menu="matMenu">
+  <button mat-menu-item (click)="routeToSamplerPage()">Sampler</button>
+</mat-menu>
+<mat-grid-list cols="1" gutterSize="50" rowHeight="40%">
+  <mat-grid-tile>
+    <div>
+      <mat-card appearance="raised">
+        <mat-card-header>
+          <mat-card-title>Midi Input Ports</mat-card-title>
+        </mat-card-header>
+      </mat-card>
+      <table mat-table [dataSource]="midiInputPortsDataSource" class="mat-elevation-z8">
+        <ng-container matColumnDef="connected">
+          <th mat-header-cell *matHeaderCellDef>Connected</th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox (click)="$event.stopPropagation()"
+                          (change)="$event ? this.toggleInputCheckbox(row) : null"
+                          [checked]="this.isInputPortConnected(row) ? 'checked' : null">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef>Id</th>
+          <td mat-cell *matCellDef="let port">{{port.id}}</td>
+        </ng-container>
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Name</th>
+          <td mat-cell *matCellDef="let port">{{port.name}}</td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+      <mat-paginator #midiInputPortsPaginator [pageSizeOptions]="[5, 10, 20]"
+        showFirstLastButtons
+        aria-label="Select page of midi input ports"
+        class="mat-elevation-z8">
+      </mat-paginator>
+    </div>
+</mat-grid-tile>
+  <mat-grid-tile>
+    <div>
+      <mat-card appearance="raised">
+        <mat-card-header>
+          <mat-card-title>Midi Output Ports</mat-card-title>
+        </mat-card-header>
+      </mat-card>
+      <table mat-table [dataSource]="midiOutputPortsDataSource" class="mat-elevation-z8">
+        <ng-container matColumnDef="connected">
+          <th mat-header-cell *matHeaderCellDef>Connected</th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox (click)="$event.stopPropagation()"
+                          (change)="$event ? this.toggleOutputCheckbox(row) : null"
+                          [checked]="this.isOutputPortConnected(row) ? 'checked' : null">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef>Id</th>
+          <td mat-cell *matCellDef="let port">{{port.id}}</td>
+        </ng-container>
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Name</th>
+          <td mat-cell *matCellDef="let port">{{port.name}}</td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+      <mat-paginator #midiOutputPortsPaginator [pageSizeOptions]="[5, 10, 20]"
+        showFirstLastButtons
+        aria-label="Select page of midi output ports"
+        class="mat-elevation-z8">
+      </mat-paginator>
+    </div>
+  </mat-grid-tile>
+</mat-grid-list>
+<button mat-raised-button (click)="routeToSamplerPage()">Done</button>
+
