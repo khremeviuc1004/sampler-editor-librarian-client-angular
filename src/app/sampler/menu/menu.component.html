@@ -1,0 +1,24 @@
+<button mat-button [matMenuTriggerFor]="fileMenu">File</button>
+<button mat-button [matMenuTriggerFor]="viewMenu">View</button>
+<mat-menu #fileMenu="matMenu">
+  <button mat-menu-item (click)="router.navigate(['disk-open'])">
+    <mat-icon>folder_open</mat-icon>
+    <span>Open</span>
+  </button>
+  <button mat-menu-item (click)="router.navigate(['disk-save'])">
+    <mat-icon>save</mat-icon>
+    <span>Save</span>
+  </button>
+  <mat-divider></mat-divider>
+  <button mat-menu-item (click)="router.navigate(['config'])">
+    <mat-icon>settings</mat-icon>
+    <span>Settings</span>
+  </button>
+</mat-menu>
+<mat-menu #viewMenu="matMenu">
+  <button mat-menu-item (click)="router.navigate(['sampler'])">Memory</button>
+  <button mat-menu-item (click)="router.navigate(['effect'])">Effects</button>
+  <button mat-menu-item (click)="router.navigate(['effect-assignment'])">Effect Assignments</button>
+  <button mat-menu-item (click)="router.navigate(['reverb'])">Reverbs</button>
+  <button mat-menu-item (click)="router.navigate(['reverb-assignment'])">Reverb Assignments</button>
+</mat-menu>

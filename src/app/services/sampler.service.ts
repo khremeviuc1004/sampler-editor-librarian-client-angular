@@ -1,13 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { KeyGroup as InMemoryKeygroup, Program as InMemoryProgram, Sample as InMemorySample} from 'sampler-editor-librarian-dto'
+import { ChorusEffect, DelayEffect, EchoEffect, KeyGroup as InMemoryKeygroup, Program as InMemoryProgram, Sample as InMemorySample, PitchShiftEffect, Reverb} from 'sampler-editor-librarian-dto'
 
 
 interface HardDiskEntryDetails {
-  entry_number: number,
-  selector: number,
-  entry_name: string,
+  name: string,
+  file_type: number,
+  model: number,
   type: string
 }
 
@@ -36,6 +36,16 @@ export interface S1000MiscellaneousDataType {
   midiExlusiveChannel: number
 }
 
+export type FileDetails = {
+  name: string;
+  file_type: string;
+};
+
+export type ProgramDetails = {
+  midi_program_number: number;
+  name: string;
+};
+
 @Injectable({
   providedIn: 'root'
 })
@@ -53,12 +63,19 @@ export class SamplerService {
     return this.httpClient.get<string[]>(this.baseUrl + 'request-resident-program-names');
   }
 
+  samplerRequestResidentProgramNamesWithMidiProgramNumbers(): Observable<Array<ProgramDetails>> {
+    return this.httpClient.get<Array<ProgramDetails>>(this.baseUrl + 'request-resident-program-names-with-numbers');
+  }
+
   samplerRequestResidentSampleNames(): Observable<string[]> {
     return this.httpClient.get<string[]>(this.baseUrl + 'request-resident-sample-names');
   }
 
   samplerRequestHardDiskDirectory(): Observable<HardDiskEntryDetails[]> {
     return this.httpClient.get<HardDiskEntryDetails[]>(this.baseUrl + 'hard-disk-dir');
+  }
+  samplerRequestHardDiskDirectoryAll(): Observable<HardDiskEntryDetails[]> {
+    return this.httpClient.get<HardDiskEntryDetails[]>(this.baseUrl + 'hard-disk-dir-entries-all');
   }
 
   samplerRequestVolumeList(): Observable<VolumeListEntryDetails[]> {
@@ -171,9 +188,12 @@ export class SamplerService {
     return this.httpClient.patch<boolean>(this.baseUrl + 'clear_volume_and_save_memory_to_selected_volume/' + saveType, null)
   }
 
-
   samplerSaveMemoryToSelectedVolume(saveType: number): Observable<boolean> {
     return this.httpClient.patch<boolean>(this.baseUrl + 'save_memory_to_selected_volume/' + saveType, null)
+  }
+
+  samplerSaveMemoryToNewVolume(saveType: number): Observable<boolean> {
+    return this.httpClient.patch<boolean>(this.baseUrl + 'save_memory_to_new_volume/' + saveType, null)
   }
 
   samplerHardDriveSelectedPartition() : Observable<number> {
@@ -182,5 +202,57 @@ export class SamplerService {
 
   samplerHardDrivePartitionSelectedVolume() : Observable<number> {
     return this.httpClient.get<number>(this.baseUrl + 'harddrive/partition/volume')
+  }
+
+  samplerEffects(): Observable<string[]> {
+    return this.httpClient.get<string[]>(this.baseUrl + 'effects')
+  }
+
+  samplerEffect(effectNumber: number): Observable<DelayEffect | ChorusEffect | PitchShiftEffect | EchoEffect> {
+    return this.httpClient.get<DelayEffect | ChorusEffect | PitchShiftEffect | EchoEffect>(this.baseUrl + 'effect/' + effectNumber)
+  }
+
+  samplerEffectUpdatePart(effectNumber: number, effectType: number, index: number, value: number) {
+    return this.httpClient.patch<boolean>(this.baseUrl + 'effect/' + effectNumber + '/effect_type/' + effectType + '/index/' + index + '/value/' + value, null).subscribe(success => console.log("Effect updated", success))
+  }
+
+  samplerReverbs(): Observable<string[]> {
+    return this.httpClient.get<string[]>(this.baseUrl + 'reverbs')
+  }
+
+  samplerReverb(reverbNumber: number): Observable<Reverb> {
+    return this.httpClient.get<Reverb>(this.baseUrl + 'reverb/' + reverbNumber)
+  }
+
+  samplerReverbUpdatePart(reverbNumber: number, index: number, value: number) {
+    return this.httpClient.patch<boolean>(this.baseUrl + 'reverb/' + reverbNumber + '/index/' + index + '/value/' + value, null).subscribe(success => console.log("Reverb updated", success))
+  }
+
+  samplerProgramReverbAssignments(): Observable<Array<number>> {
+    return this.httpClient.get<Array<number>>(this.baseUrl + 'program/reverb/assignments')
+  }
+
+  samplerProgramEffectAssignments(): Observable<Array<number>> {
+    return this.httpClient.get<Array<number>>(this.baseUrl + 'program/effect/assignments')
+  }
+
+  samplerProgramReverbAssignment(programNumber: number, reverbNumber: number) {
+    return this.httpClient.patch<Array<number>>(this.baseUrl + 'assignment/program/' + programNumber + '/reverb/' + reverbNumber, null).subscribe(success => console.log("Program reverb assignment updated", success))
+  }
+
+  samplerProgramEffectAssignment(programNumber: number, effectNumber: number) {
+    this.httpClient.patch<Array<number>>(this.baseUrl + 'assignment/program/' + programNumber + '/effect/' + effectNumber, null).subscribe(success => console.log("Program effect assignment updated", success))
+  }
+
+  samplerGetMiscellaneousBytes(dataIndex: number, dataBank: number): Observable<number>  {
+    return this.httpClient.get<number>(this.baseUrl + 'miscellaneous-bytes/' + dataIndex + '/data_bank_number/' + dataBank)
+  }
+
+  samplerUpdateMiscellaneousBytes(dataIndex: number, dataBank: number, changed_value: number): Observable<boolean>  {
+    return this.httpClient.put<boolean>(this.baseUrl + 'miscellaneous-bytes/' + dataIndex + '/data_bank_number/' + dataBank + '/value/' + changed_value, null)
+  }
+
+  samplerAllFilesInMemory(): Observable<Array<FileDetails>> {
+    return this.httpClient.get<Array<FileDetails>>(this.baseUrl + 'all-files-in-memory')
   }
 }

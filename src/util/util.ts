@@ -208,3 +208,35 @@ export const deleteFromDisk = [
   { value: DeleteFromDisk.ENTIRE_VOLUME, label: 'Entire volume'},
   { value: DeleteFromDisk.OPERATING_SYSTEM, label: 'Operating system'},
 ]
+
+export enum ReverbType {
+  LARGE_HALL,
+  MEDIUM_HALL,
+  LARGE_ROOM,
+  SMALL_ROOM,
+  PLATE_1,
+  PLATE_2,
+}
+
+export const reverbType = [
+  { value: ReverbType.LARGE_HALL, label: 'Large Hall'},
+  { value: ReverbType.MEDIUM_HALL, label: 'Medium Hall'},
+  { value: ReverbType.LARGE_ROOM, label: 'Large Room'},
+  { value: ReverbType.SMALL_ROOM, label: 'Small Room'},
+  { value: ReverbType.PLATE_1, label: 'Plate 1'},
+  { value: ReverbType.PLATE_2, label: 'Plate 2'},
+]
+
+export enum EffectType {
+  CHORUS = 6,
+  PITCH_SHIFT,
+  ECHO,
+  DELAY,
+}
+
+export const effectType = [
+  { value: EffectType.CHORUS, label: 'Chorus'},
+  { value: EffectType.PITCH_SHIFT, label: 'Pitch Shift'},
+  { value: EffectType.ECHO, label: 'Echo'},
+  { value: EffectType.DELAY, label: 'Delay'},
+]

@@ -1,3 +1,4 @@
+<app-menu />
 <app-screen-title screenTitle="Edit Program" />
 <nz-breadcrumb>
   <nz-breadcrumb-item nzSeparator=">" style="margin-left: 1em;">
@@ -17,13 +18,13 @@
   </mat-grid-tile>
   <mat-grid-tile>
     <mat-form-field>
-    <mat-label>Keygroup</mat-label>
-    <mat-select #keygroupSelect>
-      @for (item of [].constructor(programHeader ? programHeader.numberOfKeyGroups : 0); track $index) {
-        <mat-option value="{{$index}}">{{$index + 1}}</mat-option>
-      }
-    </mat-select>
-    <mat-hint align="end">Navigate to a keygroup by selecting one</mat-hint>
+      <mat-label>Keygroup</mat-label>
+      <mat-select #keygroupSelect>
+        @for (item of [].constructor(programHeader ? programHeader.numberOfKeyGroups : 0); track $index) {
+          <mat-option value="{{$index}}">{{$index + 1}}</mat-option>
+        }
+      </mat-select>
+      <mat-hint align="end">Navigate to a keygroup by selecting one</mat-hint>
   </mat-form-field>
   <button mat-mini-fab (click)="navigateToKeygroup()">
     <mat-icon>edit</mat-icon>

@@ -1,0 +1,54 @@
+<app-screen-title screenTitle="Program Effect Assignment" />
+<app-menu />
+<mat-grid-list cols="1" rowHeight="100%">
+  <mat-grid-tile>
+    <div>
+      <mat-card appearance="raised">
+        <mat-card-header>
+          <mat-card-title>Effects</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-form-field class="sample-table-filter-field">
+            <mat-label>Filter</mat-label>
+            <input #effectNameFilter matInput (input)="onEffectNameFilterInput($event)" width="12">
+          </mat-form-field>
+          <button mat-icon-button (click)="effectNameFilter.value = '';setEffectNameFilter('')">
+            <mat-icon>clear</mat-icon>
+          </button>
+        </mat-card-content>
+      </mat-card>
+      @if (samplerEffectNamesLoading) {
+        <mat-spinner></mat-spinner>
+      }
+      @else {
+        <mat-table [dataSource]="samplerEffectNamesDataSource" class="mat-elevation-z8">
+          <ng-container matColumnDef="programNumber">
+            <mat-header-cell mat-header-cell *matHeaderCellDef>Program Number</mat-header-cell>
+            <mat-cell *matCellDef="let assignment">{{assignment.programNumber + 1}}</mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="effectAssignment">
+            <mat-header-cell mat-header-cell *matHeaderCellDef>Effect Assignment</mat-header-cell>
+            <mat-cell *matCellDef="let assignment">
+                <mat-select #effectSelect (valueChange)="assignment.effectNumber=effectSelect.value;samplerService.samplerProgramEffectAssignment(assignment.programNumber, effectSelect.value)" [value]="assignment.effectNumber">
+                  @for (effectName of effectNames; track $index) {
+                    <mat-option [value]="$index">{{effectName | titlecase}}</mat-option>
+                  }
+                </mat-select>
+            </mat-cell>
+          </ng-container>
+          <mat-header-row *matHeaderRowDef="samplerEffectsDisplayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let effectName; columns: samplerEffectsDisplayedColumns;"></mat-row>
+        </mat-table>
+    }
+
+      <mat-paginator #effectsPaginator [pageSizeOptions]="[10]"
+        showFirstLastButtons
+        aria-label="Select page of effects"
+        class="mat-elevation-z8">
+      </mat-paginator>
+      <button mat-mini-fab (click)="loadEffectAssignments()" style="margin-left: 1em;margin-top: 1em;">
+        <mat-icon>refresh</mat-icon>
+      </button>
+    </div>
+  </mat-grid-tile>
+</mat-grid-list>

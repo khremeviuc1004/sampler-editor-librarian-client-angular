@@ -1,8 +1,4 @@
 
-tr:hover {
-  background: #ececec;
-}
-
 mat-grid-list {
   width: 80%;
   margin-left: 3em;
@@ -15,4 +11,8 @@ mat-grid-list {
 
 .selected-row {
   background-color: gray;
+}
+
+.mat-mdc-row:hover .mat-mdc-cell {
+  background-color: lightgray;
 }

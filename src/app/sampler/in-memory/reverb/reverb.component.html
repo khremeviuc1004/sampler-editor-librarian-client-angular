@@ -1,0 +1,125 @@
+<app-screen-title screenTitle="Reverb" />
+<app-menu />
+<mat-grid-list cols="2">
+  <mat-grid-tile>
+    <div>
+      <mat-card appearance="raised">
+        <mat-card-header>
+          <mat-card-title>Reverbs</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-form-field class="sample-table-filter-field">
+            <mat-label>Filter</mat-label>
+            <input #reverbNameFilter matInput (input)="onReverbNameFilterInput($event)" width="12">
+          </mat-form-field>
+          <button mat-icon-button (click)="reverbNameFilter.value = '';setReverbNameFilter('')">
+            <mat-icon>clear</mat-icon>
+          </button>
+        </mat-card-content>
+      </mat-card>
+      @if (samplerReverbNamesLoading) {
+        <mat-spinner></mat-spinner>
+      }
+      @else {
+        <mat-table [dataSource]="samplerReverbNamesDataSource" class="mat-elevation-z8">
+          <ng-container matColumnDef="name">
+            <mat-header-cell mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+            <mat-cell *matCellDef="let reverbName">{{reverbName}}</mat-cell>
+          </ng-container>
+          <mat-header-row *matHeaderRowDef="samplerReverbsDisplayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let reverbName; columns: samplerReverbsDisplayedColumns;" (click)="onRowClick(reverbName)"></mat-row>
+        </mat-table>
+    }
+
+      <mat-paginator #reverbsPaginator [pageSizeOptions]="[10]"
+        showFirstLastButtons
+        aria-label="Select page of reverbs"
+        class="mat-elevation-z8">
+      </mat-paginator>
+      <button mat-mini-fab (click)="loadReverbs()" style="margin-left: 1em;margin-top: 1em;">
+        <mat-icon>refresh</mat-icon>
+      </button>
+    </div>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <div class="internalMatGrid">
+      <mat-grid-list cols="2" rowHeight="100">
+        <mat-grid-tile>
+          <mat-form-field hintLabel="Min 3 Max 12 characters">
+            <mat-label>Reverb name</mat-label>
+            <input matInput #reverbName maxlength="12" minlength="3" (input)="onReverbNameInput($event)" value="{{reverbHeader ? reverbHeader.name.trim(): ''}}" (change)="onReverbNameChange($event)" />
+            <mat-hint align="end">{{name().length}}/12</mat-hint>
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile></mat-grid-tile>
+        <mat-grid-tile>
+          <mat-form-field>
+            <mat-label>Type</mat-label>
+            <mat-select #reverbTypeSelect [value]="reverbHeader?.type" (valueChange)="samplerService.samplerReverbUpdatePart(+reverbNumberInMemory, 13, +reverbTypeSelect.value)">
+              @for (reverbType of reverbType; track reverbType.value) {
+                <mat-option value="{{reverbType.value}}">{{reverbType.label}}</mat-option>
+              }
+            </mat-select>
+            <mat-hint align="end">Navigate to a keygroup by selecting one</mat-hint>
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <mat-form-field>
+            <mat-label>Individual Output Level</mat-label>
+            <input matInput #outputLevel type="number" min="0" max="99" [value]="reverbHeader?.outputLevel" (change)="samplerService.samplerReverbUpdatePart(+reverbNumberInMemory, 15, +outputLevel.value)">
+            <mat-hint>Min 0 Max 99</mat-hint>
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <mat-form-field>
+            <mat-label>Decay</mat-label>
+            <input matInput #decayTime type="number" min="0" max="99" [value]="reverbHeader?.decayTime" (change)="samplerService.samplerReverbUpdatePart(+reverbNumberInMemory, 33, +decayTime.value)">
+            <mat-hint>Min 0 Max 99</mat-hint>
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <mat-form-field>
+            <mat-label>Stereo Pan</mat-label>
+            <input matInput #pan type="number" min="-50" max="50" [value]="reverbHeader?.outputBalance" (change)="samplerService.samplerReverbUpdatePart(+reverbNumberInMemory, 16, +pan.value)">
+            <mat-hint>Min -50 Max 50</mat-hint>
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <mat-form-field>
+            <mat-label>High Freq. Damping</mat-label>
+            <input matInput #highFrequencyDamping type="number" min="0" max="99" [value]="reverbHeader?.highFrequencyDamping" (change)="samplerService.samplerReverbUpdatePart(+reverbNumberInMemory, 32, +highFrequencyDamping.value)">
+            <mat-hint>Min 0 Max 99</mat-hint>
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <mat-form-field>
+            <label>High Frequency Cut</label>
+            <input matInput #highFrequencyCut type="number" min="0" max="99" [value]="reverbHeader?.highFrequencyCut" (change)="samplerService.samplerReverbUpdatePart(+reverbNumberInMemory, 24, +highFrequencyCut.value)">
+            <mat-hint>Min 0 Max 99</mat-hint>
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <mat-form-field>
+            <label>Delay</label>
+            <input matInput #preDelay type="number" min="0" max="360" [value]="reverbHeader?.preDelay" (change)="samplerService.samplerReverbUpdatePart(+reverbNumberInMemory, 21, +preDelay.value)">
+            <mat-hint>Min 0 Max 360</mat-hint>
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <mat-form-field>
+            <label>Stereo Width</label>
+            <input matInput #stereoWidth type="number" min="0" max="99" [value]="reverbHeader?.stereoWidth" (change)="samplerService.samplerReverbUpdatePart(+reverbNumberInMemory, 17, +stereoWidth.value)">
+            <mat-hint>Min 0 Max 99</mat-hint>
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <mat-form-field>
+            <mat-label>Diffusion</mat-label>
+            <input matInput #diffusion type="number" min="0" max="99" [value]="reverbHeader?.diffusion" (change)="samplerService.samplerReverbUpdatePart(+reverbNumberInMemory, 35, +diffusion.value)">
+            <mat-hint>Min 0 Max 99</mat-hint>
+          </mat-form-field>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </div>
+  </mat-grid-tile>
+</mat-grid-list>

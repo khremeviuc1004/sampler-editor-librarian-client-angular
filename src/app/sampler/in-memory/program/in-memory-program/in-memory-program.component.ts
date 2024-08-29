@@ -11,11 +11,13 @@ import { ProgramScreenCommon } from '../../../../common/program-screen-common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { MenuComponent } from '../../../menu/menu.component';
 
 @Component({
   selector: 'app-in-memory-program',
   standalone: true,
-  imports: [MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule, MatIconModule, RouterLink, MatTabsModule, RouterOutlet, MatGridListModule, ScreenTitleComponent, NzBreadCrumbModule, NzIconModule],
+  imports: [MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule, MatIconModule, RouterLink,
+    MatTabsModule, RouterOutlet, MatGridListModule, ScreenTitleComponent, NzBreadCrumbModule, NzIconModule, MenuComponent],
   templateUrl: './in-memory-program.component.html',
   styleUrl: './in-memory-program.component.scss',
   encapsulation: ViewEncapsulation.None

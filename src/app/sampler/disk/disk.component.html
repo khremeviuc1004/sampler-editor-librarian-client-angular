@@ -1,0 +1,227 @@
+<app-menu />
+<app-screen-title [screenTitle]="openMode ? 'Open' : 'Save'" />
+<mat-grid-list [cols]="!openMode ? 4 : 3" gutterSize="10" rowHeight="100%">
+  @if (!openMode) {
+    <mat-grid-tile >
+      <div>
+        <mat-card appearance="raised">
+          <mat-card-header>
+            <mat-card-title>Memory Items</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <mat-form-field class="sample-table-filter-field">
+              <mat-label>Filter</mat-label>
+              <input #memoryFilter matInput (input)="onMemoryItemFilterInput($event)" width="12">
+            </mat-form-field>
+            <button mat-icon-button (click)="memoryFilter.value = '';setMemoryItemFilter('')">
+              <mat-icon>clear</mat-icon>
+            </button>
+          </mat-card-content>
+        </mat-card>
+        @if (samplerMemoryItemsLoading) {
+          <mat-spinner></mat-spinner>
+        }
+        @else {
+          <mat-table [dataSource]="samplerMemoryItemDataSource" class="mat-elevation-z8">
+            <ng-container matColumnDef="name">
+              <mat-header-cell mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+              <mat-cell *matCellDef="let memoryItem">{{memoryItem.name}}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="file_type">
+              <mat-header-cell mat-header-cell *matHeaderCellDef>Type</mat-header-cell>
+              <mat-cell *matCellDef="let memoryItem">{{memoryItem.file_type}}</mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="samplerMemoryItemDisplayedColumns"></mat-header-row>
+            <mat-row
+              [class.selected-row]="samplerMemoryItemListSelectIndex == i"
+              *matRowDef="let memoryItem;let i = index; columns: samplerMemoryItemDisplayedColumns;"
+              (click)="onMemoryItemSelectionIndexChange(i)"
+              ></mat-row>
+          </mat-table>
+      }
+
+        <mat-paginator #memoryItemPaginator [pageSizeOptions]="[5]"
+          showFirstLastButtons
+          aria-label="Select page of memory items"
+          class="mat-elevation-z8">
+        </mat-paginator>
+        <mat-grid-list cols="1" rowHeight="50">
+          <mat-grid-tile>
+            <mat-form-field>
+              <mat-label>Save Type</mat-label>
+              <mat-select #saveLoadType>
+                @for (element of diskAccessReadWrite; track element.value) {
+                  <mat-option [value]="element.value">{{element.label}}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+              </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-checkbox #clearVolumeOnSave>Clear volume</mat-checkbox>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-checkbox #createNewVolumeOnSave>Create new volume</mat-checkbox>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <button mat-mini-fab (click)="onSaveMemory(saveLoadType.value)" style="margin-left: 1em;margin-top: 1em;">
+              <mat-icon>save</mat-icon>
+            </button>
+              </mat-grid-tile>
+        </mat-grid-list>
+      </div>
+    </mat-grid-tile>
+  }
+  <mat-grid-tile >
+    <div>
+      <mat-card appearance="raised">
+        <mat-card-header>
+          <mat-card-title>Partition List</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-form-field class="sample-table-filter-field">
+            <mat-label>Filter</mat-label>
+            <input #samplerPartitionListFilter matInput (input)="onVolumeListFilterInput($event)">
+          </mat-form-field>
+          <button mat-icon-button (click)="samplerPartitionListFilter.value = '';setVolumeListFilter('')">
+            <mat-icon>clear</mat-icon>
+          </button>
+        </mat-card-content>
+      </mat-card>
+      @if (samplerPartitionListLoading) {
+        <mat-spinner></mat-spinner>
+      }
+      @else {
+        <mat-table mat-table [dataSource]="samplerPartitionListDataSource" class="mat-elevation-z8">
+          <ng-container matColumnDef="name">
+            <mat-header-cell mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+            <mat-cell *matCellDef="let partitionNumber">{{partitionNumber | hardDrivePartitionLetter}}</mat-cell>
+          </ng-container>
+          <mat-header-row *matHeaderRowDef="partitionListDisplayedColumns"></mat-header-row>
+          <mat-row [class.selected-row]="samplerPartitionListSelectIndex == row" *matRowDef="let row; columns: partitionListDisplayedColumns;" (click)="onPartitionSelectionIndexChange(row)">
+          </mat-row>
+        </mat-table>
+      }
+
+      <mat-paginator #samplerPartitionListPaginator [pageSizeOptions]="[5]"
+        showFirstLastButtons
+        aria-label="Select page of disk files"
+        class="mat-elevation-z8">
+      </mat-paginator>
+      <button mat-mini-fab (click)="loadPartitionList()" style="margin-left: 1em;margin-top: 1em;">
+        <mat-icon>refresh</mat-icon>
+      </button>
+    </div>
+  </mat-grid-tile>
+  <mat-grid-tile >
+    <div>
+      <mat-card appearance="raised">
+        <mat-card-header>
+          <mat-card-title>Volume List</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-form-field class="sample-table-filter-field">
+            <mat-label>Filter</mat-label>
+            <input #samplerVolumeListFilter matInput (input)="onVolumeListFilterInput($event)">
+          </mat-form-field>
+          <button mat-icon-button (click)="samplerVolumeListFilter.value = '';setVolumeListFilter('')">
+            <mat-icon>clear</mat-icon>
+          </button>
+        </mat-card-content>
+      </mat-card>
+      @if (samplerVolumeListLoading) {
+        <mat-spinner></mat-spinner>
+      }
+      @else {
+        <mat-table mat-table [dataSource]="samplerVolumeListDataSource" class="mat-elevation-z8">
+          <ng-container matColumnDef="index">
+            <mat-header-cell mat-header-cell *matHeaderCellDef>Number</mat-header-cell>
+            <mat-cell *matCellDef="let entry">{{entry.index}}</mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="name">
+            <mat-header-cell mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+            <mat-cell *matCellDef="let entry">{{entry.name}}</mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="type">
+            <mat-header-cell mat-header-cell *matHeaderCellDef>Type</mat-header-cell>
+            <mat-cell *matCellDef="let entry">{{entry.type}}</mat-cell>
+          </ng-container>
+          <mat-header-row *matHeaderRowDef="volumeListDisplayedColumns"></mat-header-row>
+          <mat-row [class.selected-row]="samplerVolumeListSelectIndex == row.index" *matRowDef="let row; columns: volumeListDisplayedColumns;" (click)="onVolumeSelectionIndexChange(row.index)">
+          </mat-row>
+        </mat-table>
+      }
+
+      <mat-paginator #samplerVolumeListPaginator [pageSizeOptions]="[5]"
+        showFirstLastButtons
+        aria-label="Select page of disk files"
+        class="mat-elevation-z8">
+      </mat-paginator>
+      <button mat-mini-fab (click)="loadVolumeList()" style="margin-left: 1em;margin-top: 1em;">
+        <mat-icon>refresh</mat-icon>
+      </button>
+    </div>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <div>
+      <mat-card appearance="raised">
+        <mat-card-header>
+          <mat-card-title>Volume Contents</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-form-field class="sample-table-filter-field">
+            <mat-label>Filter</mat-label>
+            <input #hardDiskDirectoryFilter matInput (input)="onHardDiskDirectoryFilterInput($event)">
+          </mat-form-field>
+          <button mat-icon-button (click)="hardDiskDirectoryFilter.value = '';setHardDiskDirectoryFilter('')">
+            <mat-icon>clear</mat-icon>
+          </button>
+        </mat-card-content>
+      </mat-card>
+      @if (samplerHardDiskEntriesLoading) {
+        <mat-spinner></mat-spinner>
+      }
+      @else {
+        <mat-table mat-table [dataSource]="samplerHardDiskEntriesDataSource" class="mat-elevation-z8">
+          <ng-container matColumnDef="index">
+            <mat-header-cell mat-header-cell *matHeaderCellDef>#</mat-header-cell>
+            <mat-cell *matCellDef="let entry">{{entry.index}}</mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="name">
+            <mat-header-cell mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+            <mat-cell *matCellDef="let entry">{{entry.name}}</mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="type">
+            <mat-header-cell mat-header-cell *matHeaderCellDef>Type</mat-header-cell>
+            <mat-cell *matCellDef="let entry">{{entry.type}}</mat-cell>
+          </ng-container>
+          <mat-header-row *matHeaderRowDef="hardDiskDirectoryDisplayedColumns"></mat-header-row>
+          <mat-row [class.selected-row]="selectedHarddiskVolumeEntryNumber == row.index" *matRowDef="let row; columns: hardDiskDirectoryDisplayedColumns;" (click)="onHarddiskVolumeEntrySelectionIndexChange(row.index)"></mat-row>
+        </mat-table>
+      }
+
+      <mat-paginator #residentHardDiskEntriesPaginator [pageSizeOptions]="[5]"
+        showFirstLastButtons
+        aria-label="Select page of disk files"
+        class="mat-elevation-z8">
+      </mat-paginator>
+      <button mat-mini-fab (click)="loadHardDiskDirectory()" style="margin-left: 1em;margin-top: 1em;">
+        <mat-icon>refresh</mat-icon>
+      </button>
+      @if (openMode) {
+        <mat-form-field>
+          <mat-label>Load Type</mat-label>
+          <mat-select #openLoadType>
+            @for (element of diskAccessReadWrite; track element.value) {
+              <mat-option [value]="element.value">{{element.label}}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <mat-checkbox #clearMemoryOnLoad>Clear memory</mat-checkbox>
+        <button mat-mini-fab (click)="onLoadVolume(openLoadType.value)" style="margin-left: 1em;margin-top: 1em;">
+          <mat-icon>open_in_browser</mat-icon>
+        </button>
+      }
+    </div>
+  </mat-grid-tile>
+</mat-grid-list>
+

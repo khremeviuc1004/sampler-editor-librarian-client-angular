@@ -1,8 +1,5 @@
-<app-screen-title screenTitle="Midi Configuration" />
-<button mat-button [matMenuTriggerFor]="menu">Menu</button>
-<mat-menu #menu="matMenu">
-  <button mat-menu-item (click)="routeToSamplerPage()">Sampler</button>
-</mat-menu>
+<app-screen-title screenTitle="Settings" />
+<app-menu />
 <mat-grid-list cols="1" gutterSize="50" rowHeight="40%">
   <mat-grid-tile>
     <div>
@@ -77,5 +74,4 @@
     </div>
   </mat-grid-tile>
 </mat-grid-list>
-<button mat-raised-button (click)="routeToSamplerPage()">Done</button>
 

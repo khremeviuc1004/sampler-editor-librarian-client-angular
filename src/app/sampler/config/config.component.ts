@@ -10,11 +10,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
 import { MatMenuModule } from '@angular/material/menu';
 import { LocalStorageService } from 'ngx-webstorage';
+import { MenuComponent } from '../menu/menu.component';
 
 @Component({
   selector: 'app-config',
   standalone: true,
-  imports: [MatGridListModule, MatTableModule, MatCheckboxModule, MatPaginatorModule, MatCardModule, ScreenTitleComponent, MatButtonModule, MatMenuModule],
+  imports: [MatGridListModule, MatTableModule, MatCheckboxModule, MatPaginatorModule, MatCardModule, ScreenTitleComponent, MatButtonModule, MatMenuModule, MenuComponent],
   templateUrl: './config.component.html',
   styleUrl: './config.component.scss',
 })

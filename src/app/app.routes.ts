@@ -26,6 +26,11 @@ import { Envelope2Component } from './sampler/in-memory/keygroup/envelope2/envel
 import { Envelope3Component } from './sampler/in-memory/keygroup/envelope3/envelope3.component';
 import { ZoneComponent } from './sampler/in-memory/keygroup/zone/zone.component';
 import { PitchComponent } from './sampler/in-memory/keygroup/pitch/pitch.component';
+import { EffectComponent } from './sampler/in-memory/effect/effect.component';
+import { ReverbComponent } from './sampler/in-memory/reverb/reverb.component';
+import { EffectAssignmentComponent } from './sampler/in-memory/effect-assignment/effect-assignment.component';
+import { ReverbAssignmentComponent } from './sampler/in-memory/reverb-assignment/reverb-assignment.component';
+import { DiskComponent } from './sampler/disk/disk.component';
 
 export const routes: Routes = [
   {
@@ -131,6 +136,30 @@ export const routes: Routes = [
   {
     path: 'in-memory-sample/:sampleNumberInMemory/loop/:loopNumber',
     component: SampleLoopComponent,
+  },
+  {
+    path: 'effect',
+    component: EffectComponent,
+  },
+  {
+    path: 'reverb',
+    component: ReverbComponent,
+  },
+  {
+    path: 'effect-assignment',
+    component: EffectAssignmentComponent,
+  },
+  {
+    path: 'reverb-assignment',
+    component: ReverbAssignmentComponent,
+  },
+  {
+    path: 'disk-open',
+    component: DiskComponent,
+  },
+  {
+    path: 'disk-save',
+    component: DiskComponent,
   },
   { path: '',   redirectTo: '/config', pathMatch: 'full' },
   { path: '**', component: ErrorPageComponent },

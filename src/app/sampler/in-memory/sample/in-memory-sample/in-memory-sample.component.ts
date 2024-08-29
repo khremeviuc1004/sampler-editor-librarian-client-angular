@@ -9,11 +9,23 @@ import { MatInputModule } from '@angular/material/input';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { bandwidths as Bandwidths, samplePlayBackTypes as SamplePlayBackTypes } from '../../../../../util/util';
+import { MenuComponent } from '../../../menu/menu.component';
 
 @Component({
   selector: 'app-in-memory-sample',
   standalone: true,
-  imports: [RouterOutlet, MatFormFieldModule, MatSelectModule, MatInputModule, MatGridListModule, MatCheckboxModule, MatTabsModule, RouterLink, ScreenTitleComponent],
+  imports: [
+    RouterOutlet,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule,
+    MatGridListModule,
+    MatCheckboxModule,
+    MatTabsModule,
+    RouterLink,
+    ScreenTitleComponent,
+    MenuComponent
+  ],
   templateUrl: './in-memory-sample.component.html',
   styleUrl: './in-memory-sample.component.scss'
 })
