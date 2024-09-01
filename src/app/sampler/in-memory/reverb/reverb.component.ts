@@ -1,4 +1,11 @@
-import { Component, ElementRef, inject, OnInit, signal, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  inject,
+  OnInit,
+  signal,
+  ViewChild,
+} from '@angular/core';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -18,8 +25,6 @@ import { Reverb } from 'sampler-editor-librarian-dto';
 import { reverbType } from '../../../../util/util';
 import { MenuComponent } from '../../menu/menu.component';
 
-
-
 @Component({
   selector: 'app-reverb',
   standalone: true,
@@ -37,14 +42,13 @@ import { MenuComponent } from '../../menu/menu.component';
     ScreenTitleComponent,
     MatMenuModule,
     MatSelectModule,
-    MenuComponent
+    MenuComponent,
   ],
   templateUrl: './reverb.component.html',
-  styleUrl: './reverb.component.scss'
+  styleUrl: './reverb.component.scss',
 })
 export class ReverbComponent implements OnInit {
-
-  @ViewChild("reverbName") reverbNameInput?: ElementRef;
+  @ViewChild('reverbName') reverbNameInput?: ElementRef;
 
   route: ActivatedRoute | null = null;
   samplerService = inject(SamplerService);
@@ -52,34 +56,41 @@ export class ReverbComponent implements OnInit {
 
   samplerReverbsDisplayedColumns: string[] = ['name'];
 
-  samplerReverbNamesDataSource = new MatTableDataSource<string>(new Array<string>());
+  samplerReverbNamesDataSource = new MatTableDataSource<string>(
+    new Array<string>(),
+  );
   @ViewChild('reverbsPaginator')
   samplerResidentProgramNamesPaginator!: MatPaginator;
   samplerReverbNamesLoading = true;
 
-  reverbNumberInMemory = "0";
+  reverbNumberInMemory = '0';
   reverbHeader: Reverb | null = null;
   protected readonly name = signal('');
 
   reverbType = reverbType;
 
-
-  constructor(route: ActivatedRoute){
+  constructor(route: ActivatedRoute) {
     this.route = route;
   }
 
   ngOnInit(): void {
     this.samplerReverbNamesDataSource.filterPredicate = (data, filter) => {
-      return data.toString().toLowerCase().indexOf(filter.toString().toLowerCase()) != -1;
-    }
+      return (
+        data
+          .toString()
+          .toLowerCase()
+          .indexOf(filter.toString().toLowerCase()) != -1
+      );
+    };
     this.loadReverbs();
-}
+  }
 
   loadReverbs() {
     this.samplerReverbNamesLoading = true;
-    this.samplerService.samplerReverbs().subscribe(data => {
+    this.samplerService.samplerReverbs().subscribe((data) => {
       this.samplerReverbNamesDataSource.data = data;
-      this.samplerReverbNamesDataSource.paginator = this.samplerResidentProgramNamesPaginator;
+      this.samplerReverbNamesDataSource.paginator =
+        this.samplerResidentProgramNamesPaginator;
       this.samplerReverbNamesLoading = false;
     });
   }
@@ -94,10 +105,12 @@ export class ReverbComponent implements OnInit {
 
   onRowClick(value: string) {
     if (this.reverbNameInput) {
-      this.samplerService.samplerReverb(this.samplerReverbNamesDataSource.data.indexOf(value)).subscribe(reverb => {
-        console.log("Reverb", reverb);
-        this.reverbHeader = reverb;
-      });
+      this.samplerService
+        .samplerReverb(this.samplerReverbNamesDataSource.data.indexOf(value))
+        .subscribe((reverb) => {
+          console.log('Reverb', reverb);
+          this.reverbHeader = reverb;
+        });
     }
   }
 
@@ -106,6 +119,9 @@ export class ReverbComponent implements OnInit {
   }
 
   protected onReverbNameChange(event: Event) {
-    // this.samplerService.samplerChangeNameInProgramHeader(+this.programNumberInMemory, 3, (event.target as HTMLInputElement).value);
+    this.samplerService.samplerReverbUpdateName(
+      +this.reverbNumberInMemory,
+      (event.target as HTMLInputElement).value,
+    );
   }
 }

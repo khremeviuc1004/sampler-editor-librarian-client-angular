@@ -29,8 +29,7 @@
           <mat-header-row *matHeaderRowDef="samplerEffectsDisplayedColumns"></mat-header-row>
           <mat-row *matRowDef="let effectName; columns: samplerEffectsDisplayedColumns;" (click)="onRowClick(effectName)"></mat-row>
         </mat-table>
-    }
-
+      }
       <mat-paginator #effectsPaginator [pageSizeOptions]="[10]"
         showFirstLastButtons
         aria-label="Select page of effects"
@@ -46,16 +45,22 @@
       <mat-grid-list cols="2" rowHeight="100">
         <mat-grid-tile>
           <mat-form-field hintLabel="Min 3 Max 12 characters">
+            <mat-label>Effects Filename</mat-label>
+            <input matInput #effectFilename maxlength="12" minlength="3" (input)="onEffectsAndReverbFilenameInput($event)" value="{{effectsAndReverbFilename ? effectsAndReverbFilename.trim(): ''}}" (change)="onEffectsAndReverbFilenameChange($event)" />
+            <mat-hint align="end">{{effectsFilenameSignal().length}}/12</mat-hint>
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <mat-form-field hintLabel="Min 3 Max 12 characters">
             <mat-label>Effect name</mat-label>
-            <input matInput #effectName maxlength="12" minlength="3" (input)="onEffectNameInput($event)" value="{{effectHeader ? effectHeader.name.trim(): ''}}" (change)="onEffectNameChange($event)" />
+            <input matInput #effectName maxlength="12" minlength="3" (input)="onEffectNameInput($event)" value="{{effect ? effect.name.trim(): ''}}" (change)="onEffectNameChange($event)" />
             <mat-hint align="end">{{name().length}}/12</mat-hint>
           </mat-form-field>
         </mat-grid-tile>
-        <mat-grid-tile></mat-grid-tile>
         <mat-grid-tile>
           <mat-form-field>
             <mat-label>Type</mat-label>
-            <mat-select #effectTypeSelect [value]="effectHeader?.type" (valueChange)="samplerService.samplerEffectUpdatePart(effectNumberInMemory, effectTypeInMemory, 13, +effectTypeSelect.value)">
+            <mat-select #effectTypeSelect [value]="'' + effect?.type" (valueChange)="samplerService.samplerEffectUpdatePart(effectNumberInMemory, effectTypeInMemory, 13, +effectTypeSelect.value)">
               @for (effectType of effectTypes; track effectType.value) {
                 <mat-option value="{{effectType.value}}">{{effectType.label}}</mat-option>
               }
@@ -66,42 +71,196 @@
         <mat-grid-tile>
           <mat-form-field>
             <mat-label>Individual Output Level</mat-label>
-            <input matInput #outputLevel type="number" min="0" max="99" [value]="effectHeader?.outputLevel" (change)="samplerService.samplerEffectUpdatePart(effectNumberInMemory, effectTypeInMemory, 15, +outputLevel.value)">
+            <input matInput #outputLevel type="number" min="0" max="99" [value]="effect?.outputLevel" (change)="samplerService.samplerEffectUpdatePart(effectNumberInMemory, effectTypeInMemory, 15, +outputLevel.value)">
             <mat-hint>Min 0 Max 99</mat-hint>
           </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
+            @if (effect?.type == effectTypeEnum.CHORUS) {
+              <mat-form-field>
+                <mat-label>Modulation Speed</mat-label>
+                <input matInput #chorusModulationSpeed type="number" min="0" max="99" [value]="getChorusEffect().modulationSpeed" (change)="samplerService.samplerEffectUpdatePart(effectNumberInMemory, effectTypeInMemory, 36, +chorusModulationSpeed.value)">
+                <mat-hint>Min 0 Max 99</mat-hint>
+              </mat-form-field>
+            }
+            @else if (effect?.type == effectTypeEnum.PITCH_SHIFT) {
+              <mat-form-field>
+                <mat-label>Left Tune Offset</mat-label>
+                <input matInput #pitchshiftLeftTuneOffset type="number" min="-50.0" max="50.0" step="0.01" [value]="getPitchShiftEffect().leftTuneOffset" (change)="samplerService.samplerEffectUpdatePart(effectNumberInMemory, effectTypeInMemory, 39, +pitchshiftLeftTuneOffset.value)">
+                <mat-hint>Min -50.0 Max 50.0</mat-hint>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Right Tune Offset</mat-label>
+                <input matInput #pitchshiftRightTuneOffset type="number" min="-50.0" max="50.0" step="0.01" [value]="getPitchShiftEffect().rightTuneOffset" (change)="samplerService.samplerEffectUpdatePart(effectNumberInMemory, effectTypeInMemory, 41, +pitchshiftRightTuneOffset.value)">
+                <mat-hint>Min -50.0 Max 50.0</mat-hint>
+              </mat-form-field>
+              }
+            @else if (effect?.type == effectTypeEnum.ECHO) {
+              <mat-form-field>
+                <mat-label>Delay 1</mat-label>
+                <input matInput #echoDelay1 type="number" min="0" max="360" [value]="getEchoEffect().delay1" (change)="samplerService.samplerEffectUpdatePart(effectNumberInMemory, effectTypeInMemory, 49, +echoDelay1.value)">
+                <mat-hint>Min 0ms Max 360ms</mat-hint>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Delay 2</mat-label>
+                <input matInput #echoDelay2 type="number" min="0" max="360" [value]="getEchoEffect().delay2" (change)="samplerService.samplerEffectUpdatePart(effectNumberInMemory, effectTypeInMemory, 51, +echoDelay2.value)">
+                <mat-hint>Min 0ms Max 360ms</mat-hint>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Delay 3</mat-label>
+                <input matInput #echoDelay3 type="number" min="0" max="360" [value]="getEchoEffect().delay3" (change)="samplerService.samplerEffectUpdatePart(effectNumberInMemory, effectTypeInMemory, 53, +echoDelay3.value)">
+                <mat-hint>Min 0ms Max 360ms</mat-hint>
+              </mat-form-field>
+            }
+            @else if (effect?.type == effectTypeEnum.DELAY) {
+              <mat-form-field>
+                <mat-label>Feedback</mat-label>
+                <input matInput #delayFeedback type="number" min="0" max="99" [value]="getDelayEffect().feedback" (change)="samplerService.samplerEffectUpdatePart(effectNumberInMemory, effectTypeInMemory, 26, +delayFeedback.value)">
+                <mat-hint>Min 0 Max 99</mat-hint>
+              </mat-form-field>
+            }
         </mat-grid-tile>
         <mat-grid-tile>
           <mat-form-field>
             <mat-label>Stereo Pan</mat-label>
-            <input matInput #pan type="number" min="-50" max="50" [value]="effectHeader?.outputBalance" (change)="samplerService.samplerEffectUpdatePart(effectNumberInMemory, effectTypeInMemory, 16, +pan.value)">
+            <input matInput #pan type="number" min="-50" max="50" [value]="effect?.outputBalance" (change)="samplerService.samplerEffectUpdatePart(effectNumberInMemory, effectTypeInMemory, 16, +pan.value)">
             <mat-hint>Min -50 Max 50</mat-hint>
           </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
+          @if (effect?.type == effectTypeEnum.CHORUS) {
+            <mat-form-field>
+              <mat-label>Modulation Depth</mat-label>
+              <input matInput #chorusModulationDepth type="number" min="0" max="99" [value]="getChorusEffect().modulationDepth" (change)="samplerService.samplerEffectUpdatePart(effectNumberInMemory, effectTypeInMemory, 37, +chorusModulationDepth.value)">
+              <mat-hint>Min 0 Max 99</mat-hint>
+            </mat-form-field>
+          }
+          @else if (effect?.type == effectTypeEnum.PITCH_SHIFT) {
+            <mat-form-field>
+              <mat-label>Left Feedback Level</mat-label>
+              <input matInput #pitchshiftLeftFeedbackLevel type="number" min="0" max="99" [value]="getPitchShiftEffect().leftFeedbackLevel" (change)="samplerService.samplerEffectUpdatePart(effectNumberInMemory, effectTypeInMemory, 43, +pitchshiftLeftFeedbackLevel.value)">
+              <mat-hint>Min 0 Max 99</mat-hint>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Right Feedback Level</mat-label>
+              <input matInput #pitchshiftRightFeedbackLevel type="number" min="0" max="99" [value]="getPitchShiftEffect().rightFeedbackLevel" (change)="samplerService.samplerEffectUpdatePart(effectNumberInMemory, effectTypeInMemory, 44, +pitchshiftRightFeedbackLevel.value)">
+              <mat-hint>Min 0 Max 99</mat-hint>
+            </mat-form-field>
+          }
+          @else if (effect?.type == effectTypeEnum.ECHO) {
+            <mat-form-field>
+              <mat-label>Feedback 1</mat-label>
+              <input matInput #echoFeedback1 type="number" min="0" max="99" [value]="getEchoEffect().feedback1Level" (change)="samplerService.samplerEffectUpdatePart(effectNumberInMemory, effectTypeInMemory, 55, +echoFeedback1.value)">
+              <mat-hint>Min 0 Max 99</mat-hint>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Feedback 2</mat-label>
+              <input matInput #echoFeedback2 type="number" min="0" max="99" [value]="getEchoEffect().feedback2Level" (change)="samplerService.samplerEffectUpdatePart(effectNumberInMemory, effectTypeInMemory, 56, +echoFeedback2.value)">
+              <mat-hint>Min 0 Max 99</mat-hint>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Feedback 3</mat-label>
+              <input matInput #echoFeedback3 type="number" min="0" max="99" [value]="getEchoEffect().feedback3Level" (change)="samplerService.samplerEffectUpdatePart(effectNumberInMemory, effectTypeInMemory, 57, +echoFeedback3.value)">
+              <mat-hint>Min 0 Max 99</mat-hint>
+            </mat-form-field>
+          }
+          @else if (effect?.type == effectTypeEnum.DELAY) {
+            <mat-form-field>
+              <mat-label>Delay Time</mat-label>
+              <input matInput #delayDelayTime type="number" min="0" max="999" [value]="getDelayEffect().delayTime" (change)="samplerService.samplerEffectUpdatePart(effectNumberInMemory, effectTypeInMemory, 27, +delayDelayTime.value)">
+              <mat-hint>Min 0 Max 999ms</mat-hint>
+            </mat-form-field>
+          }
         </mat-grid-tile>
         <mat-grid-tile>
-          @if (effectHeader?.type !== 8) {
+          @if (effect?.type !== 8) {
             <mat-form-field>
             <label>High Frequency Cut</label>
-            <input matInput #highFrequencyCut type="number" min="0" max="99" [value]="effectHeader?.highFrequencyCut" (change)="samplerService.samplerEffectUpdatePart(effectNumberInMemory, effectTypeInMemory, 24, +highFrequencyCut.value)">
+            <input matInput #highFrequencyCut type="number" min="0" max="99" [value]="effect?.highFrequencyCut" (change)="samplerService.samplerEffectUpdatePart(effectNumberInMemory, effectTypeInMemory, 24, +highFrequencyCut.value)">
             <mat-hint>Min 0 Max 99</mat-hint>
           </mat-form-field>
           }
         </mat-grid-tile>
         <mat-grid-tile>
+          @if (effect?.type == effectTypeEnum.CHORUS) {
+            <mat-form-field>
+              <mat-label>Feedback Level</mat-label>
+              <input matInput #chorusFeedbackLevel type="number" min="0" max="99" [value]="getChorusEffect().modulationDepth" (change)="samplerService.samplerEffectUpdatePart(effectNumberInMemory, effectTypeInMemory, 38, +chorusFeedbackLevel.value)">
+              <mat-hint>Min 0 Max 99</mat-hint>
+            </mat-form-field>
+          }
+          @else if (effect?.type == effectTypeEnum.PITCH_SHIFT) {
+            <mat-form-field>
+              <mat-label>Left Delay Time</mat-label>
+              <input matInput #pitchshiftLeftDelayTime type="number" min="0" max="180" [value]="getPitchShiftEffect().leftDelayTime" (change)="samplerService.samplerEffectUpdatePart(effectNumberInMemory, effectTypeInMemory, 45, +pitchshiftLeftDelayTime.value)">
+              <mat-hint>Min 0 Max 180ms</mat-hint>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Right Delay Time</mat-label>
+              <input matInput #pitchshiftRightDelayTime type="number" min="0" max="180" [value]="getPitchShiftEffect().rightDelayTime" (change)="samplerService.samplerEffectUpdatePart(effectNumberInMemory, effectTypeInMemory, 47, +pitchshiftRightDelayTime.value)">
+              <mat-hint>Min 0 Max 180ms</mat-hint>
+            </mat-form-field>
+        }
+          @else if (effect?.type == effectTypeEnum.ECHO) {
+            <mat-form-field>
+              <mat-label>Pan 1</mat-label>
+              <input matInput #echoPan1 type="number" min="-50" max="50" [value]="getEchoEffect().pan1" (change)="samplerService.samplerEffectUpdatePart(effectNumberInMemory, effectTypeInMemory, 58, +echoPan1.value)">
+              <mat-hint>Min -50 Max 50</mat-hint>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Pan 2</mat-label>
+              <input matInput #echoPan2 type="number" min="-50" max="50" [value]="getEchoEffect().pan2" (change)="samplerService.samplerEffectUpdatePart(effectNumberInMemory, effectTypeInMemory, 59, +echoPan2.value)">
+              <mat-hint>Min -50 Max 50</mat-hint>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Pan 3</mat-label>
+              <input matInput #echoPan3 type="number" min="-50" max="50" [value]="getEchoEffect().pan3" (change)="samplerService.samplerEffectUpdatePart(effectNumberInMemory, effectTypeInMemory, 60, +echoPan3.value)">
+              <mat-hint>Min -50 Max 50</mat-hint>
+            </mat-form-field>
+          }
+          @else if (effect?.type == effectTypeEnum.DELAY) {
+            <mat-form-field>
+              <mat-label>LFO Depth</mat-label>
+              <input matInput #delayLFODepth type="number" min="0" max="999" [value]="getDelayEffect().lfoDepth" (change)="samplerService.samplerEffectUpdatePart(effectNumberInMemory, effectTypeInMemory, 29, +delayLFODepth.value)">
+              <mat-hint>Min 0 Max 999ms</mat-hint>
+            </mat-form-field>
+          }
         </mat-grid-tile>
         <mat-grid-tile>
-          @if (effectHeader?.type !== 9) {
+          @if (effect?.type !== 9) {
             <mat-form-field>
               <label>Stereo Width</label>
-              <input matInput #stereoWidth type="number" min="0" max="99" [value]="effectHeader?.stereoWidth" (change)="samplerService.samplerEffectUpdatePart(effectNumberInMemory, effectTypeInMemory, 17, +stereoWidth.value)">
+              <input matInput #stereoWidth type="number" min="0" max="99" [value]="effect?.stereoWidth" (change)="samplerService.samplerEffectUpdatePart(effectNumberInMemory, effectTypeInMemory, 17, +stereoWidth.value)">
               <mat-hint>Min 0 Max 99</mat-hint>
             </mat-form-field>
           }
         </mat-grid-tile>
         <mat-grid-tile>
+            @if (effect?.type == effectTypeEnum.ECHO) {
+              <mat-form-field>
+                <label>Left Extra Delay</label>
+                <input matInput #echoLeftExtraDelay type="number" min="0" max="180" [value]="getEchoEffect().leftExtraDelay" (change)="samplerService.samplerEffectUpdatePart(effectNumberInMemory, effectTypeInMemory, 61, +echoLeftExtraDelay.value)">
+                <mat-hint>Min 0 Max 180</mat-hint>
+              </mat-form-field>
+            }
+            @else if (effect?.type == effectTypeEnum.DELAY) {
+              <mat-form-field>
+                <mat-label>LFO Rate</mat-label>
+                <input matInput #delayLFORate type="number" min="0" max="99" [value]="getDelayEffect().lfoRate" (change)="samplerService.samplerEffectUpdatePart(effectNumberInMemory, effectTypeInMemory, 31, +delayLFORate.value)">
+                <mat-hint>Min 0 Max 99</mat-hint>
+              </mat-form-field>
+            }
+        </mat-grid-tile>
+        <mat-grid-tile>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            @if (effect?.type == effectTypeEnum.ECHO) {
+              <mat-form-field>
+                <label>Feedback Damping</label>
+                <input matInput #echoFeedbackDamping type="number" min="0" max="99" [value]="getEchoEffect().feedbackDamping" (change)="samplerService.samplerEffectUpdatePart(effectNumberInMemory, effectTypeInMemory, 63, +echoFeedbackDamping.value)">
+                <mat-hint>Min 0 Max 99</mat-hint>
+              </mat-form-field>
+            }
         </mat-grid-tile>
       </mat-grid-list>
     </div>

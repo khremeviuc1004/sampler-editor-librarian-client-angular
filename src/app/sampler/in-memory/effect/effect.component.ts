@@ -14,7 +14,13 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ScreenTitleComponent } from '../../screen-title/screen-title.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SamplerService } from '../../../services/sampler.service';
-import { ChorusEffect, DelayEffect, EchoEffect, PitchShiftEffect } from 'sampler-editor-librarian-dto';
+import {
+  ChorusEffect,
+  DelayEffect,
+  EchoEffect,
+  EffectType,
+  PitchShiftEffect,
+} from 'sampler-editor-librarian-dto';
 import { effectType } from '../../../../util/util';
 import { MenuComponent } from '../../menu/menu.component';
 
@@ -35,49 +41,70 @@ import { MenuComponent } from '../../menu/menu.component';
     ScreenTitleComponent,
     MatMenuModule,
     MatSelectModule,
-    MenuComponent
-],
+    MenuComponent,
+  ],
   templateUrl: './effect.component.html',
-  styleUrl: './effect.component.scss'
+  styleUrl: './effect.component.scss',
 })
 export class EffectComponent implements OnInit {
-
   route: ActivatedRoute | null = null;
   samplerService = inject(SamplerService);
   router = inject(Router);
 
   samplerEffectsDisplayedColumns: string[] = ['name'];
 
-  samplerEffectNamesDataSource = new MatTableDataSource<string>(new Array<string>());
+  samplerEffectNamesDataSource = new MatTableDataSource<string>(
+    new Array<string>(),
+  );
   @ViewChild('effectsPaginator')
   samplerEffectNamesPaginator!: MatPaginator;
   samplerEffectNamesLoading = true;
 
   effectNumberInMemory = 0;
   effectTypeInMemory = 0;
-  effectHeader: EchoEffect | DelayEffect | PitchShiftEffect | ChorusEffect | null = null;
+  effect: EchoEffect | DelayEffect | PitchShiftEffect | ChorusEffect | null =
+    null;
   protected readonly name = signal('');
+  effectsAndReverbFilename: string | null = null;
+  protected readonly effectsFilenameSignal = signal('');
 
   effectTypes = effectType;
+  effectTypeEnum = EffectType;
 
-  constructor(route: ActivatedRoute){
+  constructor(route: ActivatedRoute) {
     this.route = route;
   }
 
   ngOnInit(): void {
     this.samplerEffectNamesDataSource.filterPredicate = (data, filter) => {
-      return data.toString().toLowerCase().indexOf(filter.toString().toLowerCase()) != -1;
-    }
+      return (
+        data
+          .toString()
+          .toLowerCase()
+          .indexOf(filter.toString().toLowerCase()) != -1
+      );
+    };
     this.loadEffects();
+    this.loadEffectsAndReverbFilename();
   }
 
   loadEffects() {
     this.samplerEffectNamesLoading = true;
-    this.samplerService.samplerEffects().subscribe(data => {
+    this.samplerService.samplerEffects().subscribe((data) => {
       this.samplerEffectNamesDataSource.data = data;
-      this.samplerEffectNamesDataSource.paginator = this.samplerEffectNamesPaginator;
+      this.samplerEffectNamesDataSource.paginator =
+        this.samplerEffectNamesPaginator;
       this.samplerEffectNamesLoading = false;
     });
+  }
+
+  loadEffectsAndReverbFilename() {
+    this.samplerService
+      .samplerEffectHeaderFilename()
+      .subscribe((effectsAndRverHeader) => {
+        console.log('FX filename: ', effectsAndRverHeader.filename);
+        this.effectsAndReverbFilename = effectsAndRverHeader.filename;
+      });
   }
 
   onEffectNameFilterInput(event: Event) {
@@ -89,12 +116,15 @@ export class EffectComponent implements OnInit {
   }
 
   onRowClick(value: string) {
-    this.samplerService.samplerEffect(this.samplerEffectNamesDataSource.data.indexOf(value)).subscribe(effect => {
-      console.log("Effect", effect);
-      this.effectHeader = effect;
-      this.effectNumberInMemory = this.samplerEffectNamesDataSource.data.indexOf(value);
-      this.effectTypeInMemory = this.effectHeader.type;
-    });
+    this.samplerService
+      .samplerEffect(this.samplerEffectNamesDataSource.data.indexOf(value))
+      .subscribe((effect) => {
+        console.log('Effect', effect);
+        this.effect = effect;
+        this.effectNumberInMemory =
+          this.samplerEffectNamesDataSource.data.indexOf(value);
+        this.effectTypeInMemory = this.effect.type;
+      });
   }
 
   protected onEffectNameInput(event: Event) {
@@ -102,6 +132,39 @@ export class EffectComponent implements OnInit {
   }
 
   protected onEffectNameChange(event: Event) {
-    // this.samplerService.samplerChangeNameInProgramHeader(+this.programNumberInMemory, 3, (event.target as HTMLInputElement).value);
+    this.samplerService.samplerEffectUpdateName(
+      +this.effectNumberInMemory,
+      (event.target as HTMLInputElement).value,
+    );
+  }
+
+  protected onEffectsAndReverbFilenameInput(event: Event) {
+    this.effectsFilenameSignal.set((event.target as HTMLInputElement).value);
+  }
+
+  protected onEffectsAndReverbFilenameChange(event: Event) {
+    this.samplerService
+      .samplerEffectHeaderFilenameUpdate(
+        (event.target as HTMLInputElement).value,
+      )
+      .subscribe((success) =>
+        console.log('Effects and reverb filename updated: ', success),
+      );
+  }
+
+  getEchoEffect(): EchoEffect {
+    return this.effect as EchoEffect;
+  }
+
+  getChorusEffect(): ChorusEffect {
+    return this.effect as ChorusEffect;
+  }
+
+  getPitchShiftEffect(): PitchShiftEffect {
+    return this.effect as PitchShiftEffect;
+  }
+
+  getDelayEffect(): DelayEffect {
+    return this.effect as DelayEffect;
   }
 }
