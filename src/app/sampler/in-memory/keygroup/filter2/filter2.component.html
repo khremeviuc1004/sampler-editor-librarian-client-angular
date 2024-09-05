@@ -1,11 +1,20 @@
+<app-menu />
 <app-screen-title screenTitle="Filter 2" />
-<app-screen-program-name programName="{{programHeader?.name}}" />
-<app-screen-keygroup-name keygroupName="{{+keygroupNumberInMemory + 1}}" />
-
-<mat-grid-list cols="3" rowHeight="100">
-  <mat-grid-tile></mat-grid-tile>
-  <mat-grid-tile><span class="keygroup-global">Keygroup Global</span></mat-grid-tile>
-  <mat-grid-tile></mat-grid-tile>
+<nz-breadcrumb nzSeparator=">" style="margin-left: 1em;">
+  <nz-breadcrumb-item>
+    <a routerLink="/sampler">
+      <span nz-icon nzType="home"></span>
+    </a>
+  </nz-breadcrumb-item>
+  <nz-breadcrumb-item>
+    <a routerLink="/in-memory-program/{{+programNumberInMemory}}">Program - {{programHeader?.name}}</a>
+  </nz-breadcrumb-item>
+  <nz-breadcrumb-item>
+    <a routerLink="/in-memory-program/{{+programNumberInMemory}}/in-memory-keygroup/{{+keygroupNumberInMemory}}">Keygroup {{+keygroupNumberInMemory + 1}}</a>
+  </nz-breadcrumb-item>
+  <nz-breadcrumb-item>Filter 2</nz-breadcrumb-item>
+</nz-breadcrumb>
+<mat-grid-list cols="3" rowHeight="80">
   <mat-grid-tile>
     <mat-checkbox [checked]="keygroupHeader?.filter2ToneEnabled" (change)="keygroupBooleanTypeChanged(168, $event.checked)">Filter 2/Tone Enable</mat-checkbox>
   </mat-grid-tile>

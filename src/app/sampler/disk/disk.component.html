@@ -1,8 +1,8 @@
 <app-menu />
 <app-screen-title [screenTitle]="openMode ? 'Open' : 'Save'" />
-<mat-grid-list [cols]="!openMode ? 4 : 3" gutterSize="10" rowHeight="100%">
+<mat-grid-list [cols]="!openMode ? 4 : 3" gutterSize="10" rowHeight="500">
   @if (!openMode) {
-    <mat-grid-tile >
+    <mat-grid-tile>
       <div>
         <mat-card appearance="raised">
           <mat-card-header>
@@ -12,11 +12,14 @@
             <mat-form-field class="sample-table-filter-field">
               <mat-label>Filter</mat-label>
               <input #memoryFilter matInput (input)="onMemoryItemFilterInput($event)" width="12">
+              <button matSuffix mat-icon-button (click)="memoryFilter.value = '';setMemoryItemFilter('')">
+                <mat-icon>clear</mat-icon>
+              </button>
             </mat-form-field>
-            <button mat-icon-button (click)="memoryFilter.value = '';setMemoryItemFilter('')">
-              <mat-icon>clear</mat-icon>
+            <button mat-mini-fab (click)="loadPartitionList()" style="margin-left: 1em;margin-top: 1em;" title="Reload the table from the sampler.">
+              <mat-icon>refresh</mat-icon>
             </button>
-          </mat-card-content>
+            </mat-card-content>
         </mat-card>
         @if (samplerMemoryItemsLoading) {
           <mat-spinner></mat-spinner>
@@ -33,7 +36,7 @@
             </ng-container>
             <mat-header-row *matHeaderRowDef="samplerMemoryItemDisplayedColumns"></mat-header-row>
             <mat-row
-              [class.selected-row]="samplerMemoryItemListSelectIndex == i"
+              [class.selected-row]="samplerMemoryItemListSelectIndex === i"
               *matRowDef="let memoryItem;let i = index; columns: samplerMemoryItemDisplayedColumns;"
               (click)="onMemoryItemSelectionIndexChange(i)"
               ></mat-row>
@@ -45,29 +48,6 @@
           aria-label="Select page of memory items"
           class="mat-elevation-z8">
         </mat-paginator>
-        <mat-grid-list cols="1" rowHeight="50">
-          <mat-grid-tile>
-            <mat-form-field>
-              <mat-label>Save Type</mat-label>
-              <mat-select #saveLoadType>
-                @for (element of diskAccessReadWrite; track element.value) {
-                  <mat-option [value]="element.value">{{element.label}}</mat-option>
-                }
-              </mat-select>
-            </mat-form-field>
-              </mat-grid-tile>
-          <mat-grid-tile>
-            <mat-checkbox #clearVolumeOnSave>Clear volume</mat-checkbox>
-          </mat-grid-tile>
-          <mat-grid-tile>
-            <mat-checkbox #createNewVolumeOnSave>Create new volume</mat-checkbox>
-          </mat-grid-tile>
-          <mat-grid-tile>
-            <button mat-mini-fab (click)="onSaveMemory(saveLoadType.value)" style="margin-left: 1em;margin-top: 1em;">
-              <mat-icon>save</mat-icon>
-            </button>
-              </mat-grid-tile>
-        </mat-grid-list>
       </div>
     </mat-grid-tile>
   }
@@ -81,9 +61,12 @@
           <mat-form-field class="sample-table-filter-field">
             <mat-label>Filter</mat-label>
             <input #samplerPartitionListFilter matInput (input)="onVolumeListFilterInput($event)">
+            <button matSuffix mat-icon-button (click)="samplerPartitionListFilter.value = '';setVolumeListFilter('')">
+              <mat-icon>clear</mat-icon>
+            </button>
           </mat-form-field>
-          <button mat-icon-button (click)="samplerPartitionListFilter.value = '';setVolumeListFilter('')">
-            <mat-icon>clear</mat-icon>
+          <button mat-mini-fab (click)="loadPartitionList()" style="margin-left: 1em;margin-top: 1em;" title="Reload the table from the sampler.">
+            <mat-icon>refresh</mat-icon>
           </button>
         </mat-card-content>
       </mat-card>
@@ -97,7 +80,7 @@
             <mat-cell *matCellDef="let partitionNumber">{{partitionNumber | hardDrivePartitionLetter}}</mat-cell>
           </ng-container>
           <mat-header-row *matHeaderRowDef="partitionListDisplayedColumns"></mat-header-row>
-          <mat-row [class.selected-row]="samplerPartitionListSelectIndex == row" *matRowDef="let row; columns: partitionListDisplayedColumns;" (click)="onPartitionSelectionIndexChange(row)">
+          <mat-row [class.selected-row]="samplerPartitionListSelectIndex === row" *matRowDef="let row; columns: partitionListDisplayedColumns;" (click)="onPartitionSelectionIndexChange(row)">
           </mat-row>
         </mat-table>
       }
@@ -107,9 +90,6 @@
         aria-label="Select page of disk files"
         class="mat-elevation-z8">
       </mat-paginator>
-      <button mat-mini-fab (click)="loadPartitionList()" style="margin-left: 1em;margin-top: 1em;">
-        <mat-icon>refresh</mat-icon>
-      </button>
     </div>
   </mat-grid-tile>
   <mat-grid-tile >
@@ -122,9 +102,12 @@
           <mat-form-field class="sample-table-filter-field">
             <mat-label>Filter</mat-label>
             <input #samplerVolumeListFilter matInput (input)="onVolumeListFilterInput($event)">
+            <button matSuffix mat-icon-button (click)="samplerVolumeListFilter.value = '';setVolumeListFilter('')">
+              <mat-icon>clear</mat-icon>
+            </button>
           </mat-form-field>
-          <button mat-icon-button (click)="samplerVolumeListFilter.value = '';setVolumeListFilter('')">
-            <mat-icon>clear</mat-icon>
+          <button mat-mini-fab (click)="loadVolumeList()" style="margin-left: 1em;margin-top: 1em;" title="Reload the table from the sampler.">
+            <mat-icon>refresh</mat-icon>
           </button>
         </mat-card-content>
       </mat-card>
@@ -146,7 +129,7 @@
             <mat-cell *matCellDef="let entry">{{entry.type}}</mat-cell>
           </ng-container>
           <mat-header-row *matHeaderRowDef="volumeListDisplayedColumns"></mat-header-row>
-          <mat-row [class.selected-row]="samplerVolumeListSelectIndex == row.index" *matRowDef="let row; columns: volumeListDisplayedColumns;" (click)="onVolumeSelectionIndexChange(row.index)">
+          <mat-row [class.selected-row]="samplerVolumeListSelectIndex === row.index" *matRowDef="let row; columns: volumeListDisplayedColumns;" (click)="onVolumeSelectionIndexChange(row.index)">
           </mat-row>
         </mat-table>
       }
@@ -156,9 +139,6 @@
         aria-label="Select page of disk files"
         class="mat-elevation-z8">
       </mat-paginator>
-      <button mat-mini-fab (click)="loadVolumeList()" style="margin-left: 1em;margin-top: 1em;">
-        <mat-icon>refresh</mat-icon>
-      </button>
     </div>
   </mat-grid-tile>
   <mat-grid-tile>
@@ -171,9 +151,12 @@
           <mat-form-field class="sample-table-filter-field">
             <mat-label>Filter</mat-label>
             <input #hardDiskDirectoryFilter matInput (input)="onHardDiskDirectoryFilterInput($event)">
+            <button matSuffix mat-icon-button (click)="hardDiskDirectoryFilter.value = '';setHardDiskDirectoryFilter('')">
+              <mat-icon>clear</mat-icon>
+            </button>
           </mat-form-field>
-          <button mat-icon-button (click)="hardDiskDirectoryFilter.value = '';setHardDiskDirectoryFilter('')">
-            <mat-icon>clear</mat-icon>
+          <button mat-mini-fab (click)="loadHardDiskDirectory()" style="margin-left: 1em;margin-top: 1em;" title="Reload the table from the sampler.">
+            <mat-icon>refresh</mat-icon>
           </button>
         </mat-card-content>
       </mat-card>
@@ -195,7 +178,7 @@
             <mat-cell *matCellDef="let entry">{{entry.type}}</mat-cell>
           </ng-container>
           <mat-header-row *matHeaderRowDef="hardDiskDirectoryDisplayedColumns"></mat-header-row>
-          <mat-row [class.selected-row]="selectedHarddiskVolumeEntryNumber == row.index" *matRowDef="let row; columns: hardDiskDirectoryDisplayedColumns;" (click)="onHarddiskVolumeEntrySelectionIndexChange(row.index)"></mat-row>
+          <mat-row [class.selected-row]="selectedHarddiskVolumeEntryNumber === row.index" *matRowDef="let row; columns: hardDiskDirectoryDisplayedColumns;" (click)="onHarddiskVolumeEntrySelectionIndexChange(row.index)"></mat-row>
         </mat-table>
       }
 
@@ -204,24 +187,54 @@
         aria-label="Select page of disk files"
         class="mat-elevation-z8">
       </mat-paginator>
-      <button mat-mini-fab (click)="loadHardDiskDirectory()" style="margin-left: 1em;margin-top: 1em;">
-        <mat-icon>refresh</mat-icon>
-      </button>
-      @if (openMode) {
-        <mat-form-field>
-          <mat-label>Load Type</mat-label>
-          <mat-select #openLoadType>
-            @for (element of diskAccessReadWrite; track element.value) {
-              <mat-option [value]="element.value">{{element.label}}</mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
-        <mat-checkbox #clearMemoryOnLoad>Clear memory</mat-checkbox>
-        <button mat-mini-fab (click)="onLoadVolume(openLoadType.value)" style="margin-left: 1em;margin-top: 1em;">
-          <mat-icon>open_in_browser</mat-icon>
-        </button>
-      }
     </div>
   </mat-grid-tile>
 </mat-grid-list>
+@if (openMode) {
+  <div style="margin-left: 1em;margin-top: 2em;">
+    <mat-form-field>
+      <mat-label>Load Type</mat-label>
+      <mat-select #openLoadType>
+        @for (element of diskAccessReadWrite; track element.value) {
+          <mat-option [value]="element.value">{{element.label}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <mat-checkbox #clearMemoryOnLoad>Clear memory</mat-checkbox>
+  </div>
+  <div style="text-align: end;">
+    <button mat-mini-fab (click)="router.navigate(['sampler'])" style="margin: 1em;width: 10em;">
+      <mat-icon>close</mat-icon>
+      <span>Close</span>
+    </button>
+    <button mat-mini-fab (click)="onLoadVolume(openLoadType.value)" style="margin: 1em;width: 10em;">
+      <mat-icon>open_in_browser</mat-icon>
+      <span>Open</span>
+    </button>
+  </div>
+}
+@else {
+  <div style="margin-left: 1em;margin-top: 2em;">
+    <mat-form-field>
+      <mat-label>Save Type</mat-label>
+      <mat-select #saveLoadType>
+        @for (element of diskAccessReadWrite; track element.value) {
+          <mat-option [value]="element.value">{{element.label}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <mat-checkbox #clearVolumeOnSave>Clear volume</mat-checkbox>
+    <mat-checkbox #createNewVolumeOnSave>Create new volume</mat-checkbox>
+  </div>
+  <div style="text-align: end;">
+    <button mat-mini-fab (click)="router.navigate(['sampler'])" style="margin: 1em;width: 10em;">
+      <mat-icon>close</mat-icon>
+      <span>Close</span>
+    </button>
+    <button mat-mini-fab (click)="onSaveMemory(saveLoadType.value)" style="margin: 1em;width: 10em;">
+      <mat-icon>save</mat-icon>
+      <span>Save</span>
+    </button>
+  </div>
+}
 

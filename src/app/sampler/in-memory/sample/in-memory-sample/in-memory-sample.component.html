@@ -1,5 +1,13 @@
 <app-menu />
 <app-screen-title screenTitle="Sample" />
+<nz-breadcrumb nzSeparator=">" style="margin-left: 1em;">
+  <nz-breadcrumb-item>
+    <a routerLink="/sampler">
+      <span nz-icon nzType="home"></span>
+    </a>
+  </nz-breadcrumb-item>
+  <nz-breadcrumb-item>Sample</nz-breadcrumb-item>
+</nz-breadcrumb>
 <mat-grid-list cols="4" rowHeight="100">
   <mat-grid-tile>
     <mat-form-field hintLabel="Min 3 Max 12 characters">
@@ -27,19 +35,24 @@
   </mat-grid-tile>
   <mat-grid-tile>
     <mat-checkbox [checked]="sampleHeader?.valid" disabled="true">Sample rate validity</mat-checkbox>
+    <mat-checkbox #showNoteNames checked=true>Show notes</mat-checkbox>
   </mat-grid-tile>
   <mat-grid-tile>
     <mat-form-field>
       <mat-label>Original Pitch</mat-label>
-      <input matInput type="number" min="21" max="127" [value]="sampleHeader?.originalPitch" (change)="sampleHeaderChanged(2, $event)">
-      <mat-hint>Min 21 Max 127</mat-hint>
+      <mat-select [value]="'' + sampleHeader?.originalPitch" (valueChange)="sampleHeaderChanged(2, $event)">
+        @for(item of notesRange; track item ) {
+          <mat-option value="{{item}}">{{item | notePipe:showNoteNames.checked}}</mat-option>
+        }
+      </mat-select>
+      <mat-hint>Min 21/A-1 Max 127/G8</mat-hint>
     </mat-form-field>
   </mat-grid-tile>
   <mat-grid-tile>
     <mat-form-field>
       <mat-label>Start Offset</mat-label>
-      <input matInput type="number" min="0" [max]="sampleHeader ? sampleHeader.sampleLength ? sampleHeader.sampleLength : 12 : 12" max="127" [value]="sampleHeader?.startOffset" (change)="sampleHeaderChanged(30, $event)">
-      <mat-hint>Min 21 Max 127</mat-hint>
+      <input matInput type="number" min="0" [max]="sampleHeader ? sampleHeader.sampleLength ? sampleHeader.sampleLength : 12 : 12" [value]="sampleHeader?.startOffset" (change)="sampleHeaderChanged(30, $event)">
+      <mat-hint>Min 0 Max {{sampleHeader ? sampleHeader.sampleLength ? sampleHeader.sampleLength : 12 : 12}}</mat-hint>
     </mat-form-field>
   </mat-grid-tile>
   <mat-grid-tile>
@@ -69,8 +82,8 @@
   <mat-grid-tile>
     <mat-form-field>
       <mat-label>End Offset</mat-label>
-      <input matInput type="number" min="1" [max]="sampleHeader ? sampleHeader.sampleLength ? sampleHeader.sampleLength : 12 : 12" max="127" [value]="sampleHeader?.playLength" (change)="sampleHeaderChanged(34, $event)">
-      <mat-hint>Min 21 Max 127</mat-hint>
+      <input matInput type="number" min="1" [max]="sampleHeader ? sampleHeader.sampleLength ? sampleHeader.sampleLength : 12 : 12" [value]="sampleHeader?.playLength" (change)="sampleHeaderChanged(34, $event)">
+      <mat-hint>Min 1 Max {{sampleHeader ? sampleHeader.sampleLength ? sampleHeader.sampleLength : 12 : 12}}</mat-hint>
     </mat-form-field>
   </mat-grid-tile>
   <mat-grid-tile>

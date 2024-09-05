@@ -9,9 +9,7 @@ import { IconDefinition } from '@ant-design/icons-angular';
 import * as AllIcons from '@ant-design/icons-angular/icons';
 import { provideNgxWebstorage, withLocalStorage } from 'ngx-webstorage';
 
-const antDesignIcons = AllIcons as {
-  [key: string]: IconDefinition;
-};
+const antDesignIcons = AllIcons as Record<string, IconDefinition>;
 const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesignIcons[key])
 
 export const appConfig: ApplicationConfig = {

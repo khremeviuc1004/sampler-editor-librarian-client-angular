@@ -1,12 +1,31 @@
+<app-menu />
 <app-screen-title screenTitle="Keygroup" />
-<app-screen-program-name programName="{{programHeader?.name}}" />
-<app-screen-keygroup-name keygroupName="{{+keygroupNumberInMemory + 1}}" />
-
+<nz-breadcrumb nzSeparator=">" style="margin-left: 1em;">
+  <nz-breadcrumb-item>
+    <a routerLink="/sampler">
+      <span nz-icon nzType="home"></span>
+    </a>
+  </nz-breadcrumb-item>
+  <nz-breadcrumb-item>
+    <a routerLink="/in-memory-program/{{+programNumberInMemory}}">Program - {{programHeader?.name}}</a>
+  </nz-breadcrumb-item>
+  <nz-breadcrumb-item>Keygroup {{+keygroupNumberInMemory + 1}}</nz-breadcrumb-item>
+</nz-breadcrumb>
 <mat-grid-list cols="2" rowHeight="100">
   <mat-grid-tile>
     <mat-form-field>
-      <label>Span low</label>
-      <mat-select [value]="'' + keygroupHeader?.span?.lowNote" (valueChange)="spanLowChanged($event)">
+      <label for="spanLowSelect">Span low</label>
+      <mat-select #spanLowSelect [value]="'' + keygroupHeader?.span?.lowNote" (valueChange)="spanLowChanged($event)">
+        @for(item of notesRange; track item ) {
+          <mat-option value="{{item}}">{{item | notePipe:showNoteNames.checked}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <label for="spanHighSelect">Span high</label>
+      <mat-select #spanHighSelect [value]="'' + keygroupHeader?.span?.highNote" (valueChange)="spanHighChanged($event)">
         @for(item of notesRange; track item ) {
           <mat-option value="{{item}}">{{item | notePipe:showNoteNames.checked}}</mat-option>
         }
@@ -15,16 +34,6 @@
   </mat-grid-tile>
   <mat-grid-tile>
     <mat-checkbox checked="true" #showNoteNames>Show note names</mat-checkbox>
-  </mat-grid-tile>
-  <mat-grid-tile>
-    <mat-form-field>
-      <label>Span high</label>
-      <mat-select [value]="'' + keygroupHeader?.span?.highNote" (valueChange)="spanHighChanged($event)">
-        @for(item of notesRange; track item ) {
-          <mat-option value="{{item}}">{{item | notePipe:showNoteNames.checked}}</mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
   </mat-grid-tile>
   <mat-grid-tile></mat-grid-tile>
   <mat-grid-tile>
@@ -37,7 +46,6 @@
       </mat-select>
     </mat-form-field>
   </mat-grid-tile>
-  <mat-grid-tile></mat-grid-tile>
 </mat-grid-list>
 
 <nav mat-tab-nav-bar  mat-stretch-tabs="false" mat-align-tabs="start" [tabPanel]="tabPanel">

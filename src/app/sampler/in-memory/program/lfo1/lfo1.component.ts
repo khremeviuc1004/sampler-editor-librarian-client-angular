@@ -11,11 +11,12 @@ import { ScreenProgramNameComponent } from "../../../screen-program-name/screen-
 import { ProgramScreenCommon } from '../../../../common/program-screen-common';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { MenuComponent } from '../../../menu/menu.component';
 
 @Component({
   selector: 'app-lfo1',
   standalone: true,
-  imports: [MatFormFieldModule, MatSelectModule, MatCheckboxModule, MatInputModule, MatGridListModule, ScreenTitleComponent, ScreenProgramNameComponent, NzBreadCrumbModule, RouterLink, NzIconModule],
+  imports: [MatFormFieldModule, MatSelectModule, MatCheckboxModule, MatInputModule, MatGridListModule, ScreenTitleComponent, ScreenProgramNameComponent, NzBreadCrumbModule, RouterLink, NzIconModule, MenuComponent],
   templateUrl: './lfo1.component.html',
   styleUrl: './lfo1.component.scss',
   encapsulation: ViewEncapsulation.None

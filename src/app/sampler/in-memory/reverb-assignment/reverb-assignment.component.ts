@@ -15,7 +15,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SamplerService } from '../../../services/sampler.service';
 import { TitleCasePipe } from '@angular/common';
 
-type ProgramReverbAssignment = {
+interface ProgramReverbAssignment {
   programNumber: number;
   reverbNumber: number;
 }

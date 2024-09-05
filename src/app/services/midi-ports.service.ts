@@ -18,23 +18,23 @@ export class MidiPortsService {
   private httpClient = inject(HttpClient);
   private baseUrl = 'http://localhost:4000/api/midi/';
 
-  getMidiInputPorts(): Observable<Array<PortDetails>> {
-    return this.httpClient.get<Array<PortDetails>>(this.baseUrl + 'ports/input');
+  getMidiInputPorts(): Observable<PortDetails[]> {
+    return this.httpClient.get<PortDetails[]>(this.baseUrl + 'ports/input');
   }
 
-  getMidiOutputPorts(): Observable<Array<PortDetails>> {
-    return this.httpClient.get<Array<PortDetails>>(this.baseUrl + 'ports/output');
+  getMidiOutputPorts(): Observable<PortDetails[]> {
+    return this.httpClient.get<PortDetails[]>(this.baseUrl + 'ports/output');
   }
 
-  getMidiConnections(): Observable<Array<PortDetails>> {
-    return this.httpClient.get<Array<PortDetails>>(this.baseUrl + 'connections');
+  getMidiConnections(): Observable<PortDetails[]> {
+    return this.httpClient.get<PortDetails[]>(this.baseUrl + 'connections');
   }
 
-  connectToMidiInputPort(portId: number): Observable<Object> {
+  connectToMidiInputPort(portId: number): Observable<object> {
     return this.httpClient.post(this.baseUrl + 'ports/input/connect/' + portId, null);
   }
 
-  connectToMidiOutputPort(portId: number): Observable<Object> {
+  connectToMidiOutputPort(portId: number): Observable<object> {
     return this.httpClient.post(this.baseUrl + 'ports/output/connect/' + portId, null);
   }
 }

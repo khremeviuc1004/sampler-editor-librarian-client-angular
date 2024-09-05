@@ -1,17 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { ScreenTitleComponent } from "../../../screen-title/screen-title.component";
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ScreenProgramNameComponent } from "../../../screen-program-name/screen-program-name.component";
 import { ProgramScreenCommon } from '../../../../common/program-screen-common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { modulationInputSourceTypes as ModulationTypes } from '../../../../../util/util';
+import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { MenuComponent } from '../../../menu/menu.component';
 
 @Component({
   selector: 'app-keygroup-global',
   standalone: true,
-  imports: [MatFormFieldModule, MatSelectModule, MatGridListModule, ScreenTitleComponent, ScreenProgramNameComponent],
+  imports: [MatFormFieldModule, MatSelectModule, MatGridListModule, ScreenTitleComponent, ScreenProgramNameComponent, NzBreadCrumbModule, RouterLink, NzIconModule, MenuComponent,],
   templateUrl: './keygroup-global.component.html',
   styleUrl: './keygroup-global.component.scss'
 })

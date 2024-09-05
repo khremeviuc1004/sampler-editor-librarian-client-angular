@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SampleLoopComponent } from './sample-loop.component';
+import { StatusReportComponent } from './status-report.component';
 
-describe('SampleLoopComponent', () => {
-  let component: SampleLoopComponent;
-  let fixture: ComponentFixture<SampleLoopComponent>;
+describe('StatusReportComponent', () => {
+  let component: StatusReportComponent;
+  let fixture: ComponentFixture<StatusReportComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SampleLoopComponent]
+      imports: [StatusReportComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(SampleLoopComponent);
+    fixture = TestBed.createComponent(StatusReportComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -17,8 +17,12 @@
 </mat-menu>
 <mat-menu #viewMenu="matMenu">
   <button mat-menu-item (click)="router.navigate(['sampler'])">Memory</button>
+  <mat-divider></mat-divider>
   <button mat-menu-item (click)="router.navigate(['effect'])">Effects</button>
   <button mat-menu-item (click)="router.navigate(['effect-assignment'])">Effect Assignments</button>
+  <mat-divider></mat-divider>
   <button mat-menu-item (click)="router.navigate(['reverb'])">Reverbs</button>
   <button mat-menu-item (click)="router.navigate(['reverb-assignment'])">Reverb Assignments</button>
+  <mat-divider></mat-divider>
+  <button mat-menu-item (click)="router.navigate(['status-report'])">Status Report</button>
 </mat-menu>

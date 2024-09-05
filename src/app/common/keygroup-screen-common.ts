@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { KeyGroup as InMemoryKeygroup, Program as InMemoryProgram } from 'sampler-editor-librarian-dto'
 import { SamplerService } from '../services/sampler.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ScreenCommon } from './screen-common';
 
 export class KeygroupScreenCommon extends ScreenCommon {
@@ -11,6 +11,8 @@ export class KeygroupScreenCommon extends ScreenCommon {
   keygroupNumberInMemory = "0";
   keygroupHeader: InMemoryKeygroup | null = null;
   samplerService = inject(SamplerService);
+  router = inject(Router);
+
 
   constructor(route: ActivatedRoute){
     super(route);
@@ -24,11 +26,11 @@ export class KeygroupScreenCommon extends ScreenCommon {
 
     this.samplerService.samplerRequestProgramHeader(+this.programNumberInMemory).subscribe(program => {
       this.programHeader = program;
-    });
 
-    this.samplerService.samplerRequestKeygroupHeader(+this.programNumberInMemory, +this.keygroupNumberInMemory).subscribe(keygroup => {
-      this.keygroupHeader = keygroup;
-      this.doExtraStuff();
+      this.samplerService.samplerRequestKeygroupHeader(+this.programNumberInMemory, +this.keygroupNumberInMemory).subscribe(keygroup => {
+        this.keygroupHeader = keygroup;
+        this.doExtraStuff();
+      });
     });
   }
 

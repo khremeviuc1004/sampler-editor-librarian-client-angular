@@ -1,11 +1,25 @@
+<app-menu />
 <app-screen-title screenTitle="Filter 1" />
-<app-screen-program-name programName="{{programHeader?.name}}" />
-<app-screen-keygroup-name keygroupName="{{+keygroupNumberInMemory + 1}}" />
-
+<nz-breadcrumb nzSeparator=">" style="margin-left: 1em;">
+  <nz-breadcrumb-item>
+    <a routerLink="/sampler">
+      <span nz-icon nzType="home"></span>
+    </a>
+  </nz-breadcrumb-item>
+  <nz-breadcrumb-item>
+    <a routerLink="/in-memory-program/{{+programNumberInMemory}}">Program - {{programHeader?.name}}</a>
+  </nz-breadcrumb-item>
+  <nz-breadcrumb-item>
+    <a routerLink="/in-memory-program/{{+programNumberInMemory}}/in-memory-keygroup/{{+keygroupNumberInMemory}}">Keygroup </a>
+    <select #keygroupSelect (change)="onKeygroupChange(keygroupSelect.value)">
+      @for(keygroupNumber of keyGroups ; track keygroupNumber) {
+        <option [value]="keygroupNumber" [selected]="+keygroupNumberInMemory === keygroupNumber ? true : false">{{keygroupNumber + 1}}</option>
+      }
+    </select>
+  </nz-breadcrumb-item>
+  <nz-breadcrumb-item>Filter 1</nz-breadcrumb-item>
+</nz-breadcrumb>
 <mat-grid-list cols="3" rowHeight="100">
-  <mat-grid-tile></mat-grid-tile>
-  <mat-grid-tile><span class="keygroup-global">Keygroup Global</span></mat-grid-tile>
-  <mat-grid-tile></mat-grid-tile>
   <mat-grid-tile>
     <mat-form-field>
       <mat-label>Frequency</mat-label>

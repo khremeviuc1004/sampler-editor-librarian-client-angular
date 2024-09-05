@@ -8,13 +8,20 @@ import { ScreenProgramNameComponent } from '../../../screen-program-name/screen-
 import { ScreenKeygroupNameComponent } from '../../../screen-keygroup-name/screen-keygroup-name.component';
 import { KeygroupScreenCommon } from '../../../../common/keygroup-screen-common';
 import { attenuation as Attenuation, filterTypes as FilterTypes, modulationInputSourceTypes as ModulationTypes } from '../../../../../util/util';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { MenuComponent } from '../../../menu/menu.component';
 
 @Component({
   selector: 'app-filter2',
   standalone: true,
-  imports: [MatFormFieldModule, MatCheckboxModule, MatSelectModule, MatInputModule, MatGridListModule, ScreenTitleComponent, ScreenProgramNameComponent, ScreenKeygroupNameComponent],
+  imports: [
+    MatFormFieldModule, MatCheckboxModule, MatSelectModule, MatInputModule,
+    MatGridListModule, ScreenTitleComponent, ScreenProgramNameComponent, ScreenKeygroupNameComponent,
+    NzBreadCrumbModule, RouterLink, NzIconModule, MenuComponent,
+  ],
   templateUrl: './filter2.component.html',
   styleUrl: './filter2.component.scss'
 })

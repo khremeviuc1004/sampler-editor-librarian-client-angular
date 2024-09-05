@@ -9,7 +9,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { bandwidths as Bandwidths, samplePlayBackTypes as SamplePlayBackTypes } from '../../../../../util/util';
+import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 import { MenuComponent } from '../../../menu/menu.component';
+import { NotePipe } from '../../../../pipes/note.pipe';
 
 @Component({
   selector: 'app-in-memory-sample',
@@ -24,7 +27,11 @@ import { MenuComponent } from '../../../menu/menu.component';
     MatTabsModule,
     RouterLink,
     ScreenTitleComponent,
-    MenuComponent
+    NzBreadCrumbModule,
+    RouterLink,
+    NzIconModule,
+    MenuComponent,
+    NotePipe
   ],
   templateUrl: './in-memory-sample.component.html',
   styleUrl: './in-memory-sample.component.scss'
@@ -34,6 +41,8 @@ export class InMemorySampleComponent extends SampleScreenCommon implements OnIni
   protected readonly name = signal('');
   bandwidths = Bandwidths;
   samplePlayBackTypes = SamplePlayBackTypes;
+
+  notesRange = Array.from({ length: (128 - 21)}, (_, index) => index + 21);
 
   constructor(route: ActivatedRoute){
     super(route);

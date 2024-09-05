@@ -8,17 +8,10 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-menu',
   standalone: true,
-  imports: [
-    MatMenuModule,
-    MatButtonModule,
-    MatDividerModule,
-    MatIconModule,
-  ],
+  imports: [MatMenuModule, MatButtonModule, MatDividerModule, MatIconModule],
   templateUrl: './menu.component.html',
-  styleUrl: './menu.component.scss'
+  styleUrl: './menu.component.scss',
 })
 export class MenuComponent {
-
   router = inject(Router);
-
 }

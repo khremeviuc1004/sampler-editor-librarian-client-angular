@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatGridListModule } from '@angular/material/grid-list';
@@ -9,11 +9,14 @@ import { waveFormTypes as WaveFormTypes } from '../../../../../util/util';
 import { ScreenTitleComponent } from "../../../screen-title/screen-title.component";
 import { ScreenProgramNameComponent } from "../../../screen-program-name/screen-program-name.component";
 import { ProgramScreenCommon } from '../../../../common/program-screen-common';
+import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { MenuComponent } from '../../../menu/menu.component';
 
 @Component({
   selector: 'app-lfo2',
   standalone: true,
-  imports: [MatFormFieldModule, MatSelectModule, MatCheckboxModule, MatInputModule, MatGridListModule, ScreenTitleComponent, ScreenProgramNameComponent],
+  imports: [MatFormFieldModule, MatSelectModule, MatCheckboxModule, MatInputModule, MatGridListModule, ScreenTitleComponent, ScreenProgramNameComponent, NzBreadCrumbModule, RouterLink, NzIconModule, MenuComponent,],
   templateUrl: './lfo2.component.html',
   styleUrl: './lfo2.component.scss'
 })

@@ -6,13 +6,20 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { ScreenTitleComponent } from '../../../screen-title/screen-title.component';
 import { ScreenProgramNameComponent } from '../../../screen-program-name/screen-program-name.component';
 import { ScreenKeygroupNameComponent } from '../../../screen-keygroup-name/screen-keygroup-name.component';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { KeygroupScreenCommon } from '../../../../common/keygroup-screen-common';
+import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { MenuComponent } from '../../../menu/menu.component';
 
 @Component({
   selector: 'app-envelope3',
   standalone: true,
-  imports: [MatFormFieldModule, MatInputModule, MatGridListModule, ScreenTitleComponent, ScreenProgramNameComponent, ScreenKeygroupNameComponent, FourStageEnvelopeCanvasComponent],
+  imports: [
+    MatFormFieldModule, MatInputModule, MatGridListModule, ScreenTitleComponent,
+    ScreenProgramNameComponent, ScreenKeygroupNameComponent, FourStageEnvelopeCanvasComponent,
+    NzBreadCrumbModule, RouterLink, NzIconModule, MenuComponent,
+  ],
   templateUrl: './envelope3.component.html',
   styleUrl: './envelope3.component.scss'
 })

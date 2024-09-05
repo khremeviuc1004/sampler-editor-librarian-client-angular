@@ -12,11 +12,18 @@ import { MatInputModule } from '@angular/material/input';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { muteGroups as MuteGroups } from '../../../../../util/util';
 import { NotePipe } from '../../../../pipes/note.pipe';
+import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { MenuComponent } from '../../../menu/menu.component';
 
 @Component({
   selector: 'app-in-memory-keygroup',
   standalone: true,
-  imports: [MatFormFieldModule, MatSelectModule, MatCheckboxModule, MatInputModule, MatGridListModule, NotePipe, RouterOutlet, MatTabsModule, RouterLink, ScreenTitleComponent, ScreenProgramNameComponent, ScreenKeygroupNameComponent],
+  imports: [
+    MatFormFieldModule, MatSelectModule, MatCheckboxModule, MatInputModule,
+    MatGridListModule, NotePipe, RouterOutlet, MatTabsModule, RouterLink,
+    ScreenTitleComponent, ScreenProgramNameComponent, ScreenKeygroupNameComponent,
+    NzBreadCrumbModule, RouterLink, NzIconModule, MenuComponent,],
   templateUrl: './in-memory-keygroup.component.html',
   styleUrl: './in-memory-keygroup.component.scss'
 })
@@ -24,7 +31,7 @@ export class InMemoryKeygroupComponent extends KeygroupScreenCommon implements O
 
   muteGroups = MuteGroups;
 
-  notesRange = Array.from({ length: (127 - 21)}, (_, index) => index + 21);
+  notesRange = Array.from({ length: (128 - 21)}, (_, index) => index + 21);
 
   constructor(route: ActivatedRoute){
     super(route);

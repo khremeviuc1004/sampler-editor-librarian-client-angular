@@ -35,7 +35,7 @@ export class ConfigComponent implements OnInit, AfterViewInit {
   @ViewChild('midiOutputPortsPaginator')
   midiOutputPortsPaginator!: MatPaginator;
 
-  midiPortConnections!: Array<PortDetails>;
+  midiPortConnections!: PortDetails[];
 
   localStorageService =  inject(LocalStorageService);
 
@@ -49,9 +49,9 @@ export class ConfigComponent implements OnInit, AfterViewInit {
       this.midiInputPortsDataSource.paginator = this.midiInputPortPaginator;
 
       // get the midi input port index
-      let midiInputPortName = this.localStorageService.retrieve('midiInputPortName');
+      const midiInputPortName = this.localStorageService.retrieve('midiInputPortName');
       if (midiInputPortName) {
-        let midiInputPort = this.midiInputPortsDataSource.data.find(inputPortDetails => inputPortDetails.name === midiInputPortName);
+        const midiInputPort = this.midiInputPortsDataSource.data.find(inputPortDetails => inputPortDetails.name === midiInputPortName);
 
         if (midiInputPort) {
           if (!this.isInputPortConnected(midiInputPort)) {
@@ -65,9 +65,9 @@ export class ConfigComponent implements OnInit, AfterViewInit {
       this.midiOutputPortsDataSource.paginator = this.midiOutputPortsPaginator;
 
       // get the midi output port index
-      let midiOutputPortName = this.localStorageService.retrieve('midiOutputPortName');
+      const midiOutputPortName = this.localStorageService.retrieve('midiOutputPortName');
       if (midiOutputPortName) {
-        let midiOutputPort = this.midiOutputPortsDataSource.data.find(outputPortDetails => outputPortDetails.name === midiOutputPortName);
+        const midiOutputPort = this.midiOutputPortsDataSource.data.find(outputPortDetails => outputPortDetails.name === midiOutputPortName);
 
         if (midiOutputPort) {
           if (!this.isOutputPortConnected(midiOutputPort)) {

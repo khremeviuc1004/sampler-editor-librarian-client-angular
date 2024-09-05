@@ -44,15 +44,25 @@ export interface S1000MiscellaneousDataType {
   midiExlusiveChannel: number;
 }
 
-export type FileDetails = {
+export interface StatusReport {
+  software_version_minor: number;
+  software_version_major: number;
+  max_blocks: number;
+  free_blocks: number;
+  max_sample_words: number;
+  free_words: number;
+  exclusive_channel: number;
+}
+
+export interface FileDetails {
   name: string;
   file_type: string;
-};
+}
 
-export type ProgramDetails = {
+export interface ProgramDetails {
   midi_program_number: number;
   name: string;
-};
+}
 
 @Injectable({
   providedIn: 'root',
@@ -61,8 +71,8 @@ export class SamplerService {
   private httpClient = inject(HttpClient);
   private baseUrl = 'http://localhost:4000/api/midi/sampler/';
 
-  samplerStatusReport(): Observable<any> {
-    return this.httpClient.get<any>(this.baseUrl + 'sampler-status-report');
+  samplerStatusReport(): Observable<StatusReport> {
+    return this.httpClient.get<StatusReport>(this.baseUrl + 'sampler-status-report');
   }
 
   samplerRequestResidentProgramNames(): Observable<string[]> {
@@ -72,9 +82,9 @@ export class SamplerService {
   }
 
   samplerRequestResidentProgramNamesWithMidiProgramNumbers(): Observable<
-    Array<ProgramDetails>
+    ProgramDetails[]
   > {
-    return this.httpClient.get<Array<ProgramDetails>>(
+    return this.httpClient.get<ProgramDetails[]>(
       this.baseUrl + 'request-resident-program-names-with-numbers',
     );
   }
@@ -126,7 +136,7 @@ export class SamplerService {
           newProgramName,
         null,
       )
-      .subscribe((data) => console.log('Program name changed.'));
+      .subscribe((data) => console.log('Program name changed:', data));
   }
 
   samplerChangeValueInProgramHeader(
@@ -145,7 +155,7 @@ export class SamplerService {
           (typeof value !== 'boolean' ? value : value ? 1 : 0),
         null,
       )
-      .subscribe((data) => console.log('Program data changed.'));
+      .subscribe((data) => console.log('Program data changed:', data));
   }
 
   samplerRequestKeygroupHeader(
@@ -180,7 +190,7 @@ export class SamplerService {
           (typeof value !== 'boolean' ? value : value ? 1 : 0),
         null,
       )
-      .subscribe((data) => console.log('Keygroup data changed.'));
+      .subscribe((data) => console.log('Keygroup data changed:', data));
   }
 
   samplerChangeZoneSampleNameInKeyGroupHeader(
@@ -202,7 +212,7 @@ export class SamplerService {
           name,
         null,
       )
-      .subscribe((data) => console.log('Zone sample name changed.'));
+      .subscribe((data) => console.log('Zone sample name changed:', data));
   }
 
   samplerRequestSampleHeader(
@@ -229,7 +239,7 @@ export class SamplerService {
           (typeof value !== 'boolean' ? value : value ? 1 : 0),
         null,
       )
-      .subscribe((data) => console.log('Sample data changed.'));
+      .subscribe((data) => console.log('Sample data changed: ', data));
   }
 
   samplerChangeSampleNameInSampleHeader(
@@ -248,7 +258,7 @@ export class SamplerService {
           name,
         null,
       )
-      .subscribe((data) => console.log('Sample name changed.'));
+      .subscribe((data) => console.log('Sample name changed: ', data));
   }
 
   samplerRequestS1000MiscellaneousData(): Observable<S1000MiscellaneousData> {
@@ -260,7 +270,7 @@ export class SamplerService {
   samplerChangeS1000MiscellaneousData(data: S1000MiscellaneousDataType) {
     return this.httpClient
       .put(this.baseUrl + 's1000-misc-data', data)
-      .subscribe((dat) => console.log('S1000 miscellaneous data changed.'));
+      .subscribe((data) => console.log('S1000 miscellaneous data changed: ', data));
   }
 
   samplerNewProgram(programNumberInMemory: number): Observable<boolean> {
@@ -480,21 +490,21 @@ export class SamplerService {
       .subscribe((success) => console.log('Reverb name updated', success));
   }
 
-  samplerProgramReverbAssignments(): Observable<Array<number>> {
-    return this.httpClient.get<Array<number>>(
+  samplerProgramReverbAssignments(): Observable<number[]> {
+    return this.httpClient.get<number[]>(
       this.baseUrl + 'program/reverb/assignments',
     );
   }
 
-  samplerProgramEffectAssignments(): Observable<Array<number>> {
-    return this.httpClient.get<Array<number>>(
+  samplerProgramEffectAssignments(): Observable<number[]> {
+    return this.httpClient.get<number[]>(
       this.baseUrl + 'program/effect/assignments',
     );
   }
 
   samplerProgramReverbAssignment(programNumber: number, reverbNumber: number) {
     return this.httpClient
-      .patch<Array<number>>(
+      .patch<number[]>(
         this.baseUrl +
           'assignment/program/' +
           programNumber +
@@ -509,7 +519,7 @@ export class SamplerService {
 
   samplerProgramEffectAssignment(programNumber: number, effectNumber: number) {
     this.httpClient
-      .patch<Array<number>>(
+      .patch<number[]>(
         this.baseUrl +
           'assignment/program/' +
           programNumber +
@@ -552,8 +562,8 @@ export class SamplerService {
     );
   }
 
-  samplerAllFilesInMemory(): Observable<Array<FileDetails>> {
-    return this.httpClient.get<Array<FileDetails>>(
+  samplerAllFilesInMemory(): Observable<FileDetails[]> {
+    return this.httpClient.get<FileDetails[]>(
       this.baseUrl + 'all-files-in-memory',
     );
   }

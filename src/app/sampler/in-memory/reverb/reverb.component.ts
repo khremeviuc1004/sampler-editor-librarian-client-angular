@@ -24,6 +24,7 @@ import { ScreenTitleComponent } from '../../screen-title/screen-title.component'
 import { Reverb } from 'sampler-editor-librarian-dto';
 import { reverbType } from '../../../../util/util';
 import { MenuComponent } from '../../menu/menu.component';
+import { StereoPanPipe } from '../../../pipes/stereo-pan.pipe';
 
 @Component({
   selector: 'app-reverb',
@@ -43,6 +44,7 @@ import { MenuComponent } from '../../menu/menu.component';
     MatMenuModule,
     MatSelectModule,
     MenuComponent,
+    StereoPanPipe,
   ],
   templateUrl: './reverb.component.html',
   styleUrl: './reverb.component.scss',

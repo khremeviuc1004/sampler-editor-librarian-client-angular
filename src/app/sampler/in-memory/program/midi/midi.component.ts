@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ScreenTitleComponent } from "../../../screen-title/screen-title.component";
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ScreenProgramNameComponent } from "../../../screen-program-name/screen-program-name.component";
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -10,11 +10,14 @@ import { priorityTypes as PriorityTypes, reassignmentTypes as ReassignmentTypes 
 import { NotePipe } from '../../../../pipes/note.pipe';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ProgramScreenCommon } from '../../../../common/program-screen-common';
+import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { MenuComponent } from '../../../menu/menu.component';
 
 @Component({
   selector: 'app-midi',
   standalone: true,
-  imports: [MatFormFieldModule, MatSelectModule, MatInputModule, MatGridListModule, MatCheckboxModule, ScreenTitleComponent, ScreenProgramNameComponent, NotePipe],
+  imports: [MatFormFieldModule, MatSelectModule, MatInputModule, MatGridListModule, MatCheckboxModule, ScreenTitleComponent, ScreenProgramNameComponent, NotePipe, NzBreadCrumbModule, RouterLink, NzIconModule, MenuComponent,],
   templateUrl: './midi.component.html',
   styleUrl: './midi.component.scss'
 })
@@ -23,7 +26,7 @@ export class MidiComponent extends ProgramScreenCommon implements OnInit {
   priorityTypes= PriorityTypes;
   reassignmentTypes = ReassignmentTypes;
 
-  notesRange = Array.from({ length: (127 - 21)}, (_, index) => index + 21);
+  notesRange = Array.from({ length: (128 - 21)}, (_, index) => index + 21);
 
   constructor(route: ActivatedRoute){
     super(route);

@@ -23,6 +23,7 @@ import {
 } from 'sampler-editor-librarian-dto';
 import { effectType } from '../../../../util/util';
 import { MenuComponent } from '../../menu/menu.component';
+import { StereoPanPipe } from '../../../pipes/stereo-pan.pipe';
 
 @Component({
   selector: 'app-effect',
@@ -42,6 +43,7 @@ import { MenuComponent } from '../../menu/menu.component';
     MatMenuModule,
     MatSelectModule,
     MenuComponent,
+    StereoPanPipe,
   ],
   templateUrl: './effect.component.html',
   styleUrl: './effect.component.scss',
@@ -102,7 +104,7 @@ export class EffectComponent implements OnInit {
     this.samplerService
       .samplerEffectHeaderFilename()
       .subscribe((effectsAndRverHeader) => {
-        console.log('FX filename: ', effectsAndRverHeader.filename);
+        console.log('FX filename: ', effectsAndRverHeader);
         this.effectsAndReverbFilename = effectsAndRverHeader.filename;
       });
   }

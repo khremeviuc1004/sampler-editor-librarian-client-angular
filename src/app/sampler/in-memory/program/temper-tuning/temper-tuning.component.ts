@@ -1,16 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { ScreenTitleComponent } from "../../../screen-title/screen-title.component";
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ScreenProgramNameComponent } from "../../../screen-program-name/screen-program-name.component";
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { ProgramScreenCommon } from '../../../../common/program-screen-common';
+import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { MenuComponent } from '../../../menu/menu.component';
 
 @Component({
   selector: 'app-temper-tuning',
   standalone: true,
-  imports: [MatFormFieldModule, MatInputModule, MatGridListModule, ScreenTitleComponent, ScreenProgramNameComponent],
+  imports: [MatFormFieldModule, MatInputModule, MatGridListModule, ScreenTitleComponent, ScreenProgramNameComponent, NzBreadCrumbModule, RouterLink, NzIconModule, MenuComponent,],
   templateUrl: './temper-tuning.component.html',
   styleUrl: './temper-tuning.component.scss'
 })

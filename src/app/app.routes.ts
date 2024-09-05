@@ -17,7 +17,6 @@ import { MidiComponent } from './sampler/in-memory/program/midi/midi.component';
 import { PortamentoComponent } from './sampler/in-memory/program/portamento/portamento.component';
 import { KeygroupGlobalComponent } from './sampler/in-memory/program/keygroup-global/keygroup-global.component';
 import { InMemorySampleComponent } from './sampler/in-memory/sample/in-memory-sample/in-memory-sample.component';
-import { SampleLoopComponent } from './sampler/in-memory/sample/sample-loop/sample-loop.component';
 import { Filter1Component } from './sampler/in-memory/keygroup/filter1/filter1.component';
 import { Filter2Component } from './sampler/in-memory/keygroup/filter2/filter2.component';
 import { ToneComponent } from './sampler/in-memory/keygroup/tone/tone.component';
@@ -31,6 +30,7 @@ import { ReverbComponent } from './sampler/in-memory/reverb/reverb.component';
 import { EffectAssignmentComponent } from './sampler/in-memory/effect-assignment/effect-assignment.component';
 import { ReverbAssignmentComponent } from './sampler/in-memory/reverb-assignment/reverb-assignment.component';
 import { DiskComponent } from './sampler/disk/disk.component';
+import { StatusReportComponent } from './sampler/status-report/status-report.component';
 
 export const routes: Routes = [
   {
@@ -134,10 +134,6 @@ export const routes: Routes = [
     component: InMemorySampleComponent,
   },
   {
-    path: 'in-memory-sample/:sampleNumberInMemory/loop/:loopNumber',
-    component: SampleLoopComponent,
-  },
-  {
     path: 'effect',
     component: EffectComponent,
   },
@@ -160,6 +156,10 @@ export const routes: Routes = [
   {
     path: 'disk-save',
     component: DiskComponent,
+  },
+  {
+    path: 'status-report',
+    component: StatusReportComponent,
   },
   { path: '',   redirectTo: '/config', pathMatch: 'full' },
   { path: '**', component: ErrorPageComponent },

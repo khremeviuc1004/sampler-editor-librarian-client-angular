@@ -1,16 +1,19 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { ScreenTitleComponent } from "../../../screen-title/screen-title.component";
 import { ScreenProgramNameComponent } from "../../../screen-program-name/screen-program-name.component";
 import { ProgramScreenCommon } from '../../../../common/program-screen-common';
+import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { MenuComponent } from '../../../menu/menu.component';
 
 @Component({
   selector: 'app-modes',
   standalone: true,
-  imports: [MatFormFieldModule, MatCheckboxModule, MatGridListModule, ScreenTitleComponent, ScreenProgramNameComponent],
+  imports: [MatFormFieldModule, MatCheckboxModule, MatGridListModule, ScreenTitleComponent, ScreenProgramNameComponent, NzBreadCrumbModule, RouterLink, NzIconModule, MenuComponent,],
   templateUrl: './modes.component.html',
   styleUrl: './modes.component.scss',
   encapsulation: ViewEncapsulation.None

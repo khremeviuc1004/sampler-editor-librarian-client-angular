@@ -16,7 +16,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { TitleCasePipe } from '@angular/common';
 
 
-type ProgramEffectAssignment = {
+interface ProgramEffectAssignment {
   programNumber: number;
   effectNumber: number;
 }

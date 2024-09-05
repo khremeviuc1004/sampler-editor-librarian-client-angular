@@ -1,7 +1,19 @@
+<app-menu />
 <app-screen-title screenTitle="Envelope 1" />
-<app-screen-program-name programName="{{programHeader?.name}}" />
-<app-screen-keygroup-name keygroupName="{{+keygroupNumberInMemory + 1}}" />
-
+<nz-breadcrumb nzSeparator=">" style="margin-left: 1em;">
+  <nz-breadcrumb-item>
+    <a routerLink="/sampler">
+      <span nz-icon nzType="home"></span>
+    </a>
+  </nz-breadcrumb-item>
+  <nz-breadcrumb-item>
+    <a routerLink="/in-memory-program/{{+programNumberInMemory}}">Program - {{programHeader?.name}}</a>
+  </nz-breadcrumb-item>
+  <nz-breadcrumb-item>
+    <a routerLink="/in-memory-program/{{+programNumberInMemory}}/in-memory-keygroup/{{+keygroupNumberInMemory}}">Keygroup {{+keygroupNumberInMemory + 1}}</a>
+  </nz-breadcrumb-item>
+  <nz-breadcrumb-item>Envelope 1</nz-breadcrumb-item>
+</nz-breadcrumb>
 <mat-grid-list cols="3" rowHeight="100">
   <mat-grid-tile>
     <mat-form-field>
