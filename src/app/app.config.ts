@@ -1,4 +1,4 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
@@ -8,6 +8,9 @@ import { NZ_I18N, en_US } from 'ng-zorro-antd/i18n';
 import { IconDefinition } from '@ant-design/icons-angular';
 import * as AllIcons from '@ant-design/icons-angular/icons';
 import { provideNgxWebstorage, withLocalStorage } from 'ngx-webstorage';
+import { CommonModule } from '@angular/common';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
 const antDesignIcons = AllIcons as Record<string, IconDefinition>;
 const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesignIcons[key])
@@ -21,5 +24,12 @@ export const appConfig: ApplicationConfig = {
     { provide: NZ_I18N, useValue: en_US },
     { provide: NZ_ICONS, useValue: icons },
     provideNgxWebstorage(withLocalStorage()),
-  ]
+    importProvidersFrom(
+      BrowserAnimationsModule,
+      CommonModule,
+      ToastrModule.forRoot({
+        positionClass :'toast-bottom-right'
+      }),
+    )
+  ],
 };

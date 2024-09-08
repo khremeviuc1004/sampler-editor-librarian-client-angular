@@ -1,0 +1,5 @@
+<mat-form-field hintLabel="Min {{minChars}} Max {{maxChars}} characters">
+  <mat-label>{{nameFieldTitle}}</mat-label>
+  <input matInput #fixedLengthFieldName attr.maxlength="{{maxChars}}" attr.minlength="{{minChars}}" (input)="onNameInput($event)" value="{{nameFieldValue}}" (change)="onNameChange($event)" />
+  <mat-hint align="end">{{name().length}}/{{maxChars}}</mat-hint>
+</mat-form-field>

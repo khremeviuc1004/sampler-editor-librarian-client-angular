@@ -432,6 +432,7 @@ export class SamplerService {
     effectType: number,
     index: number,
     value: number,
+    subscription = (success: boolean) => console.log('Effect updated', success)
   ) {
     return this.httpClient
       .patch<boolean>(
@@ -446,16 +447,19 @@ export class SamplerService {
           value,
         null,
       )
-      .subscribe((success) => console.log('Effect updated', success));
+      .subscribe(subscription);
   }
 
-  samplerEffectUpdateName(effectNumber: number, name: string) {
+  samplerEffectUpdateName(
+    effectNumber: number,
+    name: string,
+    subscription = (success: boolean) => console.log('Effect name updated', success)) {
     return this.httpClient
       .patch<boolean>(
         this.baseUrl + 'effect/' + effectNumber + '/name/' + name,
         null,
       )
-      .subscribe((success) => console.log('Effect name updated', success));
+      .subscribe(subscription);
   }
 
   samplerReverbs(): Observable<string[]> {
@@ -481,13 +485,14 @@ export class SamplerService {
       .subscribe((success) => console.log('Reverb updated', success));
   }
 
-  samplerReverbUpdateName(reverbNumber: number, name: string) {
+  samplerReverbUpdateName(reverbNumber: number, name: string,
+    subscription = (success: boolean) => console.log('Reverb name updated', success)) {
     return this.httpClient
       .patch<boolean>(
         this.baseUrl + 'reverb/' + reverbNumber + '/name/' + name,
         null,
       )
-      .subscribe((success) => console.log('Reverb name updated', success));
+      .subscribe(subscription);
   }
 
   samplerProgramReverbAssignments(): Observable<number[]> {

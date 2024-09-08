@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -24,6 +24,8 @@ import {
 import { effectType } from '../../../../util/util';
 import { MenuComponent } from '../../menu/menu.component';
 import { StereoPanPipe } from '../../../pipes/stereo-pan.pipe';
+import { ToastrService } from 'ngx-toastr';
+import { FixedLengthNameFieldComponent } from '../../fixed-length-name-field/fixed-length-name-field.component';
 
 @Component({
   selector: 'app-effect',
@@ -44,6 +46,7 @@ import { StereoPanPipe } from '../../../pipes/stereo-pan.pipe';
     MatSelectModule,
     MenuComponent,
     StereoPanPipe,
+    FixedLengthNameFieldComponent
   ],
   templateUrl: './effect.component.html',
   styleUrl: './effect.component.scss',
@@ -62,18 +65,16 @@ export class EffectComponent implements OnInit {
   samplerEffectNamesPaginator!: MatPaginator;
   samplerEffectNamesLoading = true;
 
-  effectNumberInMemory = 0;
+  effectNumberInMemory = -1;
   effectTypeInMemory = 0;
   effect: EchoEffect | DelayEffect | PitchShiftEffect | ChorusEffect | null =
     null;
-  protected readonly name = signal('');
   effectsAndReverbFilename: string | null = null;
-  protected readonly effectsFilenameSignal = signal('');
 
   effectTypes = effectType;
   effectTypeEnum = EffectType;
 
-  constructor(route: ActivatedRoute) {
+  constructor(route: ActivatedRoute, private toastr: ToastrService) {
     this.route = route;
   }
 
@@ -117,37 +118,56 @@ export class EffectComponent implements OnInit {
     this.samplerEffectNamesDataSource.filter = value;
   }
 
-  onRowClick(value: string) {
+  onRowClick(value: number) {
+    this.effectNumberInMemory = value;
     this.samplerService
-      .samplerEffect(this.samplerEffectNamesDataSource.data.indexOf(value))
+      .samplerEffect(value)
       .subscribe((effect) => {
         console.log('Effect', effect);
         this.effect = effect;
-        this.effectNumberInMemory =
-          this.samplerEffectNamesDataSource.data.indexOf(value);
         this.effectTypeInMemory = this.effect.type;
       });
   }
 
-  protected onEffectNameInput(event: Event) {
-    this.name.set((event.target as HTMLInputElement).value);
+  effectUpdatePartAndRefreshLocalData(effectNumberInMemory: number, effectTypeInMemory: number, index: number, value: number) {
+    this.samplerService.samplerEffectUpdatePart(effectNumberInMemory, effectTypeInMemory, index, value, (success) => {
+      console.log('Effect updated', success);
+      this.reloadEffect();
+    });
   }
 
-  protected onEffectNameChange(event: Event) {
+  reloadEffect() {
+    this.samplerService
+      .samplerEffect(this.effectNumberInMemory)
+      .subscribe((effect) => {
+        console.log('Effect', effect);
+        this.effect = effect;
+        this.effectTypeInMemory = this.effect.type;
+      });
+  }
+
+  protected onEffectNameChange(value: string) {
+    console.log('onEffectNameChange', value);
     this.samplerService.samplerEffectUpdateName(
       +this.effectNumberInMemory,
-      (event.target as HTMLInputElement).value,
+      value,
+      (success: boolean) => {
+        console.log('Effect updated', success);
+        if (success) {
+          this.toastr.success('Success', 'Updated the effect name');
+          this.loadEffects();
+        }
+        else {
+          this.toastr.error('Error', 'Could not update the effect name');
+        }
+      }
     );
   }
 
-  protected onEffectsAndReverbFilenameInput(event: Event) {
-    this.effectsFilenameSignal.set((event.target as HTMLInputElement).value);
-  }
-
-  protected onEffectsAndReverbFilenameChange(event: Event) {
+  protected onEffectsAndReverbFilenameChange(value: string) {
     this.samplerService
       .samplerEffectHeaderFilenameUpdate(
-        (event.target as HTMLInputElement).value,
+        value,
       )
       .subscribe((success) =>
         console.log('Effects and reverb filename updated: ', success),

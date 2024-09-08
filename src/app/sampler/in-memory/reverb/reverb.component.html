@@ -27,10 +27,13 @@
         <mat-table [dataSource]="samplerReverbNamesDataSource" class="mat-elevation-z8">
           <ng-container matColumnDef="name">
             <mat-header-cell mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
-            <mat-cell *matCellDef="let reverbName">{{reverbName}}</mat-cell>
+            <mat-cell *matCellDef="let reverbName;">{{reverbName}}</mat-cell>
           </ng-container>
           <mat-header-row *matHeaderRowDef="samplerReverbsDisplayedColumns"></mat-header-row>
-          <mat-row *matRowDef="let reverbName; columns: samplerReverbsDisplayedColumns;" (click)="onRowClick(reverbName)"></mat-row>
+          <mat-row
+            *matRowDef="let reverbName; let i = index;columns: samplerReverbsDisplayedColumns;"
+            [class.selected-row]="reverbNumberInMemory === i"
+            (click)="onRowClick(i)"></mat-row>
         </mat-table>
     }
 
@@ -45,17 +48,13 @@
     <div class="internalMatGrid">
       <mat-grid-list cols="2" rowHeight="100">
         <mat-grid-tile>
-          <mat-form-field hintLabel="Min 3 Max 12 characters">
-            <mat-label>Reverb name</mat-label>
-            <input matInput #reverbName maxlength="12" minlength="3" (input)="onReverbNameInput($event)" value="{{reverbHeader ? reverbHeader.name.trim(): ''}}" (change)="onReverbNameChange($event)" />
-            <mat-hint align="end">{{name().length}}/12</mat-hint>
-          </mat-form-field>
+          <app-fixed-length-name-field nameFieldTitle="Reverb name" nameFieldValue="{{reverbHeader ? reverbHeader.name.trim(): ''}}" maxChars="12" minChars="3" (doChange)="onReverbNameChange($event)" />
         </mat-grid-tile>
         <mat-grid-tile></mat-grid-tile>
         <mat-grid-tile>
           <mat-form-field>
             <mat-label>Type</mat-label>
-            <mat-select #reverbTypeSelect [value]="reverbHeader?.type" (valueChange)="samplerService.samplerReverbUpdatePart(+reverbNumberInMemory, 13, +reverbTypeSelect.value)">
+            <mat-select #reverbTypeSelect [value]="reverbHeader ? '' + reverbHeader.type : '0'" (valueChange)="samplerService.samplerReverbUpdatePart(+reverbNumberInMemory, 13, +reverbTypeSelect.value)">
               @for (reverbType of reverbType; track reverbType.value) {
                 <mat-option value="{{reverbType.value}}">{{reverbType.label}}</mat-option>
               }
@@ -93,21 +92,21 @@
         </mat-grid-tile>
         <mat-grid-tile>
           <mat-form-field>
-            <label>High Frequency Cut</label>
+            <label for="highFrequencyCut">High Frequency Cut</label>
             <input matInput #highFrequencyCut type="number" min="0" max="99" [value]="reverbHeader?.highFrequencyCut" (change)="samplerService.samplerReverbUpdatePart(+reverbNumberInMemory, 24, +highFrequencyCut.value)">
             <mat-hint>Min 0 Max 99</mat-hint>
           </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
           <mat-form-field>
-            <label>Delay</label>
+            <label for="preDelay">Delay</label>
             <input matInput #preDelay type="number" min="0" max="360" [value]="reverbHeader?.preDelay" (change)="samplerService.samplerReverbUpdatePart(+reverbNumberInMemory, 21, +preDelay.value)">
             <mat-hint>Min 0 Max 360</mat-hint>
           </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
           <mat-form-field>
-            <label>Stereo Width</label>
+            <label for="stereoWidth">Stereo Width</label>
             <input matInput #stereoWidth type="number" min="0" max="99" [value]="reverbHeader?.stereoWidth" (change)="samplerService.samplerReverbUpdatePart(+reverbNumberInMemory, 17, +stereoWidth.value)">
             <mat-hint>Min 0 Max 99</mat-hint>
           </mat-form-field>

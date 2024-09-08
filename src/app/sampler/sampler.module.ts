@@ -8,7 +8,7 @@ import { SamplerRoutingModule } from './sampler-routing.module';
   declarations: [],
   imports: [
     CommonModule,
-    SamplerRoutingModule
+    SamplerRoutingModule,
   ]
 })
 export class SamplerModule { }

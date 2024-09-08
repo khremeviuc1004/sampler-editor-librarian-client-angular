@@ -3,7 +3,6 @@ import {
   ElementRef,
   inject,
   OnInit,
-  signal,
   ViewChild,
 } from '@angular/core';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -25,6 +24,8 @@ import { Reverb } from 'sampler-editor-librarian-dto';
 import { reverbType } from '../../../../util/util';
 import { MenuComponent } from '../../menu/menu.component';
 import { StereoPanPipe } from '../../../pipes/stereo-pan.pipe';
+import { ToastrService } from 'ngx-toastr';
+import { FixedLengthNameFieldComponent } from '../../fixed-length-name-field/fixed-length-name-field.component';
 
 @Component({
   selector: 'app-reverb',
@@ -45,6 +46,7 @@ import { StereoPanPipe } from '../../../pipes/stereo-pan.pipe';
     MatSelectModule,
     MenuComponent,
     StereoPanPipe,
+    FixedLengthNameFieldComponent
   ],
   templateUrl: './reverb.component.html',
   styleUrl: './reverb.component.scss',
@@ -65,13 +67,12 @@ export class ReverbComponent implements OnInit {
   samplerResidentProgramNamesPaginator!: MatPaginator;
   samplerReverbNamesLoading = true;
 
-  reverbNumberInMemory = '0';
+  reverbNumberInMemory = -1;
   reverbHeader: Reverb | null = null;
-  protected readonly name = signal('');
 
   reverbType = reverbType;
 
-  constructor(route: ActivatedRoute) {
+  constructor(route: ActivatedRoute, private toastr: ToastrService) {
     this.route = route;
   }
 
@@ -105,25 +106,31 @@ export class ReverbComponent implements OnInit {
     this.samplerReverbNamesDataSource.filter = value;
   }
 
-  onRowClick(value: string) {
-    if (this.reverbNameInput) {
-      this.samplerService
-        .samplerReverb(this.samplerReverbNamesDataSource.data.indexOf(value))
-        .subscribe((reverb) => {
-          console.log('Reverb', reverb);
-          this.reverbHeader = reverb;
-        });
-    }
+  onRowClick(value: number) {
+    console.log("onRowClick", value);
+    this.reverbNumberInMemory = value;
+    this.samplerService
+    .samplerReverb(+this.reverbNumberInMemory)
+    .subscribe((reverb) => {
+      console.log('Reverb', reverb);
+      this.reverbHeader = reverb;
+    });
   }
 
-  protected onReverbNameInput(event: Event) {
-    this.name.set((event.target as HTMLInputElement).value);
-  }
-
-  protected onReverbNameChange(event: Event) {
+  protected onReverbNameChange(value: string) {
     this.samplerService.samplerReverbUpdateName(
       +this.reverbNumberInMemory,
-      (event.target as HTMLInputElement).value,
+      value,
+      (success: boolean) => {
+        console.log('Reverb name updated', success);
+        if (success) {
+          this.toastr.success('Success', 'Updated the reverb name');
+          this.loadReverbs();
+        }
+        else {
+          this.toastr.error('Error', 'Could not update the reverb name');
+        }
+      }
     );
   }
 }

@@ -30,7 +30,10 @@
             <mat-cell *matCellDef="let effectName">{{effectName}}</mat-cell>
           </ng-container>
           <mat-header-row *matHeaderRowDef="samplerEffectsDisplayedColumns"></mat-header-row>
-          <mat-row *matRowDef="let effectName; columns: samplerEffectsDisplayedColumns;" (click)="onRowClick(effectName)"></mat-row>
+          <mat-row
+            *matRowDef="let effectName;let i=index; columns: samplerEffectsDisplayedColumns;"
+            [class.selected-row]="effectNumberInMemory === i"
+            (click)="onRowClick(i)"></mat-row>
         </mat-table>
       }
       <mat-paginator #effectsPaginator [pageSizeOptions]="[10]"
@@ -44,23 +47,15 @@
     <div class="internalMatGrid">
       <mat-grid-list cols="2" rowHeight="100">
         <mat-grid-tile>
-          <mat-form-field hintLabel="Min 3 Max 12 characters">
-            <mat-label>Effects Filename</mat-label>
-            <input matInput #effectFilename maxlength="12" minlength="3" (input)="onEffectsAndReverbFilenameInput($event)" value="{{effectsAndReverbFilename ? effectsAndReverbFilename.trim(): ''}}" (change)="onEffectsAndReverbFilenameChange($event)" />
-            <mat-hint align="end">{{effectsFilenameSignal().length}}/12</mat-hint>
-          </mat-form-field>
+          <app-fixed-length-name-field nameFieldTitle="Effects Filename" nameFieldValue="{{effectsAndReverbFilename ? effectsAndReverbFilename.trim(): ''}}" maxChars="12" minChars="3" (doChange)="onEffectsAndReverbFilenameChange($event)" />
         </mat-grid-tile>
         <mat-grid-tile>
-          <mat-form-field hintLabel="Min 3 Max 12 characters">
-            <mat-label>Effect name</mat-label>
-            <input matInput #effectName maxlength="12" minlength="3" (input)="onEffectNameInput($event)" value="{{effect ? effect.name.trim(): ''}}" (change)="onEffectNameChange($event)" />
-            <mat-hint align="end">{{name().length}}/12</mat-hint>
-          </mat-form-field>
+          <app-fixed-length-name-field nameFieldTitle="Effect name" nameFieldValue="{{effect ? effect.name.trim(): ''}}" maxChars="12" minChars="3" (doChange)="onEffectNameChange($event)" />
         </mat-grid-tile>
         <mat-grid-tile>
           <mat-form-field>
             <mat-label>Type</mat-label>
-            <mat-select #effectTypeSelect [value]="'' + effect?.type" (valueChange)="samplerService.samplerEffectUpdatePart(effectNumberInMemory, effectTypeInMemory, 13, +effectTypeSelect.value)">
+            <mat-select #effectTypeSelect [value]="'' + effect?.type" (valueChange)="effectUpdatePartAndRefreshLocalData(effectNumberInMemory, effectTypeInMemory, 13, +effectTypeSelect.value)">
               @for (effectType of effectTypes; track effectType.value) {
                 <mat-option value="{{effectType.value}}">{{effectType.label}}</mat-option>
               }
@@ -175,7 +170,7 @@
         <mat-grid-tile>
           @if (effect?.type !== 8) {
             <mat-form-field>
-            <label>High Frequency Cut</label>
+            <label for="highFrequencyCut">High Frequency Cut</label>
             <input matInput #highFrequencyCut type="number" min="0" max="99" [value]="effect?.highFrequencyCut" (change)="samplerService.samplerEffectUpdatePart(effectNumberInMemory, effectTypeInMemory, 24, +highFrequencyCut.value)">
             <mat-hint>Min 0 Max 99</mat-hint>
           </mat-form-field>
@@ -229,7 +224,7 @@
         <mat-grid-tile>
           @if (effect?.type !== 9) {
             <mat-form-field>
-              <label>Stereo Width</label>
+              <label for="stereoWidth">Stereo Width</label>
               <input matInput #stereoWidth type="number" min="0" max="99" [value]="effect?.stereoWidth" (change)="samplerService.samplerEffectUpdatePart(effectNumberInMemory, effectTypeInMemory, 17, +stereoWidth.value)">
               <mat-hint>Min 0 Max 99</mat-hint>
             </mat-form-field>
@@ -238,7 +233,7 @@
         <mat-grid-tile>
             @if (effect?.type === effectTypeEnum.ECHO) {
               <mat-form-field>
-                <label>Left Extra Delay</label>
+                <label for="echoLeftExtraDelay">Left Extra Delay</label>
                 <input matInput #echoLeftExtraDelay type="number" min="0" max="180" [value]="getEchoEffect().leftExtraDelay" (change)="samplerService.samplerEffectUpdatePart(effectNumberInMemory, effectTypeInMemory, 61, +echoLeftExtraDelay.value)">
                 <mat-hint>Min 0 Max 180</mat-hint>
               </mat-form-field>
@@ -256,7 +251,7 @@
         <mat-grid-tile>
             @if (effect?.type === effectTypeEnum.ECHO) {
               <mat-form-field>
-                <label>Feedback Damping</label>
+                <label for="echoFeedbackDamping">Feedback Damping</label>
                 <input matInput #echoFeedbackDamping type="number" min="0" max="99" [value]="getEchoEffect().feedbackDamping" (change)="samplerService.samplerEffectUpdatePart(effectNumberInMemory, effectTypeInMemory, 63, +echoFeedbackDamping.value)">
                 <mat-hint>Min 0 Max 99</mat-hint>
               </mat-form-field>
