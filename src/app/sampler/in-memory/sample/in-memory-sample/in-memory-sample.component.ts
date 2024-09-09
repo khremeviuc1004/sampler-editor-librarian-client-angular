@@ -13,6 +13,7 @@ import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { MenuComponent } from '../../../menu/menu.component';
 import { NotePipe } from '../../../../pipes/note.pipe';
+import { FixedLengthNameFieldComponent } from '../../../fixed-length-name-field/fixed-length-name-field.component';
 
 @Component({
   selector: 'app-in-memory-sample',
@@ -31,7 +32,8 @@ import { NotePipe } from '../../../../pipes/note.pipe';
     RouterLink,
     NzIconModule,
     MenuComponent,
-    NotePipe
+    NotePipe,
+    FixedLengthNameFieldComponent
   ],
   templateUrl: './in-memory-sample.component.html',
   styleUrl: './in-memory-sample.component.scss'

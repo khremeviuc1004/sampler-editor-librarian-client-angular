@@ -4,7 +4,7 @@ import { SamplerService } from '../services/sampler.service';
 import { ActivatedRoute } from '@angular/router';
 import { ScreenCommon } from './screen-common';
 
-export class SampleScreenCommon extends ScreenCommon {
+export abstract class SampleScreenCommon extends ScreenCommon {
 
   sampleNumberInMemory = "0";
   sampleHeader: InMemorySample | null = null;
@@ -24,16 +24,14 @@ export class SampleScreenCommon extends ScreenCommon {
     });
   }
 
-  doExtraStuff() {
-
-  }
+  abstract doExtraStuff(): void ;
 
   sampleHeaderChanged(sampleHeaderIndex: number, event: Event): void {
     this.samplerService.samplerChangeValueInSampleHeader(+this.sampleNumberInMemory, sampleHeaderIndex, +(event.target as HTMLInputElement).value);
   }
 
-  sampleHeaderNameChanged(sampleHeaderIndex: number, event: Event): void {
-    this.samplerService.samplerChangeSampleNameInSampleHeader(+this.sampleNumberInMemory, sampleHeaderIndex, (event.target as HTMLInputElement).value);
+  sampleHeaderNameChanged(sampleHeaderIndex: number, value: string): void {
+    this.samplerService.samplerChangeSampleNameInSampleHeader(+this.sampleNumberInMemory, sampleHeaderIndex, value);
   }
 
   sampleEnumTypeChanged(sampleHeaderIndex: number, programEnumType: string) {

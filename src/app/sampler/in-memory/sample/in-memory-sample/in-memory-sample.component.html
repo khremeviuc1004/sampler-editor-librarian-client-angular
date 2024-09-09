@@ -10,11 +10,7 @@
 </nz-breadcrumb>
 <mat-grid-list cols="4" rowHeight="100">
   <mat-grid-tile>
-    <mat-form-field hintLabel="Min 3 Max 12 characters">
-      <mat-label>Sample name</mat-label>
-      <input matInput #input maxlength="12" minlength="3" (input)="onInput($event)" value="{{sampleHeader ? sampleHeader.name.trim(): ''}}" (change)="sampleHeaderNameChanged(3, $event)" />
-      <mat-hint align="end">{{name().length}}/12</mat-hint>
-    </mat-form-field>
+    <app-fixed-length-name-field nameFieldTitle="Sample name" nameFieldValue="{{sampleHeader ? sampleHeader.name.trim(): ''}}" maxChars="12" minChars="3" (doChange)="sampleHeaderNameChanged(3, $event)" />
   </mat-grid-tile>
   <mat-grid-tile>
     <mat-form-field>

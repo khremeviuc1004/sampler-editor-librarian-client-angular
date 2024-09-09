@@ -12,12 +12,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { MenuComponent } from '../../../menu/menu.component';
+import { FixedLengthNameFieldComponent } from '../../../fixed-length-name-field/fixed-length-name-field.component';
 
 @Component({
   selector: 'app-in-memory-program',
   standalone: true,
   imports: [MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule, MatIconModule, RouterLink,
-    MatTabsModule, RouterOutlet, MatGridListModule, ScreenTitleComponent, NzBreadCrumbModule, NzIconModule, MenuComponent],
+    MatTabsModule, RouterOutlet, MatGridListModule, ScreenTitleComponent, NzBreadCrumbModule, NzIconModule, MenuComponent,
+    FixedLengthNameFieldComponent],
   templateUrl: './in-memory-program.component.html',
   styleUrl: './in-memory-program.component.scss',
   encapsulation: ViewEncapsulation.None
@@ -30,8 +32,6 @@ export class InMemoryProgramComponent extends ProgramScreenCommon implements OnI
 
   router = inject(Router);
 
-  protected readonly name = signal('');
-
   constructor(route: ActivatedRoute){
     super(route);
   }
@@ -40,16 +40,14 @@ export class InMemoryProgramComponent extends ProgramScreenCommon implements OnI
     this.programOnInit();
     this.samplerService.samplerRequestProgramHeader(+this.programNumberInMemory).subscribe(program => {
       this.programHeader = program;
-      this.name.set(this.programHeader.name.trim());
     });
   }
 
-  protected onInput(event: Event) {
-    this.name.set((event.target as HTMLInputElement).value);
-  }
-
-  protected onProgramNameChange(event: Event) {
-    this.samplerService.samplerChangeNameInProgramHeader(+this.programNumberInMemory, 3, (event.target as HTMLInputElement).value);
+  protected onProgramNameChange(value: string) {
+    this.samplerService.samplerChangeNameInProgramHeader(+this.programNumberInMemory, 3, value);
+    if (this.programHeader) {
+      this.programHeader.name = value;
+    }
   }
 
   navigateToKeygroup() {
@@ -65,7 +63,6 @@ export class InMemoryProgramComponent extends ProgramScreenCommon implements OnI
         if (success) {
           this.samplerService.samplerRequestProgramHeader(+this.programNumberInMemory).subscribe(program => {
             this.programHeader = program;
-            this.name.set(this.programHeader.name.trim());
           });
         }
       });
@@ -78,7 +75,6 @@ export class InMemoryProgramComponent extends ProgramScreenCommon implements OnI
         if (success) {
           this.samplerService.samplerRequestProgramHeader(+this.programNumberInMemory).subscribe(program => {
             this.programHeader = program;
-            this.name.set(this.programHeader.name.trim());
           });
         }
       });

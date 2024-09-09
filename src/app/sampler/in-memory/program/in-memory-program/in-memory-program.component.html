@@ -10,11 +10,7 @@
 </nz-breadcrumb>
 <mat-grid-list cols="1" rowHeight="100">
   <mat-grid-tile>
-    <mat-form-field hintLabel="Min 3 Max 12 characters">
-      <mat-label>Program name</mat-label>
-      <input matInput #input maxlength="12" minlength="3" (input)="onInput($event)" value="{{programHeader ? programHeader.name.trim(): ''}}" (change)="onProgramNameChange($event)" />
-      <mat-hint align="end">{{name().length}}/12</mat-hint>
-    </mat-form-field>
+    <app-fixed-length-name-field nameFieldTitle="Program name" nameFieldValue="{{programHeader ? programHeader.name.trim(): ''}}" maxChars="12" minChars="3" (doChange)="onProgramNameChange($event)" />
   </mat-grid-tile>
   <mat-grid-tile>
     <mat-form-field>
