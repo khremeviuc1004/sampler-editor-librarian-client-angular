@@ -11,11 +11,18 @@ import { Router } from '@angular/router';
 import { MatMenuModule } from '@angular/material/menu';
 import { LocalStorageService } from 'ngx-webstorage';
 import { MenuComponent } from '../menu/menu.component';
+import { SamplerService } from '../../services/sampler.service';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelect, MatSelectModule } from '@angular/material/select';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-config',
   standalone: true,
-  imports: [MatGridListModule, MatTableModule, MatCheckboxModule, MatPaginatorModule, MatCardModule, ScreenTitleComponent, MatButtonModule, MatMenuModule, MenuComponent],
+  imports: [MatGridListModule, MatTableModule, MatCheckboxModule, MatPaginatorModule, MatCardModule, ScreenTitleComponent, MatButtonModule, MatMenuModule, MenuComponent,
+    MatFormFieldModule,
+    MatSelectModule
+  ],
   templateUrl: './config.component.html',
   styleUrl: './config.component.scss',
 })
@@ -26,6 +33,7 @@ export class ConfigComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['connected', 'id', 'name'];
 
   midiPortsService = inject(MidiPortsService);
+  samplerService = inject(SamplerService);
 
   midiInputPortsDataSource = new MatTableDataSource<PortDetails>(new Array<PortDetails>());
   @ViewChild('midiInputPortsPaginator')
@@ -35,10 +43,16 @@ export class ConfigComponent implements OnInit, AfterViewInit {
   @ViewChild('midiOutputPortsPaginator')
   midiOutputPortsPaginator!: MatPaginator;
 
+  @ViewChild('scsiDriveIdSelect')
+  scsiSelect!: MatSelect;
+
   midiPortConnections!: PortDetails[];
 
   localStorageService =  inject(LocalStorageService);
 
+  activeScsiId = 5;
+
+  constructor(private toastr: ToastrService) {}
 
   ngOnInit(): void {
     this.midiPortsService.getMidiConnections().subscribe(midiPortConnectionsApi => {
@@ -76,6 +90,8 @@ export class ConfigComponent implements OnInit, AfterViewInit {
         }
       }
     });
+
+    // this.samplerService.samplerGetMiscellaneousBytes(11, 1).subscribe(activeScsiId => this.activeScsiId = activeScsiId);
   }
 
   ngAfterViewInit(): void {
@@ -85,8 +101,13 @@ export class ConfigComponent implements OnInit, AfterViewInit {
   toggleInputCheckbox(midiInputPortDetails: PortDetails) {
     midiInputPortDetails.connected = !midiInputPortDetails.connected;
     if (midiInputPortDetails.connected) {
-      this.midiPortsService.connectToMidiInputPort(midiInputPortDetails.id).subscribe(response => console.log(response));
-      this.localStorageService.store('midiInputPortName', midiInputPortDetails.name);
+      this.midiPortsService.connectToMidiInputPort(midiInputPortDetails.id).subscribe(response => {
+        console.log(response);
+        this.localStorageService.store('midiInputPortName', midiInputPortDetails.name);
+        if (this.midiPortConnections.length === 2) {
+          this.samplerService.samplerGetMiscellaneousBytes(11, 1).subscribe(activeScsiId => this.activeScsiId = activeScsiId);
+        }
+      });
     }
   }
 
@@ -97,8 +118,13 @@ export class ConfigComponent implements OnInit, AfterViewInit {
   toggleOutputCheckbox(midiOutputPortDetails: PortDetails) {
     midiOutputPortDetails.connected = !midiOutputPortDetails.connected;
     if (midiOutputPortDetails.connected) {
-      this.midiPortsService.connectToMidiOutputPort(midiOutputPortDetails.id).subscribe(response => console.log(response));
-      this.localStorageService.store('midiOutputPortName', midiOutputPortDetails.name);
+      this.midiPortsService.connectToMidiOutputPort(midiOutputPortDetails.id).subscribe(response => {
+        console.log(response);
+        this.localStorageService.store('midiOutputPortName', midiOutputPortDetails.name);
+        if (this.midiPortConnections.length === 2) {
+          this.samplerService.samplerGetMiscellaneousBytes(11, 1).subscribe(activeScsiId => this.activeScsiId = activeScsiId);
+        }
+      });
     }
   }
 
@@ -108,5 +134,17 @@ export class ConfigComponent implements OnInit, AfterViewInit {
 
   routeToSamplerPage() {
     this.router.navigate(["sampler"]);
+  }
+
+  onActiveScsiChange(scsiId: number) {
+    this.samplerService.samplerUpdateMiscellaneousBytes(11, 1, scsiId).subscribe((success) => {
+      if (success) {
+        this.activeScsiId = scsiId;
+        this.toastr.success('Active scsi ID successfully changed.', 'Active SCSI ID');
+      }
+      else {
+        this.toastr.error('Failed to update the active scsi ID.', 'Active SCSI ID');
+      }
+    });
   }
 }

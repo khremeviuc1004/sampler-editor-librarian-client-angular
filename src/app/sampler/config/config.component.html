@@ -1,6 +1,6 @@
 <app-screen-title screenTitle="Settings" />
 <app-menu />
-<mat-grid-list cols="1" gutterSize="50" rowHeight="40%">
+<mat-grid-list cols="2" gutterSize="50" rowHeight="40%">
   <mat-grid-tile>
     <div>
       <mat-card appearance="raised">
@@ -36,7 +36,7 @@
         class="mat-elevation-z8">
       </mat-paginator>
     </div>
-</mat-grid-tile>
+  </mat-grid-tile>
   <mat-grid-tile>
     <div>
       <mat-card appearance="raised">
@@ -72,6 +72,17 @@
         class="mat-elevation-z8">
       </mat-paginator>
     </div>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Scsi Drive ID</mat-label>
+      <mat-select #scsiDriveIdSelect [value]="'' + activeScsiId" (valueChange)="onActiveScsiChange(+scsiDriveIdSelect.value)" [disabled]="!midiPortConnections ? false : midiPortConnections.length !== 2">
+        @for (item of [].constructor(8); track $index) {
+          <mat-option value="{{$index}}">{{$index}}</mat-option>
+        }
+      </mat-select>
+      <mat-hint align="end">Navigate to a keygroup by selecting one</mat-hint>
+    </mat-form-field>
   </mat-grid-tile>
 </mat-grid-list>
 
