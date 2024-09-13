@@ -7,10 +7,8 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ScreenTitleComponent } from '../../screen-title/screen-title.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SamplerService } from '../../services/sampler.service';
@@ -26,6 +24,22 @@ import { MenuComponent } from '../../menu/menu.component';
 import { StereoPanPipe } from '../../pipes/stereo-pan.pipe';
 import { ToastrService } from 'ngx-toastr';
 import { FixedLengthNameFieldComponent } from '../../fixed-length-name-field/fixed-length-name-field.component';
+import { ColumnDefinition, DataRetriever, SamplerTableComponent, WHOLE } from '../../sampler-table/sampler-table.component';
+
+class EffectsDataRetriever extends DataRetriever<string> {
+
+  constructor(samplerService: SamplerService) {
+    super(samplerService);
+  }
+
+  public override getData(): void {
+    if (this.subscription) {
+      this.samplerService
+      .samplerEffects()
+      .subscribe(this.subscription);
+    }
+  }
+}
 
 @Component({
   selector: 'app-effect',
@@ -34,9 +48,7 @@ import { FixedLengthNameFieldComponent } from '../../fixed-length-name-field/fix
     MatProgressSpinnerModule,
     MatGridListModule,
     MatCheckboxModule,
-    MatTableModule,
     MatIconModule,
-    MatPaginatorModule,
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
@@ -46,7 +58,8 @@ import { FixedLengthNameFieldComponent } from '../../fixed-length-name-field/fix
     MatSelectModule,
     MenuComponent,
     StereoPanPipe,
-    FixedLengthNameFieldComponent
+    FixedLengthNameFieldComponent,
+    SamplerTableComponent
   ],
   templateUrl: './effect.component.html',
   styleUrl: './effect.component.scss',
@@ -55,15 +68,6 @@ export class EffectComponent implements OnInit {
   route: ActivatedRoute | null = null;
   samplerService = inject(SamplerService);
   router = inject(Router);
-
-  samplerEffectsDisplayedColumns: string[] = ['name'];
-
-  samplerEffectNamesDataSource = new MatTableDataSource<string>(
-    new Array<string>(),
-  );
-  @ViewChild('effectsPaginator')
-  samplerEffectNamesPaginator!: MatPaginator;
-  samplerEffectNamesLoading = true;
 
   effectNumberInMemory = -1;
   effectTypeInMemory = 0;
@@ -74,31 +78,38 @@ export class EffectComponent implements OnInit {
   effectTypes = effectType;
   effectTypeEnum = EffectType;
 
+  nameFilterPredicate = (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    data: any,
+    filter: string,
+  ) => {
+    if (data.name) {
+      return (
+        data['name']
+          .toLowerCase()
+          .indexOf(filter.toLowerCase()) != -1
+      );
+    }
+
+    return false;
+  };
+  effectsDataRetriever = new EffectsDataRetriever(this.samplerService);
+  effectColumnDefinitions: ColumnDefinition[] = [
+    {
+      columnDefinitionName: 'name',
+      type: WHOLE,
+      displayName: 'Name'
+    },
+  ];
+  @ViewChild('effectsTable')
+  effectsTable!: SamplerTableComponent<string>;
+
   constructor(route: ActivatedRoute, private toastr: ToastrService) {
     this.route = route;
   }
 
   ngOnInit(): void {
-    this.samplerEffectNamesDataSource.filterPredicate = (data, filter) => {
-      return (
-        data
-          .toString()
-          .toLowerCase()
-          .indexOf(filter.toString().toLowerCase()) != -1
-      );
-    };
-    this.loadEffects();
     this.loadEffectsAndReverbFilename();
-  }
-
-  loadEffects() {
-    this.samplerEffectNamesLoading = true;
-    this.samplerService.samplerEffects().subscribe((data) => {
-      this.samplerEffectNamesDataSource.data = data;
-      this.samplerEffectNamesDataSource.paginator =
-        this.samplerEffectNamesPaginator;
-      this.samplerEffectNamesLoading = false;
-    });
   }
 
   loadEffectsAndReverbFilename() {
@@ -108,14 +119,6 @@ export class EffectComponent implements OnInit {
         console.log('FX filename: ', effectsAndRverHeader);
         this.effectsAndReverbFilename = effectsAndRverHeader.filename;
       });
-  }
-
-  onEffectNameFilterInput(event: Event) {
-    this.setEffectNameFilter((event.target as HTMLInputElement).value);
-  }
-
-  setEffectNameFilter(value: string) {
-    this.samplerEffectNamesDataSource.filter = value;
   }
 
   onRowClick(value: number) {
@@ -155,7 +158,7 @@ export class EffectComponent implements OnInit {
         console.log('Effect updated', success);
         if (success) {
           this.toastr.success('Success', 'Updated the effect name');
-          this.loadEffects();
+          this.effectsTable.loadData();
         }
         else {
           this.toastr.error('Error', 'Could not update the effect name');

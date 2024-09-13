@@ -1,0 +1,94 @@
+<div>
+  <mat-card appearance="raised">
+    <mat-card-header>
+      <mat-card-title>{{title}}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-form-field class="sample-table-filter-field">
+        <mat-label>Filter</mat-label>
+        <input #itemFilter matInput (input)="onItemFilterInput($event)" width="12">
+        <button matSuffix mat-icon-button (click)="itemFilter.value = '';setItemFilter('')">
+          <mat-icon>clear</mat-icon>
+        </button>
+      </mat-form-field>
+      @if (showRowAddButton) {
+        <button mat-mini-fab (click)="addItem()" style="margin-left: 1em;margin-top: 1em;" title="Add a new item.">
+          <mat-icon>add</mat-icon>
+        </button>
+      }
+      <button mat-mini-fab (click)="loadData()" style="margin-left: 1em;margin-top: 1em;" title="Reload this table from the sampler.">
+        <mat-icon>refresh</mat-icon>
+      </button>
+        </mat-card-content>
+  </mat-card>
+  @if (itemsLoading) {
+    <mat-spinner></mat-spinner>
+  }
+  @else {
+    <mat-table [dataSource]="itemDataSource" class="mat-elevation-z8">
+      @for (column of columnDefinitions; track column.columnDefinitionName) {
+        <ng-container [matColumnDef]="column.columnDefinitionName">
+          <mat-header-cell mat-header-cell *matHeaderCellDef>{{column.displayName}}</mat-header-cell>
+          @if (column.type === ACTION) {
+            <mat-cell *matCellDef="let itemDetails; let i = index">
+              @if (showRowEditButton) {
+                <button mat-mini-fab (click)="editItem(tablePaginator.pageIndex * tablePaginator.pageSize + i)" title="Edit this item.">
+                  <mat-icon>edit</mat-icon>
+                </button>
+              }
+              @if (showRowDeleteButton) {
+                <button mat-mini-fab (click)="deleteItem(tablePaginator.pageIndex * tablePaginator.pageSize + i)" style="margin-left: 1em;" title="Delete this item.">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              }
+            </mat-cell>
+          }
+          @else if (column.type ===  SELECT) {
+            <mat-cell *matCellDef="let itemDetails; let i = index">
+              <mat-select (valueChange)="onSelectValueChanged(tablePaginator.pageIndex * tablePaginator.pageSize + i, $event)" [value]="itemDetails">
+              @for (selectionValue of column.selectionValues; track $index) {
+                <mat-option [value]="$index">{{selectionValue}}</mat-option>
+              }
+              </mat-select>
+            </mat-cell>
+          }
+          @else if (column.type ===  INDEX) {
+            <mat-cell *matCellDef="let itemDetails; let i = index">
+              @if (column.formatDisplayText) {
+                {{column.formatDisplayText(tablePaginator.pageIndex * tablePaginator.pageSize + i)}}
+              }
+              @else {
+                {{tablePaginator.pageIndex * tablePaginator.pageSize + i}}
+              }
+            </mat-cell>
+          }
+          @else {
+            <mat-cell *matCellDef="let itemDetails">
+              @if (column.type === WHOLE) {
+                {{itemDetails}}
+              }
+              @else if (column.formatDisplayText) {
+                {{column.formatDisplayText(itemDetails[column.columnDefinitionName])}}
+              }
+              @else {
+                {{itemDetails[column.columnDefinitionName]}}
+              }
+            </mat-cell>
+          }
+        </ng-container>
+      }
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row
+        [class.selected-row]="rowSelectionDeterminer(itemDetails, i, selectedRowNumber)"
+        *matRowDef="let itemDetails;let i = index; columns: displayedColumns;"
+        (click)="onRowSelected(tablePaginator.pageIndex * tablePaginator.pageSize + i)"
+        ></mat-row>
+    </mat-table>
+  }
+
+  <mat-paginator #tablePaginator [pageSizeOptions]="pageSizesInRows"
+    showFirstLastButtons
+    aria-label="Select page of items"
+    class="mat-elevation-z8">
+  </mat-paginator>
+</div>

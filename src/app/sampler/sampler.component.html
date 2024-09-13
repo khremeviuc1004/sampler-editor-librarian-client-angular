@@ -1,8 +1,8 @@
 <app-menu />
 <app-screen-title screenTitle="Memory" />
-<mat-grid-list cols="3" gutterSize="10" rowHeight="500">
+<mat-grid-list cols="3" gutterSize="10" rowHeight="100%">
   <mat-grid-tile>
-    <mat-grid-list cols="1" rowHeight="100" gutterSize="0">
+    <mat-grid-list cols="1" rowHeight="85" gutterSize="0">
       <mat-grid-tile>
         <mat-form-field>
           <mat-label>Selected Program Number</mat-label>
@@ -39,115 +39,37 @@
     </mat-grid-list>
   </mat-grid-tile>
   <mat-grid-tile>
-    <div>
-      <mat-card appearance="raised">
-        <mat-card-header>
-          <mat-card-title>Resident Programs</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <mat-form-field class="sample-table-filter-field">
-            <mat-label>Filter</mat-label>
-            <input #programNameFilter matInput (input)="onProgramNameFilterInput($event)" width="12">
-            <button matSuffix mat-icon-button (click)="programNameFilter.value = '';setProgramNameFilter('')">
-              <mat-icon>clear</mat-icon>
-            </button>
-          </mat-form-field>
-          <button mat-mini-fab (click)="addProgram()" style="margin-left: 1em;margin-top: 1em;" title="Add a new program.">
-            <mat-icon>add</mat-icon>
-          </button>
-          <button mat-mini-fab (click)="loadResidentPrograms()" style="margin-left: 1em;margin-top: 1em;" title="Reload this table from the sampler.">
-            <mat-icon>refresh</mat-icon>
-          </button>
-            </mat-card-content>
-      </mat-card>
-      @if (samplerResidentProgramNamesLoading) {
-        <mat-spinner></mat-spinner>
-      }
-      @else {
-        <mat-table [dataSource]="samplerResidentProgramNamesDataSource" class="mat-elevation-z8">
-          <ng-container matColumnDef="program_number">
-            <mat-header-cell mat-header-cell *matHeaderCellDef>#</mat-header-cell>
-            <mat-cell *matCellDef="let programDetails">{{programDetails.midi_program_number + 1}}</mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="name">
-            <mat-header-cell mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
-            <mat-cell *matCellDef="let programDetails">{{programDetails.name}}</mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="action">
-            <mat-header-cell mat-header-cell *matHeaderCellDef>Action</mat-header-cell>
-            <mat-cell *matCellDef="let programDetails; let i = index">
-              <button mat-mini-fab (click)="editProgram(i)" title="Edit this program.">
-                <mat-icon>edit</mat-icon>
-              </button>
-              <button mat-mini-fab (click)="deleteProgram(i)" style="margin-left: 1em;" title="Delete this program.">
-                <mat-icon>delete</mat-icon>
-              </button>
-            </mat-cell>
-          </ng-container>
-          <mat-header-row *matHeaderRowDef="samplerResidentProgramsDisplayedColumns"></mat-header-row>
-          <mat-row
-            [class.selected-row]="programDetails.midi_program_number === +selectedProgramNumber.value - 1"
-            *matRowDef="let programDetails;let i = index; columns: samplerResidentProgramsDisplayedColumns;"></mat-row>
-        </mat-table>
-    }
-
-      <mat-paginator #residentProgramsPaginator [pageSizeOptions]="[5]"
-        showFirstLastButtons
-        aria-label="Select page of resident programs"
-        class="mat-elevation-z8">
-      </mat-paginator>
-    </div>
+    <app-sampler-table
+      #programsTable
+      title="Resident Programs"
+      [showRowAddButton]="true"
+      [showRowActions]="true"
+      [showRowEditButton]="true"
+      [showRowDeleteButton]="true"
+      (doEditRow)="editProgram($event)"
+      (doAddRow)="addProgram($event)"
+      (doDeleteRow)="deleteProgram($event)"
+      [pageSizesInRows]="[8]"
+      [dataRetriever]="programsDataRetriever"
+      [columnDefinitions]="programColumnDefinitions"
+      [filterPredicate]="nameFilterPredicate"
+      [rowSelectionDeterminer]="programRowSelectionDeterminer"
+      />
   </mat-grid-tile>
   <mat-grid-tile>
-    <div>
-      <mat-card appearance="raised">
-        <mat-card-header>
-          <mat-card-title>Resident Samples</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <mat-form-field class="sample-table-filter-field">
-            <mat-label>Filter</mat-label>
-            <input #sampleNameFilter matInput (input)="onSampleNameFilterInput($event)">
-            <button matSuffix mat-icon-button (click)="sampleNameFilter.value = '';setSampleNameFilter('')">
-              <mat-icon>clear</mat-icon>
-            </button>
-          </mat-form-field>
-          <button mat-mini-fab (click)="loadResidentSamples()" style="margin-left: 1em;margin-top: 1em;" title="Reload this table from the sampler.">
-            <mat-icon>refresh</mat-icon>
-          </button>
-            </mat-card-content>
-      </mat-card>
-      @if (samplerResidentSampleNamesLoading) {
-        <mat-spinner></mat-spinner>
-      }
-      @else {
-        <mat-table mat-table [dataSource]="samplerResidentSampleNamesDataSource" class="mat-elevation-z8">
-          <ng-container matColumnDef="name">
-            <mat-header-cell mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
-            <mat-cell *matCellDef="let sampleName">{{sampleName}}</mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="action">
-            <mat-header-cell mat-header-cell *matHeaderCellDef>Action</mat-header-cell>
-            <mat-cell *matCellDef="let sampleName">
-              <button mat-mini-fab (click)="editSample(sampleName)" title="Edit this sample.">
-                <mat-icon>edit</mat-icon>
-              </button>
-              <button mat-mini-fab (click)="deleteSample(sampleName)" style="margin-left: 1em;" title="Delete this sample.">
-                <mat-icon>delete</mat-icon>
-              </button>
-            </mat-cell>
-          </ng-container>
-          <mat-header-row *matHeaderRowDef="samplerResidentNamesDisplayedColumns"></mat-header-row>
-          <mat-row *matRowDef="let sampleName; columns: samplerResidentNamesDisplayedColumns;"></mat-row>
-        </mat-table>
-      }
-
-      <mat-paginator #residentSamplesPaginator [pageSizeOptions]="[5]"
-        showFirstLastButtons
-        aria-label="Select page of resident samples"
-        class="mat-elevation-z8">
-      </mat-paginator>
-    </div>
+    <app-sampler-table
+      #samplesTable
+      title="Resident Samples"
+      [showRowActions]="true"
+      [showRowEditButton]="true"
+      [showRowDeleteButton]="true"
+      (doEditRow)="editSample($event)"
+      (doDeleteRow)="deleteSample($event)"
+      [pageSizesInRows]="[8]"
+      [dataRetriever]="samplesDataRetriever"
+      [columnDefinitions]="sampleColumnDefinitions"
+      [filterPredicate]="nameFilterPredicate"
+      />
   </mat-grid-tile>
 </mat-grid-list>
 <mat-grid-list cols="5" gutterSize="10" rowHeight="60">

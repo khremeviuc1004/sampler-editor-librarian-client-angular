@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import {
   ChorusEffect,
   DelayEffect,
@@ -11,6 +11,7 @@ import {
   PitchShiftEffect,
   Reverb,
 } from 'sampler-editor-librarian-dto';
+import { HardDrivePartitionLetterPipe } from '../pipes/hard-drive-partition-letter.pipe';
 
 interface HardDiskEntryDetails {
   name: string;
@@ -19,11 +20,24 @@ interface HardDiskEntryDetails {
   type: string;
 }
 
+export interface HardDiskEntryDetailsType {
+  index: number;
+  name: string;
+  type: string;
+}
+
 interface VolumeListEntryDetails {
   entry_number: number;
   entry_name: string;
   active: boolean;
   type: number;
+}
+
+export interface VolumeListEntryDetailsType {
+  index: number;
+  name: string;
+  active: boolean;
+  type: string;
 }
 
 interface S1000MiscellaneousData {
@@ -54,6 +68,11 @@ export interface StatusReport {
   exclusive_channel: number;
 }
 
+export interface StatusReportDetail {
+  name: string;
+  value: number;
+}
+
 export interface FileDetails {
   name: string;
   file_type: string;
@@ -64,6 +83,10 @@ export interface ProgramDetails {
   name: string;
 }
 
+export interface NameOnly {
+  name: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -71,8 +94,48 @@ export class SamplerService {
   private httpClient = inject(HttpClient);
   private baseUrl = 'http://localhost:4000/api/midi/sampler/';
 
-  samplerStatusReport(): Observable<StatusReport> {
-    return this.httpClient.get<StatusReport>(this.baseUrl + 'sampler-status-report');
+  samplerStatusReport(): Observable<StatusReportDetail[]> {
+    return this.httpClient.get<StatusReport>(this.baseUrl + 'sampler-status-report')
+            .pipe(map((data) => {
+              const samplerStatusData = new Array<StatusReportDetail>();
+              const exclusiveChannel: StatusReportDetail = {
+                name: 'exclusive channel',
+                value: data.exclusive_channel,
+              };
+              samplerStatusData.push(exclusiveChannel);
+              const freeBlocks: StatusReportDetail = {
+                name: 'free blocks',
+                value: data.free_blocks,
+              };
+              samplerStatusData.push(freeBlocks);
+              const freeWords: StatusReportDetail = {
+                name: 'free words',
+                value: data.free_words,
+              };
+              samplerStatusData.push(freeWords);
+              const maxBlocks: StatusReportDetail = {
+                name: 'max blocks',
+                value: data.max_blocks,
+              };
+              samplerStatusData.push(maxBlocks);
+              const maxSampleWords: StatusReportDetail = {
+                name: 'max sample words',
+                value: data.max_sample_words,
+              };
+              samplerStatusData.push(maxSampleWords);
+              const softwareVersionMajor: StatusReportDetail = {
+                name: 'software version major',
+                value: data.software_version_major,
+              };
+              samplerStatusData.push(softwareVersionMajor);
+              const softwareVersionMinor: StatusReportDetail = {
+                name: 'software version minor',
+                value: data.software_version_minor,
+              };
+              samplerStatusData.push(softwareVersionMinor);
+
+              return samplerStatusData;
+            }));
   }
 
   samplerRequestResidentProgramNames(): Observable<string[]> {
@@ -95,10 +158,18 @@ export class SamplerService {
     );
   }
 
-  samplerRequestHardDiskDirectory(): Observable<HardDiskEntryDetails[]> {
+  samplerRequestHardDiskDirectory(): Observable<HardDiskEntryDetailsType[]> {
     return this.httpClient.get<HardDiskEntryDetails[]>(
       this.baseUrl + 'hard-disk-dir',
-    );
+    ).pipe(map((data) => {
+      return data.map((entry, index): HardDiskEntryDetailsType => {
+        return {
+          index: index,
+          type: entry.type,
+          name: entry.name,
+        }
+      });
+    }));
   }
   samplerRequestHardDiskDirectoryAll(): Observable<HardDiskEntryDetails[]> {
     return this.httpClient.get<HardDiskEntryDetails[]>(
@@ -106,10 +177,23 @@ export class SamplerService {
     );
   }
 
-  samplerRequestVolumeList(): Observable<VolumeListEntryDetails[]> {
+  samplerRequestVolumeList(): Observable<VolumeListEntryDetailsType[]> {
     return this.httpClient.get<VolumeListEntryDetails[]>(
       this.baseUrl + 'volume-list',
-    );
+    ).pipe(map((data) => {
+      const entries2: VolumeListEntryDetailsType[] = [];
+
+      data.forEach((volumeEntry) => {
+        const entry: VolumeListEntryDetailsType = {
+          index: volumeEntry.entry_number,
+          name: volumeEntry.entry_name,
+          active: true,
+          type: volumeEntry.type === 3 ? 'S3000' : 'S1000',
+        };
+        entries2.push(entry);
+      });
+      return entries2;
+    }));
   }
 
   samplerRequestProgramHeader(
@@ -327,8 +411,16 @@ export class SamplerService {
     return this.httpClient.patch<boolean>(this.baseUrl + 'harddrive', null);
   }
 
-  samplerHardDriveNumberOfPartitions(): Observable<number> {
-    return this.httpClient.get<number>(this.baseUrl + 'harddrive/partitions');
+  samplerHardDriveNumberOfPartitions(): Observable<NameOnly[]> {
+    return this.httpClient.get<number>(this.baseUrl + 'harddrive/partitions')
+              .pipe(map((numberOfPartitions: number) => {
+                const partitionLetterPipe = new HardDrivePartitionLetterPipe();
+                return Array.from(
+                  { length: numberOfPartitions },
+                  (e, index) => { return { name: partitionLetterPipe.transform(index) } },
+                );
+              })
+            );
   }
 
   samplerSelectHardDrivePartition(

@@ -1,166 +1,134 @@
 import { Routes } from '@angular/router';
-import { ErrorPageComponent } from './error-page/error-page.component';
-import { ConfigComponent } from './config/config.component';
-import { SamplerComponent } from './sampler/sampler.component';
-import { InMemoryProgramComponent } from './in-memory/program/in-memory-program/in-memory-program.component';
-import { InMemoryKeygroupComponent } from './in-memory/keygroup/in-memory-keygroup/in-memory-keygroup.component';
-import { Lfo1Component } from './in-memory/program/lfo1/lfo1.component';
-import { Lfo2Component } from './in-memory/program/lfo2/lfo2.component';
-import { PitchBendComponent } from './in-memory/program/pitch-bend/pitch-bend.component';
-import { TemperTuningComponent } from './in-memory/program/temper-tuning/temper-tuning.component';
-import { MasterTuningComponent } from './in-memory/program/master-tuning/master-tuning.component';
-import { SoftPedalComponent } from './in-memory/program/soft-pedal/soft-pedal.component';
-import { ModesComponent } from './in-memory/program/modes/modes.component';
-import { MasterOutputComponent } from './in-memory/program/master-output/master-output.component';
-import { MasterPanComponent } from './in-memory/program/master-pan/master-pan.component';
-import { MidiComponent } from './in-memory/program/midi/midi.component';
-import { PortamentoComponent } from './in-memory/program/portamento/portamento.component';
-import { KeygroupGlobalComponent } from './in-memory/program/keygroup-global/keygroup-global.component';
-import { InMemorySampleComponent } from './in-memory/sample/in-memory-sample/in-memory-sample.component';
-import { Filter1Component } from './in-memory/keygroup/filter1/filter1.component';
-import { Filter2Component } from './in-memory/keygroup/filter2/filter2.component';
-import { ToneComponent } from './in-memory/keygroup/tone/tone.component';
-import { Envelope1Component } from './in-memory/keygroup/envelope1/envelope1.component';
-import { Envelope2Component } from './in-memory/keygroup/envelope2/envelope2.component';
-import { Envelope3Component } from './in-memory/keygroup/envelope3/envelope3.component';
-import { ZoneComponent } from './in-memory/keygroup/zone/zone.component';
-import { PitchComponent } from './in-memory/keygroup/pitch/pitch.component';
-import { EffectComponent } from './in-memory/effect/effect.component';
-import { ReverbComponent } from './in-memory/reverb/reverb.component';
-import { EffectAssignmentComponent } from './in-memory/effect-assignment/effect-assignment.component';
-import { ReverbAssignmentComponent } from './in-memory/reverb-assignment/reverb-assignment.component';
-import { DiskComponent } from './disk/disk.component';
-import { StatusReportComponent } from './status-report/status-report.component';
 
 export const routes: Routes = [
   {
     path: 'config',
-    component: ConfigComponent,
+    loadComponent:  () => import('./config/config.component').then(m => m.ConfigComponent)
   },
   {
     path: 'sampler',
-    component: SamplerComponent,
+    loadComponent:  () => import('./sampler/sampler.component').then(m => m.SamplerComponent)
   },
   {
     path: 'in-memory-program/:programNumberInMemory',
-    component: InMemoryProgramComponent,
+    loadComponent:  () => import('./in-memory/program/in-memory-program/in-memory-program.component').then(m => m.InMemoryProgramComponent)
   },
   {
     path: 'in-memory-program/:programNumberInMemory/lfo1',
-    component: Lfo1Component,
+    loadComponent:  () => import('./in-memory/program/lfo1/lfo1.component').then(m => m.Lfo1Component)
   },
   {
     path: 'in-memory-program/:programNumberInMemory/lfo2',
-    component: Lfo2Component,
+    loadComponent:  () => import('./in-memory/program/lfo2/lfo2.component').then(m => m.Lfo2Component)
   },
   {
     path: 'in-memory-program/:programNumberInMemory/pitch-bend',
-    component: PitchBendComponent,
+    loadComponent:  () => import('./in-memory/program/pitch-bend/pitch-bend.component').then(m => m.PitchBendComponent)
   },
   {
     path: 'in-memory-program/:programNumberInMemory/temper-tuning',
-    component: TemperTuningComponent,
+    loadComponent:  () => import('./in-memory/program/temper-tuning/temper-tuning.component').then(m => m.TemperTuningComponent)
   },
   {
     path: 'in-memory-program/:programNumberInMemory/master-tuning',
-    component: MasterTuningComponent,
+    loadComponent:  () => import('./in-memory/program/master-tuning/master-tuning.component').then(m => m.MasterTuningComponent)
   },
   {
     path: 'in-memory-program/:programNumberInMemory/soft-pedal',
-    component: SoftPedalComponent,
+    loadComponent:  () => import('./in-memory/program/soft-pedal/soft-pedal.component').then(m => m.SoftPedalComponent)
   },
   {
     path: 'in-memory-program/:programNumberInMemory/modes',
-    component: ModesComponent,
+    loadComponent:  () => import('./in-memory/program/modes/modes.component').then(m => m.ModesComponent)
   },
   {
     path: 'in-memory-program/:programNumberInMemory/master-output',
-    component: MasterOutputComponent,
+    loadComponent:  () => import('./in-memory/program/master-output/master-output.component').then(m => m.MasterOutputComponent)
   },
   {
     path: 'in-memory-program/:programNumberInMemory/master-pan',
-    component: MasterPanComponent,
+    loadComponent:  () => import('./in-memory/program/master-pan/master-pan.component').then(m => m.MasterPanComponent)
   },
   {
     path: 'in-memory-program/:programNumberInMemory/midi',
-    component: MidiComponent,
+    loadComponent:  () => import('./in-memory/program/midi/midi.component').then(m => m.MidiComponent)
   },
   {
     path: 'in-memory-program/:programNumberInMemory/portamento',
-    component: PortamentoComponent,
+    loadComponent:  () => import('./in-memory/program/portamento/portamento.component').then(m => m.PortamentoComponent)
   },
   {
     path: 'in-memory-program/:programNumberInMemory/keygroup-global',
-    component: KeygroupGlobalComponent,
+    loadComponent:  () => import('./in-memory/program/keygroup-global/keygroup-global.component').then(m => m.KeygroupGlobalComponent)
   },
   {
     path: 'in-memory-program/:programNumberInMemory/in-memory-keygroup/:keygroupNumberInMemory',
-    component: InMemoryKeygroupComponent,
+    loadComponent:  () => import('./in-memory/keygroup/in-memory-keygroup/in-memory-keygroup.component').then(m => m.InMemoryKeygroupComponent)
   },
   {
     path: 'in-memory-program/:programNumberInMemory/in-memory-keygroup/:keygroupNumberInMemory/filter1',
-    component: Filter1Component,
+    loadComponent:  () => import('./in-memory/keygroup/filter1/filter1.component').then(m => m.Filter1Component)
   },
   {
     path: 'in-memory-program/:programNumberInMemory/in-memory-keygroup/:keygroupNumberInMemory/filter2',
-    component: Filter2Component,
+    loadComponent:  () => import('./in-memory/keygroup/filter2/filter2.component').then(m => m.Filter2Component)
   },
   {
     path: 'in-memory-program/:programNumberInMemory/in-memory-keygroup/:keygroupNumberInMemory/tone',
-    component: ToneComponent,
+    loadComponent:  () => import('./in-memory/keygroup/tone/tone.component').then(m => m.ToneComponent)
   },
   {
     path: 'in-memory-program/:programNumberInMemory/in-memory-keygroup/:keygroupNumberInMemory/envelope1',
-    component: Envelope1Component,
+    loadComponent:  () => import('./in-memory/keygroup/envelope1/envelope1.component').then(m => m.Envelope1Component)
   },
   {
     path: 'in-memory-program/:programNumberInMemory/in-memory-keygroup/:keygroupNumberInMemory/envelope2',
-    component: Envelope2Component,
+    loadComponent:  () => import('./in-memory/keygroup/envelope2/envelope2.component').then(m => m.Envelope2Component)
   },
   {
     path: 'in-memory-program/:programNumberInMemory/in-memory-keygroup/:keygroupNumberInMemory/envelope3',
-    component: Envelope3Component,
+    loadComponent:  () => import('./in-memory/keygroup/envelope3/envelope3.component').then(m => m.Envelope3Component)
   },
   {
     path: 'in-memory-program/:programNumberInMemory/in-memory-keygroup/:keygroupNumberInMemory/zones',
-    component: ZoneComponent,
+    loadComponent:  () => import('./in-memory/keygroup/zone/zone.component').then(m => m.ZoneComponent)
   },
   {
     path: 'in-memory-program/:programNumberInMemory/in-memory-keygroup/:keygroupNumberInMemory/pitch',
-    component: PitchComponent,
+    loadComponent:  () => import('./in-memory/keygroup/pitch/pitch.component').then(m => m.PitchComponent)
   },
   {
     path: 'in-memory-sample/:sampleNumberInMemory',
-    component: InMemorySampleComponent,
+    loadComponent:  () => import('./in-memory/sample/in-memory-sample/in-memory-sample.component').then(m => m.InMemorySampleComponent)
   },
   {
     path: 'effect',
-    component: EffectComponent,
+    loadComponent:  () => import('./in-memory/effect/effect.component').then(m => m.EffectComponent)
   },
   {
     path: 'reverb',
-    component: ReverbComponent,
+    loadComponent:  () => import('./in-memory/reverb/reverb.component').then(m => m.ReverbComponent)
   },
   {
     path: 'effect-assignment',
-    component: EffectAssignmentComponent,
+    loadComponent:  () => import('./in-memory/effect-assignment/effect-assignment.component').then(m => m.EffectAssignmentComponent)
   },
   {
     path: 'reverb-assignment',
-    component: ReverbAssignmentComponent,
+    loadComponent:  () => import('./in-memory/reverb-assignment/reverb-assignment.component').then(m => m.ReverbAssignmentComponent)
   },
   {
     path: 'disk-open',
-    component: DiskComponent,
+    loadComponent:  () => import('./disk/disk.component').then(m => m.DiskComponent)
   },
   {
     path: 'disk-save',
-    component: DiskComponent,
+    loadComponent:  () => import('./disk/disk.component').then(m => m.DiskComponent)
   },
   {
     path: 'status-report',
-    component: StatusReportComponent,
+    loadComponent:  () => import('./status-report/status-report.component').then(m => m.StatusReportComponent)
   },
   { path: '',   redirectTo: '/config', pathMatch: 'full' },
-  { path: '**', component: ErrorPageComponent },
+  { path: '**', loadComponent:  () => import('./error-page/error-page.component').then(m => m.ErrorPageComponent) },
 ];

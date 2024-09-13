@@ -2,46 +2,13 @@
 <app-screen-title screenTitle="Status Report" />
 <mat-grid-list cols="1" gutterSize="10">
   <mat-grid-tile>
-    <div>
-      <mat-card appearance="raised">
-        <mat-card-header>
-          <mat-card-title>Status Report</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <mat-form-field class="sample-table-filter-field">
-            <mat-label>Filter</mat-label>
-            <input #samplerStatusFilter matInput (input)="onStatusReportFilterInput($event)" width="12">
-            <button matSuffix mat-icon-button (click)="samplerStatusFilter.value = '';setStatusReportFilter('')">
-              <mat-icon>clear</mat-icon>
-            </button>
-          </mat-form-field>
-          <button mat-mini-fab (click)="loadStatusReport()" style="margin-left: 1em;margin-top: 1em;" title="Reload this table from the sampler.">
-            <mat-icon>refresh</mat-icon>
-          </button>
-            </mat-card-content>
-      </mat-card>
-      @if (samplerStatusDataLoading) {
-        <mat-spinner></mat-spinner>
-      }
-      @else {
-        <mat-table mat-table [dataSource]="samplerStatusReportDataSource" class="mat-elevation-z8">
-          <ng-container matColumnDef="name">
-            <mat-header-cell mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
-            <mat-cell mat-cell *matCellDef="let statusData">{{statusData.name}}</mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="value">
-            <mat-header-cell mat-header-cell *matHeaderCellDef>Value</mat-header-cell>
-            <mat-cell mat-cell *matCellDef="let statusData">{{statusData.value}}</mat-cell>
-          </ng-container>
-          <mat-header-row *matHeaderRowDef="samplerStatusDisplayedColumns"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: samplerStatusDisplayedColumns;"></mat-row>
-        </mat-table>
-      }
-      <mat-paginator #statusPaginator [pageSizeOptions]="[7]"
-        showFirstLastButtons
-        aria-label="Select page of resident samples"
-        class="mat-elevation-z8">
-      </mat-paginator>
-    </div>
+    <app-sampler-table
+      #statusReportTable
+      title="Status Report"
+      [pageSizesInRows]="[7]"
+      [dataRetriever]="statusReportDataRetriever"
+      [columnDefinitions]="statusReportColumnDefinitions"
+      [filterPredicate]="nameFilterPredicate"
+    />
   </mat-grid-tile>
 </mat-grid-list>

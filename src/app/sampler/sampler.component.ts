@@ -8,8 +8,6 @@ import {
 import { MatCardModule } from '@angular/material/card';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Router } from '@angular/router';
 import {
   ProgramDetails,
@@ -25,6 +23,37 @@ import { MatCheckbox, MatCheckboxModule } from '@angular/material/checkbox';
 import { HardDrivePartitionLetterPipe } from '../pipes/hard-drive-partition-letter.pipe';
 import { MatSelectModule } from '@angular/material/select';
 import { MenuComponent } from '../menu/menu.component';
+import { ACTION, ColumnDefinition, DataRetriever, SamplerTableComponent, WHOLE } from '../sampler-table/sampler-table.component';
+
+class ProgramDataRetriever extends DataRetriever<ProgramDetails> {
+
+  constructor(samplerService: SamplerService) {
+    super(samplerService);
+  }
+
+  public override getData(): void {
+    if (this.subscription) {
+      this.samplerService
+      .samplerRequestResidentProgramNamesWithMidiProgramNumbers()
+      .subscribe(this.subscription);
+    }
+  }
+}
+
+class SampleDataRetriever extends DataRetriever<string> {
+
+  constructor(samplerService: SamplerService) {
+    super(samplerService);
+  }
+
+  public override getData(): void {
+    if (this.subscription) {
+      this.samplerService
+      .samplerRequestResidentSampleNames()
+      .subscribe(this.subscription);
+    }
+  }
+}
 
 @Component({
   selector: 'app-sampler',
@@ -33,9 +62,7 @@ import { MenuComponent } from '../menu/menu.component';
     MatProgressSpinnerModule,
     MatGridListModule,
     MatCheckboxModule,
-    MatTableModule,
     MatIconModule,
-    MatPaginatorModule,
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
@@ -44,6 +71,7 @@ import { MenuComponent } from '../menu/menu.component';
     HardDrivePartitionLetterPipe,
     MatSelectModule,
     MenuComponent,
+    SamplerTableComponent
   ],
   templateUrl: './sampler.component.html',
   styleUrl: './sampler.component.scss',
@@ -57,32 +85,24 @@ export class SamplerComponent implements OnInit {
   @ViewChild('midiProgramSelectEnable') midiProgramSelectEnable?: MatCheckbox;
   @ViewChild('midiExlusiveChannel') midiExlusiveChannel?: ElementRef;
 
-  samplerStatusDisplayedColumns: string[] = ['name', 'value'];
-  samplerResidentProgramsDisplayedColumns: string[] = [
-    'program_number',
-    'name',
-    'action',
-  ];
-  samplerResidentNamesDisplayedColumns: string[] = ['name', 'action'];
-  hardDiskDirectoryDisplayedColumns: string[] = ['index', 'name', 'type'];
-  volumeListDisplayedColumns: string[] = ['name', 'type'];
-  partitionListDisplayedColumns: string[] = ['name'];
-
   samplerService = inject(SamplerService);
   router = inject(Router);
 
-  samplerResidentSampleNamesDataSource = new MatTableDataSource<string>(
-    new Array<string>(),
-  );
-  @ViewChild('residentSamplesPaginator')
-  samplerResidentSampleNamesPaginator!: MatPaginator;
-  samplerResidentSampleNamesLoading = true;
+  nameFilterPredicate = (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    data: any,
+    filter: string,
+  ) => {
+    if (data.name) {
+      return (
+        data['name']
+          .toLowerCase()
+          .indexOf(filter.toLowerCase()) != -1
+      );
+    }
 
-  samplerResidentProgramNamesDataSource =
-    new MatTableDataSource<ProgramDetails>(new Array<ProgramDetails>());
-  @ViewChild('residentProgramsPaginator')
-  samplerResidentProgramNamesPaginator!: MatPaginator;
-  samplerResidentProgramNamesLoading = true;
+    return false;
+  };
 
   s1000MiscellaneousData: S1000MiscellaneousDataType = {
     selectedProgramNumber: 0,
@@ -95,33 +115,52 @@ export class SamplerComponent implements OnInit {
 
   basicChannelValues = Array.from({length: 18}, (v, i) => i);
 
+  programsDataRetriever = new ProgramDataRetriever(this.samplerService);
+  programColumnDefinitions: ColumnDefinition[] = [
+    {
+      columnDefinitionName: 'midi_program_number',
+      displayName: '#',
+      formatDisplayText: (value) => {
+        if (typeof(value) === 'number') {
+          return '' + (value + 1);
+        }
+        return '' + value;
+      }
+    },
+    {
+      columnDefinitionName: 'name',
+      displayName: 'Name'
+    },
+    {
+      columnDefinitionName: 'xaction',
+      type: ACTION,
+      displayName: 'Actions'
+    },
+  ];
+  @ViewChild('programsTable')
+  programsTable!: SamplerTableComponent<ProgramDetails>;
+  programRowSelectionDeterminer = (programDetails: ProgramDetails, rowIndex: number, selectedRowNumber: number)=> {
+    return selectedRowNumber === programDetails.midi_program_number;
+  }
+
+
+  samplesDataRetriever = new SampleDataRetriever(this.samplerService);
+  sampleColumnDefinitions: ColumnDefinition[] = [
+    {
+      columnDefinitionName: 'name',
+      type: WHOLE,
+      displayName: 'Name'
+    },
+    {
+      columnDefinitionName: 'xaction',
+      type: ACTION,
+      displayName: 'Actions'
+    },
+  ];
+  @ViewChild('samplesTable')
+  samplesTable!: SamplerTableComponent<string>;
+
   ngOnInit(): void {
-    this.samplerResidentProgramNamesDataSource.filterPredicate = (
-      data,
-      filter,
-    ) => {
-      return (
-        data
-          .toString()
-          .toLowerCase()
-          .indexOf(filter.toString().toLowerCase()) != -1
-      );
-    };
-    this.loadResidentPrograms();
-
-    this.samplerResidentSampleNamesDataSource.filterPredicate = (
-      data,
-      filter,
-    ) => {
-      return (
-        data
-          .toString()
-          .toLowerCase()
-          .indexOf(filter.toString().toLowerCase()) != -1
-      );
-    };
-    this.loadResidentSamples();
-
     this.samplerService
       .samplerRequestS1000MiscellaneousData()
       .subscribe((s1000MiscellaneousData) => {
@@ -135,23 +174,8 @@ export class SamplerComponent implements OnInit {
             s1000MiscellaneousData.midi_program_select_enable == 1,
           midiExlusiveChannel: s1000MiscellaneousData.midi_exlusive_channel,
         };
+        this.programsTable.selectedRowNumber = s1000MiscellaneousData.selected_program_number;
       });
-  }
-
-  onProgramNameFilterInput(event: Event) {
-    this.setProgramNameFilter((event.target as HTMLInputElement).value);
-  }
-
-  setProgramNameFilter(value: string) {
-    this.samplerResidentProgramNamesDataSource.filter = value;
-  }
-
-  onSampleNameFilterInput(event: Event) {
-    this.setSampleNameFilter((event.target as HTMLInputElement).value);
-  }
-
-  setSampleNameFilter(value: string) {
-    this.samplerResidentSampleNamesDataSource.filter = value;
   }
 
   onS1000MiscDataChange() {
@@ -180,9 +204,10 @@ export class SamplerComponent implements OnInit {
   onSelectedProgramNumberChange(programNumber: number) {
     this.samplerService
       .samplerUpdateMiscellaneousBytes(55, 1, programNumber)
-      .subscribe((success) =>
-        console.log('Updated  selected program number: ', success),
-      );
+      .subscribe((success) => {
+        console.log('Updated  selected program number: ', success);
+        this.programsTable.selectedRowNumber = programNumber;
+      });
   }
 
   onSamplerBasicMidiChannelChange(item: number) {
@@ -214,12 +239,12 @@ export class SamplerComponent implements OnInit {
     this.router.navigate(['in-memory-program', programNumber]);
   }
 
-  addProgram() {
+  addProgram(newProgramIndex: number) {
     this.samplerService
-      .samplerNewProgram(this.samplerResidentProgramNamesDataSource.data.length)
+      .samplerNewProgram(newProgramIndex)
       .subscribe((success) => {
         if (success) {
-          this.loadResidentPrograms();
+          this.programsTable.loadData()
         }
       });
   }
@@ -229,56 +254,32 @@ export class SamplerComponent implements OnInit {
       .samplerDeleteProgram(programNumber)
       .subscribe((success) => {
         if (success) {
-          this.loadResidentPrograms();
+          this.programsTable.loadData()
         }
       });
   }
 
-  editSample(sampleName: string) {
+  editSample(sampleNumber: number) {
     console.log(
       'Sample row clicked: ',
-      sampleName,
-      this.samplerResidentSampleNamesDataSource.data.indexOf(sampleName),
+      sampleNumber,
+      sampleNumber,
     );
     this.router.navigate([
       'in-memory-sample',
-      this.samplerResidentSampleNamesDataSource.data.indexOf(sampleName),
+      sampleNumber,
     ]);
   }
 
-  deleteSample(sampleName: string) {
+  deleteSample(sampleNumber: number) {
     this.samplerService
       .samplerDeleteSample(
-        this.samplerResidentSampleNamesDataSource.data.indexOf(sampleName),
+        sampleNumber,
       )
       .subscribe((success) => {
         if (success) {
-          this.loadResidentSamples();
+          this.samplesTable.loadData();
         }
-      });
-  }
-
-  loadResidentPrograms() {
-    this.samplerResidentProgramNamesLoading = true;
-    this.samplerService
-      .samplerRequestResidentProgramNamesWithMidiProgramNumbers()
-      .subscribe((data) => {
-        this.samplerResidentProgramNamesDataSource.data = data;
-        this.samplerResidentProgramNamesDataSource.paginator =
-          this.samplerResidentProgramNamesPaginator;
-        this.samplerResidentProgramNamesLoading = false;
-      });
-  }
-
-  loadResidentSamples() {
-    this.samplerResidentSampleNamesLoading = true;
-    this.samplerService
-      .samplerRequestResidentSampleNames()
-      .subscribe((data) => {
-        this.samplerResidentSampleNamesDataSource.data = data;
-        this.samplerResidentSampleNamesDataSource.paginator =
-          this.samplerResidentSampleNamesPaginator;
-        this.samplerResidentSampleNamesLoading = false;
       });
   }
 }

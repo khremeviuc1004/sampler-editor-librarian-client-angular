@@ -6,14 +6,13 @@ import { provideHttpClient } from '@angular/common/http';
 import { NZ_ICONS } from 'ng-zorro-antd/icon';
 import { NZ_I18N, en_US } from 'ng-zorro-antd/i18n';
 import { IconDefinition } from '@ant-design/icons-angular';
-import * as AllIcons from '@ant-design/icons-angular/icons';
+import { HomeOutline } from '@ant-design/icons-angular/icons';
 import { provideNgxWebstorage, withLocalStorage } from 'ngx-webstorage';
 import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 
-const antDesignIcons = AllIcons as Record<string, IconDefinition>;
-const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesignIcons[key])
+const icons: IconDefinition[] = [ HomeOutline ];
 
 export const appConfig: ApplicationConfig = {
   providers: [

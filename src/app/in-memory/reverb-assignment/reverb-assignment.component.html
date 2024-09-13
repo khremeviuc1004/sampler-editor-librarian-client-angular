@@ -2,53 +2,13 @@
 <app-menu />
 <mat-grid-list cols="1" rowHeight="100%">
   <mat-grid-tile>
-    <div>
-      <mat-card appearance="raised">
-        <mat-card-header>
-          <mat-card-title>Reverb Assignments</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <mat-form-field class="sample-table-filter-field">
-            <mat-label>Filter</mat-label>
-            <input #reverbNameFilter matInput (input)="onReverbNameFilterInput($event)" width="12">
-            <button matSuffix mat-icon-button (click)="reverbNameFilter.value = '';setReverbNameFilter('')">
-              <mat-icon>clear</mat-icon>
-            </button>
-          </mat-form-field>
-          <button mat-mini-fab (click)="loadReverbAssignments()" style="margin-left: 1em;margin-top: 1em;" title="Reload this table from the sampler.">
-            <mat-icon>refresh</mat-icon>
-          </button>
-        </mat-card-content>
-      </mat-card>
-      @if (samplerReverbNamesLoading) {
-        <mat-spinner></mat-spinner>
-      }
-      @else {
-        <mat-table [dataSource]="samplerReverbNamesDataSource" class="mat-elevation-z8">
-          <ng-container matColumnDef="programNumber">
-            <mat-header-cell mat-header-cell *matHeaderCellDef>Program Number</mat-header-cell>
-            <mat-cell *matCellDef="let assignment">{{assignment.programNumber + 1}}</mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="reverbAssignment">
-            <mat-header-cell mat-header-cell *matHeaderCellDef>Reverb Assignment</mat-header-cell>
-            <mat-cell *matCellDef="let assignment">
-                <mat-select #reverbSelect (valueChange)="assignment.reverbNumber=reverbSelect.value;samplerService.samplerProgramReverbAssignment(assignment.programNumber, reverbSelect.value)" [value]="assignment.reverbNumber">
-                  @for (reverbName of reverbNames; track $index) {
-                    <mat-option [value]="$index">{{reverbName | titlecase}}</mat-option>
-                  }
-                </mat-select>
-            </mat-cell>
-          </ng-container>
-          <mat-header-row *matHeaderRowDef="samplerReverbsDisplayedColumns"></mat-header-row>
-          <mat-row *matRowDef="let reverbName; columns: samplerReverbsDisplayedColumns;"></mat-row>
-        </mat-table>
-    }
-
-      <mat-paginator #reverbsPaginator [pageSizeOptions]="[10]"
-        showFirstLastButtons
-        aria-label="Select page of reverbs"
-        class="mat-elevation-z8">
-      </mat-paginator>
-    </div>
+    <app-sampler-table
+      #reverbAssignmentsTable
+      title="Reverb Assignments"
+      [pageSizesInRows]="[10]"
+      [dataRetriever]="reverbAssignmentsDataRetriever"
+      [columnDefinitions]="reverbAssignmentColumnDefinitions"
+      (doSelectValueChange)="onSelectValueChanged($event)"
+    />
   </mat-grid-tile>
 </mat-grid-list>

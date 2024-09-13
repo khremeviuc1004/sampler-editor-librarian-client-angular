@@ -2,46 +2,16 @@
 <app-menu />
 <mat-grid-list cols="2">
   <mat-grid-tile>
-    <div>
-      <mat-card appearance="raised">
-        <mat-card-header>
-          <mat-card-title>Effects</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <mat-form-field class="sample-table-filter-field">
-            <mat-label>Filter</mat-label>
-            <input #effectNameFilter matInput (input)="onEffectNameFilterInput($event)" width="12">
-            <button matSuffix mat-icon-button (click)="effectNameFilter.value = '';setEffectNameFilter('')">
-              <mat-icon>clear</mat-icon>
-            </button>
-          </mat-form-field>
-          <button mat-mini-fab (click)="loadEffects()" style="margin-left: 1em;margin-top: 1em;" title="Reload this table from the sampler.">
-            <mat-icon>refresh</mat-icon>
-          </button>
-        </mat-card-content>
-      </mat-card>
-      @if (samplerEffectNamesLoading) {
-        <mat-spinner></mat-spinner>
-      }
-      @else {
-        <mat-table [dataSource]="samplerEffectNamesDataSource" class="mat-elevation-z8">
-          <ng-container matColumnDef="name">
-            <mat-header-cell mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
-            <mat-cell *matCellDef="let effectName">{{effectName}}</mat-cell>
-          </ng-container>
-          <mat-header-row *matHeaderRowDef="samplerEffectsDisplayedColumns"></mat-header-row>
-          <mat-row
-            *matRowDef="let effectName;let i=index; columns: samplerEffectsDisplayedColumns;"
-            [class.selected-row]="effectNumberInMemory === i"
-            (click)="onRowClick(i)"></mat-row>
-        </mat-table>
-      }
-      <mat-paginator #effectsPaginator [pageSizeOptions]="[10]"
-        showFirstLastButtons
-        aria-label="Select page of effects"
-        class="mat-elevation-z8">
-      </mat-paginator>
-    </div>
+    <app-sampler-table
+      #effectsTable
+      title="Effects"
+      [pageSizesInRows]="[10]"
+      [dataRetriever]="effectsDataRetriever"
+      [columnDefinitions]="effectColumnDefinitions"
+      [filterPredicate]="nameFilterPredicate"
+      [allowRowSelection]="true"
+      (doSelectedRowChanged)="onRowClick($event)"
+      />
   </mat-grid-tile>
   <mat-grid-tile>
     <div class="internalMatGrid">

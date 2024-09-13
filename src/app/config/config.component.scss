@@ -1,3 +1,4 @@
+@import '../../base';
 
 tr:hover {
   background: #ececec;
@@ -5,7 +6,6 @@ tr:hover {
 
 mat-grid-list {
   width: 80%;
-  margin-left: 3em;
-  margin-top: 3em;
+  @include mat-grid-list-shared;
 }
 

@@ -2,7 +2,6 @@ import {
   Component,
   ElementRef,
   inject,
-  OnInit,
   ViewChild,
 } from '@angular/core';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -26,6 +25,22 @@ import { MenuComponent } from '../../menu/menu.component';
 import { StereoPanPipe } from '../../pipes/stereo-pan.pipe';
 import { ToastrService } from 'ngx-toastr';
 import { FixedLengthNameFieldComponent } from '../../fixed-length-name-field/fixed-length-name-field.component';
+import { ColumnDefinition, DataRetriever, SamplerTableComponent, WHOLE } from '../../sampler-table/sampler-table.component';
+
+class ReverbsDataRetriever extends DataRetriever<string> {
+
+  constructor(samplerService: SamplerService) {
+    super(samplerService);
+  }
+
+  public override getData(): void {
+    if (this.subscription) {
+      this.samplerService
+      .samplerReverbs()
+      .subscribe(this.subscription);
+    }
+  }
+}
 
 @Component({
   selector: 'app-reverb',
@@ -46,12 +61,13 @@ import { FixedLengthNameFieldComponent } from '../../fixed-length-name-field/fix
     MatSelectModule,
     MenuComponent,
     StereoPanPipe,
-    FixedLengthNameFieldComponent
+    FixedLengthNameFieldComponent,
+    SamplerTableComponent
   ],
   templateUrl: './reverb.component.html',
   styleUrl: './reverb.component.scss',
 })
-export class ReverbComponent implements OnInit {
+export class ReverbComponent {
   @ViewChild('reverbName') reverbNameInput?: ElementRef;
 
   route: ActivatedRoute | null = null;
@@ -72,38 +88,34 @@ export class ReverbComponent implements OnInit {
 
   reverbType = reverbType;
 
+  nameFilterPredicate = (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    data: any,
+    filter: string,
+  ) => {
+    if (data.name) {
+      return (
+        data['name']
+          .toLowerCase()
+          .indexOf(filter.toLowerCase()) != -1
+      );
+    }
+
+    return false;
+  };
+  reverbsDataRetriever = new ReverbsDataRetriever(this.samplerService);
+  reverbColumnDefinitions: ColumnDefinition[] = [
+    {
+      columnDefinitionName: 'name',
+      type: WHOLE,
+      displayName: 'Name'
+    },
+  ];
+  @ViewChild('reverbsTable')
+  reverbsTable!: SamplerTableComponent<string>;
+
   constructor(route: ActivatedRoute, private toastr: ToastrService) {
     this.route = route;
-  }
-
-  ngOnInit(): void {
-    this.samplerReverbNamesDataSource.filterPredicate = (data, filter) => {
-      return (
-        data
-          .toString()
-          .toLowerCase()
-          .indexOf(filter.toString().toLowerCase()) != -1
-      );
-    };
-    this.loadReverbs();
-  }
-
-  loadReverbs() {
-    this.samplerReverbNamesLoading = true;
-    this.samplerService.samplerReverbs().subscribe((data) => {
-      this.samplerReverbNamesDataSource.data = data;
-      this.samplerReverbNamesDataSource.paginator =
-        this.samplerResidentProgramNamesPaginator;
-      this.samplerReverbNamesLoading = false;
-    });
-  }
-
-  onReverbNameFilterInput(event: Event) {
-    this.setReverbNameFilter((event.target as HTMLInputElement).value);
-  }
-
-  setReverbNameFilter(value: string) {
-    this.samplerReverbNamesDataSource.filter = value;
   }
 
   onRowClick(value: number) {
@@ -125,7 +137,7 @@ export class ReverbComponent implements OnInit {
         console.log('Reverb name updated', success);
         if (success) {
           this.toastr.success('Success', 'Updated the reverb name');
-          this.loadReverbs();
+          this.reverbsTable.loadData();
         }
         else {
           this.toastr.error('Error', 'Could not update the reverb name');
