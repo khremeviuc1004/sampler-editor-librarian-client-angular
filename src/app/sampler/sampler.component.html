@@ -13,9 +13,9 @@
       <mat-grid-tile>
         <mat-form-field>
           <mat-label>Basic Midi Channel</mat-label>
-          <mat-select #basicMidiChannel (selectionChange)="onSamplerBasicMidiChannelChange(+basicMidiChannel.value)">
+          <mat-select #basicMidiChannel (selectionChange)="onSamplerBasicMidiChannelChange(+basicMidiChannel.value)" [value]="s1000MiscellaneousData.basicMidiChannel">
             @for (index of basicChannelValues; track index) {
-              <mat-option [value]="index">{{index === 0 ? 'Off' : index === 17 ? 'Omni' : index + 1}}</mat-option>
+              <mat-option [value]="index">{{index === 0 ? 'Off' : index === 17 ? 'Omni' : index}}</mat-option>
             }
           </mat-select>
           <mat-hint>Min 1 Max 16</mat-hint>
